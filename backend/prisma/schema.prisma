@@ -20,6 +20,8 @@ model User {
   sentMessages     Message[]   @relation("SentMessages")
   receivedMessages Message[]   @relation("ReceivedMessages")
   groups           UserGroup[]
+  Profile          Profile[]
+  lastLogin        DateTime @default(now()) 
 }
 
 model Message {
@@ -61,4 +63,6 @@ model Profile {
   profilePic String? @db.VarChar(255) // add default profile image link
   bio        String  @default("")
   intro      String  @default("")
+  userId     String
+  user       User    @relation(fields: [userId], references: [id])
 }
