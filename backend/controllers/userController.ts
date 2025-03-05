@@ -46,6 +46,8 @@ const generateToken = asyncHandler(async (req: AuthenticatedRequest, res) => {
         console.log("generateToken", token);
         res.json({
           token: token,
+          username: req.user.username,
+          success: true,
         });
       }
     }
@@ -93,7 +95,8 @@ const logIN = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
       // Ensure req.user is set before calling next()
       next();
     }
-  } catch (error) {
+  } catch (error: any) {
+    console.log("error", error);
     res.status(400).json({ message: error.message, failure: true });
   }
 });
@@ -109,9 +112,10 @@ const createUser = asyncHandler(
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     try {
-      const user = await userQueries.createUser(username, hashedPassword);
+      await userQueries.createUser(username, hashedPassword);
+      console.log("user created");
       next();
-    } catch (err) {
+    } catch (err: any) {
       if (
         err.message.includes(
           "Unique constraint failed on the fields: (`username`)"
