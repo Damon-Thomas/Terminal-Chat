@@ -1,7 +1,11 @@
 import "dotenv/config";
 import express from "express";
-import routes from "./routes/routes.ts";
+import routes from "./routes/user.ts";
 import cors from "cors";
+import bodyParser from "body-parser";
+import passport from "passport";
+import strategy from "./validators/strategies.ts";
+import userRouter from "./routes/user.ts";
 
 const app: express.Express = express();
 
@@ -9,10 +13,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", routes.router);
-app.use("/comments", routes.comments);
-app.use("/users", routes.user);
-app.use("/posts", routes.posts);
+passport.use("jwtStrategy", strategy);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use("/", userRouter);
+
+app.use("/user", userRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`)
