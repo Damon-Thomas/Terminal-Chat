@@ -74,7 +74,7 @@ const logIN = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
     res.status(400).json({ errors: errors.array() });
     return;
   }
-  console.log("post errors");
+
   try {
     //check if user exists
     const userExists = await userQueries.getUser(req.body.username);
@@ -129,6 +129,17 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.json({ message: "Logged out" });
 });
 
+const deleteUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
+  const user = req.user;
+  const username = user.username;
+  try {
+    await userQueries.deleteUser(username);
+    res.json({ message: "User deleted", success: true });
+  } catch (error) {
+    res.json({ message: error.message, success: false });
+  }
+});
+
 export default {
   createUser,
   logIN,
@@ -136,4 +147,5 @@ export default {
   verifyToken,
   authUser,
   logoutUser,
+  deleteUser,
 };

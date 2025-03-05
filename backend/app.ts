@@ -4,7 +4,7 @@ import routes from "./routes/user.ts";
 import cors from "cors";
 import bodyParser from "body-parser";
 import passport from "passport";
-import strategy from "./validators/strategies.ts";
+import strategy from "./routes/validators/strategies.ts";
 import userRouter from "./routes/user.ts";
 
 const app: express.Express = express();
@@ -17,10 +17,10 @@ passport.use("jwtStrategy", strategy);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use("/", userRouter);
-
 app.use("/user", userRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Example app listening on port ${process.env.PORT}!`)
 );
+
+export default app;

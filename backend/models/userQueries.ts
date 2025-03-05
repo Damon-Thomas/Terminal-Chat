@@ -1,4 +1,4 @@
-import prisma from "./client.js";
+import prisma from "./client";
 
 const createUser = async (username: string, password: string) => {
   try {
@@ -128,12 +128,11 @@ const deleteUser = async (username: string) => {
   }
 };
 
-const createProfile = async (userId: string, username: string) => {
+const createProfile = async (userId: string) => {
   try {
     await prisma.profile.create({
       data: {
         userId: userId,
-        name: username,
       },
     });
     return true;
@@ -185,10 +184,12 @@ const loginUpdate = async (userId: string) => {
     return error;
   }
 };
+
 export default {
   createUser,
   getUser,
   deleteUser,
   updateProfile,
   createProfile,
+  loginUpdate,
 };
