@@ -67,6 +67,15 @@ describe("Test CRUD operations for user", () => {
     expect(result.status).toBe(400);
   });
 
+  test("Incorrect Login", async () => {
+    const result = await request(app).post("/user/login").send({
+      username: "Bobbsdjasjkdsaasdsad",
+      password: "password",
+    });
+    expect(result.status).toBe(400);
+    expect(result.body.failure).toBe(true);
+  });
+
   test("Login user", async () => {
     const result = await request(app).post("/user/login").send({
       username: "Bob",
