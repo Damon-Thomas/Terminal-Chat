@@ -1,11 +1,12 @@
 import "dotenv/config";
 import express from "express";
-import routes from "./routes/user.ts";
+import routes from "./routes/user";
 import cors from "cors";
 import bodyParser from "body-parser";
 import passport from "passport";
-import strategy from "./routes/validators/strategies.ts";
-import userRouter from "./routes/user.ts";
+import strategy from "./routes/validators/strategies";
+import userRouter from "./routes/user";
+import messageRouter from "./routes/messages";
 
 const app: express.Express = express();
 
@@ -18,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use("/user", userRouter);
+app.use("/message", messageRouter);
 
 if (process.env.NODE_ENV !== "test") {
   app.listen(process.env.PORT, () =>
