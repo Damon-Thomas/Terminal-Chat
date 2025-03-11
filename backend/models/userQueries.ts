@@ -28,6 +28,16 @@ const getUser = async (username: string) => {
   });
   return user;
 };
+
+const getUserById = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  return user;
+};
+
 //later add functionality to delete user files
 //delete cloud files
 const deleteUser = async (username: string) => {
@@ -166,4 +176,5 @@ export default {
   updateProfile,
   createProfile,
   loginUpdate,
+  getUserById,
 };
