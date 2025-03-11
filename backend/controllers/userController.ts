@@ -21,6 +21,7 @@ const authUser = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
       } else {
         req.user = user;
         console.log("authUser2", req.user);
+        next();
       }
     }
   });
@@ -112,7 +113,11 @@ const createUser = asyncHandler(
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     try {
-      await userQueries.createUser(username, hashedPassword);
+      const user = await userQueries.createUser(username, hashedPassword);
+      if (!user || user.failure) {
+        res.json({ message: "User not created", failure: true });
+        return;
+      }
       console.log("user created");
       next();
     } catch (err: any) {
@@ -121,26 +126,50 @@ const createUser = asyncHandler(
           "Unique constraint failed on the fields: (`username`)"
         )
       ) {
-        res.json({ message: "Username already exists", failure: true });
+        res
+          .status(400)
+          .json({ message: "Username already exists", failure: true });
       } else {
-        res.json({ message: err.message, failure: true });
+        res.status(400).json({ message: err.message, failure: true });
       }
     }
   }
 );
 
 const logoutUser = asyncHandler(async (req, res) => {
-  res.json({ message: "Logged out" });
+  console.log("logout start");
+  const user = req.user;
+  console.log("logout user", user);
+  if (user) {
+    try {
+      console.log("pre query");
+      await userQueries.loginUpdate(user.id);
+      console.log("post query");
+      res.status(200).json({ message: "Logged out", failure: false });
+    } catch {
+      res
+        .status(500)
+        .json({ message: "Failed to update login status", failure: true });
+    }
+  } else {
+    res.status(400).json({ message: "User not found", failure: true });
+  }
 });
 
 const deleteUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const user = req.user;
   const username = user.username;
-  try {
-    await userQueries.deleteUser(username);
-    res.json({ message: "User deleted", success: true });
-  } catch (error) {
-    res.json({ message: error.message, success: false });
+  const userDeleter = await userQueries.deleteUser(username);
+  if (userDeleter && !userDeleter.failure) {
+    res.status(200).json({ message: "User deleted", failure: false });
+  } else if (userDeleter && userDeleter.failure) {
+    res.status(400).json({
+      message: "User not deleted",
+      failure: true,
+      stepsCompleted: userDeleter.stepsCompleted || 0,
+    });
+  } else {
+    res.status(500).json({ message: "deleter did not work", failure: true });
   }
 });
 

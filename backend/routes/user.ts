@@ -22,7 +22,7 @@ router.post(
   userController.generateToken
 );
 
-router.post(
+router.delete(
   "/deleteUser",
   userController.verifyToken,
   userController.authUser,

@@ -34,6 +34,16 @@ describe("Test CRUD operations for user", () => {
     jest.clearAllMocks();
   });
 
+  test("Invalid Create user", async () => {
+    const result = await request(app).post("/user/createUser").send({
+      username: "",
+      password: "",
+      confirmPassword: "password",
+    });
+
+    expect(result.status).toBe(400);
+  });
+
   test("Create user", async () => {
     const result = await request(app).post("/user/createUser").send({
       username: "Bob",
@@ -45,6 +55,16 @@ describe("Test CRUD operations for user", () => {
     expect(result.body.username).toBe("Bob");
     expect(result.body.token).toBeDefined();
     expect(result.body.success).toBe(true);
+  });
+
+  test("Create duplicate user", async () => {
+    const result = await request(app).post("/user/createUser").send({
+      username: "Bob",
+      password: "password",
+      confirmPassword: "password",
+    });
+
+    expect(result.status).toBe(400);
   });
 
   test("Login user", async () => {
@@ -66,7 +86,11 @@ describe("Test CRUD operations for user", () => {
           password: "password",
         })
         .set("Authorization", `Bearer ${token}`);
+      console.log("Logout result: ", result.body.message);
       expect(result.status).toBe(200);
+    } else {
+      console.log("Token is undefined");
+      expect(token).toBeDefined();
     }
   });
 

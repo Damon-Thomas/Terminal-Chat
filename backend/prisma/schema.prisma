@@ -14,37 +14,41 @@ datasource db {
 }
 
 model User {
-  id               String      @id @unique @default(uuid())
-  username         String      @unique
+  id               String         @id @unique @default(uuid())
+  username         String         @unique
   password         String
-  sentMessages     Message[]   @relation("SentMessages")
-  receivedMessages Message[]   @relation("ReceivedMessages")
+  sentMessages     Message[]      @relation("SentMessages")
+  receivedMessages Message[]      @relation("ReceivedMessages")
   groups           UserGroup[]
+  friends          UserFriend[]
   Profile          Profile[]
-  lastLogin        DateTime @default(now()) 
+  lastLogin        DateTime       @default(now())
+  MessageLikes     MessageLikes[]
 }
 
 model Message {
-  id            String   @id @unique @default(uuid())
-  createdAt     DateTime @default(now())
-  filename      String   @db.VarChar(255)
-  content       String?  @db.VarChar(255)
+  id            String         @id @unique @default(uuid())
+  createdAt     DateTime       @default(now())
+  filename      String         @db.VarChar(255)
+  content       String?        @db.VarChar(255)
   size          Int?
-  filePath      String   @db.VarChar(255)
+  filePath      String         @db.VarChar(255)
   authorId      String
-  author        User     @relation("SentMessages", fields: [authorId], references: [id])
+  author        User           @relation("SentMessages", fields: [authorId], references: [id])
   sentToId      String?
-  sentTo        User?    @relation("ReceivedMessages", fields: [sentToId], references: [id])
+  sentTo        User?          @relation("ReceivedMessages", fields: [sentToId], references: [id])
   sentToGroupId String?
-  sentToGroup   Group?   @relation(fields: [sentToGroupId], references: [id])
+  sentToGroup   Group?         @relation(fields: [sentToGroupId], references: [id])
+  likes         MessageLikes[]
 }
 
 model Group {
-  id        String      @id @unique @default(uuid())
-  groupName String      @unique
-  createdAt DateTime    @default(now())
-  members   UserGroup[]
-  Message   Message[]
+  id         String       @id @unique @default(uuid())
+  groupName  String       @unique
+  createdAt  DateTime     @default(now())
+  members    UserGroup[]
+  Message    Message[]
+  UserFriend UserFriend[]
 }
 
 model UserGroup {
@@ -57,8 +61,26 @@ model UserGroup {
   @@id([userId, groupId])
 }
 
+model UserFriend {
+  userId   String
+  friendId String
+  user     User   @relation(fields: [userId], references: [id])
+  group    Group  @relation(fields: [friendId], references: [id])
+
+  @@id([userId, friendId])
+}
+
+model MessageLikes {
+  userId    String
+  messageId String
+  user      User    @relation(fields: [userId], references: [id])
+  message   Message @relation(fields: [messageId], references: [id])
+
+  @@id([userId, messageId])
+}
+
 model Profile {
-  id         String  @id @unique @default(uuid())
+  id         String  @id @unique
   color      String  @default("#74121D")
   profilePic String? @db.VarChar(255) // add default profile image link
   bio        String  @default("")

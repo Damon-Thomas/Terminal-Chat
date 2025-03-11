@@ -19,8 +19,10 @@ app.use(bodyParser.json());
 
 app.use("/user", userRouter);
 
-app.listen(process.env.PORT, () =>
-  console.log(`Example app listening on port ${process.env.PORT}!`)
-);
+if (process.env.NODE_ENV !== "test") {
+  app.listen(process.env.PORT, () =>
+    console.log(`Example app listening on port ${process.env.PORT}!`)
+  );
+}
 
 export default app;

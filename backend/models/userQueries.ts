@@ -1,24 +1,22 @@
 import prisma from "./client";
 
 const createUser = async (username: string, password: string) => {
-  try {
-    const newUser = await prisma.user.create({
-      data: {
-        username: username,
-        password: password,
-      },
-    });
+  const newUser = await prisma.user.create({
+    data: {
+      username: username,
+      password: password,
+    },
+  });
+
+  if (newUser) {
     try {
-      await createProfile(newUser.id, username);
-      return newUser;
+      await createProfile(newUser.id);
+      return { newUser, failure: false };
     } catch (error) {
       console.log("Error creating profile: ", error);
       deleteUser(username);
-      return error;
+      return { error, failure: true };
     }
-  } catch (error) {
-    console.log("Error creating user: ", error);
-    return error;
   }
 };
 
@@ -49,60 +47,39 @@ const deleteUser = async (username: string) => {
       //delete all messages sent to user
       await prisma.message.deleteMany({
         where: {
-          sentId: user.id,
+          sentToId: user.id,
         },
       });
       stepsCompleted++;
 
       //delete user from groups
-      await prisma.group.updateMany({
+      await prisma.userGroup.deleteMany({
         where: {
-          members: {
-            has: user.id,
-          },
-        },
-        data: {
-          members: {
-            disconnect: { id: user.id },
-          },
+          userId: user.id,
         },
       });
       stepsCompleted++;
 
       //delete user from friends lists
-      await prisma.user.updateMany({
+      await prisma.UserFriend.deleteMany({
         where: {
-          friends: {
-            has: user.id,
-          },
-        },
-        data: {
-          friends: {
-            disconnect: { id: user.id },
-          },
+          OR: [{ userId: user.id }, { friendId: user.id }],
         },
       });
       stepsCompleted++;
 
       //remove likes from messages
-      await prisma.message.updateMany({
+      await prisma.MessageLikes.deleteMany({
         where: {
-          likes: {
-            has: user.id,
-          },
-        },
-        data: {
-          likes: {
-            disconnect: { id: user.id },
-          },
+          userId: user.id,
         },
       });
       stepsCompleted++;
 
       //remove user profile
-      await prisma.profile.delete({
+      await prisma.Profile.delete({
         where: {
-          userId: user.id,
+          id: user.id,
         },
       });
       stepsCompleted++;
@@ -115,15 +92,16 @@ const deleteUser = async (username: string) => {
       });
       stepsCompleted++;
 
-      return true;
+      return { failure: false, stepsCompleted: stepsCompleted };
     } catch (error) {
       console.log(
-        "Error profile completely: Please try again",
+        "Error profile not deleted completely: Please try again",
         "   Deletions complete:",
         stepsCompleted,
+        "/6",
         error
       );
-      return error;
+      return { error, stepsCompleted: stepsCompleted, failure: true };
     }
   }
 };
@@ -132,6 +110,7 @@ const createProfile = async (userId: string) => {
   try {
     await prisma.profile.create({
       data: {
+        id: userId,
         userId: userId,
       },
     });
@@ -170,19 +149,14 @@ const updateProfile = async (
 };
 
 const loginUpdate = async (userId: string) => {
-  try {
-    await prisma.profile.update({
-      where: {
-        userId: userId,
-      },
-      data: {
-        lastLogin: new Date(),
-      },
-    });
-  } catch (error) {
-    console.log("Error updating profile: ", error);
-    return error;
-  }
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      lastLogin: new Date(),
+    },
+  });
 };
 
 export default {
