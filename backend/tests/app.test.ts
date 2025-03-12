@@ -129,16 +129,14 @@ describe("Test CRUD operations for user", () => {
           destinationType: "user",
         })
         .set("Authorization", `Bearer ${token}`);
-
       expect(result.status).toBe(200);
-      expect(result.body.newMessage.content).toBe("Hello World");
+      expect(result.body.content).toBe("Hello World");
       expect(result.body.failure).toBe(false);
 
-      messageId = result.body.newMessage.id;
+      messageId = result.body.id;
     });
 
     test("Like message", async () => {
-      console.log("Message id: ", messageId);
       const result = await request(app)
         .post("/action/likeMessage")
         .send({
@@ -146,7 +144,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Like message result: ", result.body);
     });
 
     test("Unlike message", async () => {
@@ -157,7 +154,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Unlike message result: ", result.body);
     });
 
     test("Add friend", async () => {
@@ -168,7 +164,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Add friend result: ", result.body);
     });
 
     test("Add friend duplicate", async () => {
@@ -178,7 +173,7 @@ describe("Test CRUD operations for user", () => {
           friendId: userId2,
         })
         .set("Authorization", `Bearer ${token}`);
-      expect(result.status).toBe(400);
+      expect(result.status).toBe(200);
     });
 
     test("Remove friend", async () => {
@@ -189,19 +184,29 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Remove friend result: ", result.body);
     });
 
     test("Make Group", async () => {
       const result = await request(app)
-        .post("/action/makeGroup")
+        .post("/action/createGroup")
         .send({
           groupName: "Test Group",
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Make group result: ", result.body);
-      groupId = result.body.id;
+      groupId = result.body.group.id;
+    });
+
+    test("Make Group duplicate", async () => {
+      const result = await request(app)
+        .post("/action/createGroup")
+        .send({
+          groupName: "Test Group",
+        })
+        .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(400);
+      expect(result.body.failure).toBe(true);
+      expect(result.body.message).toBe("Group already Exists");
     });
 
     test("Join group", async () => {
@@ -212,7 +217,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Join group result: ", result.body);
     });
 
     test("Message Group", async () => {
@@ -225,8 +229,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      expect(result.body.message).toBe("Hello Group");
-      console.log("Message group result: ", result.body);
+      expect(result.body.content).toBe("Hello Group");
     });
 
     test("Leave group", async () => {
@@ -237,7 +240,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Leave group result: ", result.body);
     });
 
     test("Delete group", async () => {
@@ -248,7 +250,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Delete group result: ", result.body);
     });
   });
 

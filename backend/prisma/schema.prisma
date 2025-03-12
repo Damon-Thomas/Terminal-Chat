@@ -20,10 +20,11 @@ model User {
   sentMessages     Message[]      @relation("SentMessages")
   receivedMessages Message[]      @relation("ReceivedMessages")
   groups           UserGroup[]
-  friends          UserFriend[]
+  friends          UserFriend[]   @relation("UsertoFriend")
   Profile          Profile[]
   lastLogin        DateTime       @default(now())
   MessageLikes     MessageLikes[]
+  UserFriend       UserFriend[]
 }
 
 model Message {
@@ -43,12 +44,11 @@ model Message {
 }
 
 model Group {
-  id         String       @id @unique @default(uuid())
-  groupName  String       @unique
-  createdAt  DateTime     @default(now())
-  members    UserGroup[]
-  Message    Message[]
-  UserFriend UserFriend[]
+  id        String      @id @unique @default(uuid())
+  groupName String      @unique
+  createdAt DateTime    @default(now())
+  members   UserGroup[]
+  Message   Message[]
 }
 
 model UserGroup {
@@ -64,8 +64,8 @@ model UserGroup {
 model UserFriend {
   userId   String
   friendId String
-  user     User   @relation(fields: [userId], references: [id])
-  group    Group  @relation(fields: [friendId], references: [id])
+  user     User   @relation("UsertoFriend", fields: [userId], references: [id])
+  friend   User   @relation(fields: [friendId], references: [id])
 
   @@id([userId, friendId])
 }

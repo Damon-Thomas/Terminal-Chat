@@ -7,7 +7,16 @@ const sendMessage = async (
   sentTo: string,
   destinationType: "user" | "group"
 ) => {
-  console.log("sentTo", sentTo);
+  console.log(
+    "userId",
+    userId,
+    "sentTo",
+    sentTo,
+    "message",
+    message,
+    "destinationType",
+    destinationType
+  );
   if (destinationType === "user" && sentTo === userId) {
     return { message: "Cannot send message to self", failure: true };
   }
@@ -18,9 +27,7 @@ const sendMessage = async (
     }
   } else if (destinationType === "group") {
     const group = await prisma.group.findUnique({
-      where: {
-        id: sentTo,
-      },
+      where: { id: sentTo },
     });
     if (!group) {
       return { message: "Group not found", failure: true };
@@ -34,20 +41,16 @@ const sendMessage = async (
       sentToGroupId: destinationType === "group" ? sentTo : null,
     },
   });
-  return { newMessage, failure: false };
+  return { ...newMessage, failure: false };
 };
 
 const likeMessage = async (userId: string, messageId: string) => {
-  console.log("like message", userId, messageId);
   const message = await prisma.message.findUnique({
-    where: {
-      id: messageId,
-    },
+    where: { id: messageId },
   });
   if (!message) {
     return { message: "Message not found", failure: true };
   }
-  console.log("found message", message);
   const likeChecker = await prisma.MessageLikes.findFirst({
     where: {
       userId: userId,
@@ -57,49 +60,30 @@ const likeMessage = async (userId: string, messageId: string) => {
   if (likeChecker) {
     return { message: "Message already liked", failure: true };
   }
-  console.log("likeChecker", likeChecker);
   const newLike = await prisma.MessageLikes.create({
-    data: {
-      userId: userId,
-      messageId: messageId,
-    },
+    data: { userId: userId, messageId: messageId },
   });
-  console.log("newLike", newLike);
-
   return { newLike, failure: false };
 };
 
 const unLikeMessage = async (userId: string, messageId: string) => {
-  console.log("unlike message", userId, messageId);
   const message = await prisma.message.findUnique({
-    where: {
-      id: messageId,
-    },
+    where: { id: messageId },
   });
   if (!message) {
     return { message: "Message not found", failure: true };
   }
-  console.log("found message", message);
   const likeChecker = await prisma.MessageLikes.findFirst({
-    where: {
-      userId: userId,
-      messageId: messageId,
-    },
+    where: { userId: userId, messageId: messageId },
   });
   if (!likeChecker) {
     return { message: "Message not liked", failure: true };
   }
-  console.log("likeChecker", likeChecker);
   const likeDeleter = await prisma.MessageLikes.delete({
     where: {
-      userId_messageId: {
-        userId: userId,
-        messageId: messageId,
-      },
+      userId_messageId: { userId, messageId },
     },
   });
-  console.log("likeDeleter", likeDeleter);
-
   return { likeDeleter, failure: false };
 };
 
@@ -108,19 +92,15 @@ const addFriend = async (userId: string, friendId: string) => {
   if (!friend) {
     return { message: "Friend not found", failure: true };
   }
-  const friendMaker = await prisma.UserFriend.findFirst({
+
+  // Use upsert to either insert if the record does not exist.
+  const friendMaker = await prisma.UserFriend.upsert({
     where: {
-      userId: userId,
-      friendId: friendId,
+      userId_friendId: { userId: userId, friendId: friendId },
     },
-
-    update: {}, // No update because the record already exists
-    create: {
-      userId: userId,
-      friendId: friendId,
-    },
+    update: {}, // No update since record exists
+    create: { userId, friendId },
   });
-
   return { friendMaker, failure: false };
 };
 
@@ -130,59 +110,49 @@ const deleteFriend = async (userId: string, friendId: string) => {
     return { message: "Friend not found", failure: true };
   }
   const friendDeleter = await prisma.UserFriend.delete({
-    where: {
-      userId: userId,
-      friendId: friendId,
-    },
+    where: { userId_friendId: { userId, friendId } },
   });
-
   return { friendDeleter, failure: false };
 };
 
 const joinGroup = async (userId: string, groupId: string) => {
-  const group = await prisma.UserGroup.findUnique({
+  // Use upsert with the composite key (assuming it's defined as groupId_userId)
+  const group = await prisma.UserGroup.upsert({
     where: {
-      groupId: groupId,
-      userId: userId,
+      userId_groupId: { groupId, userId },
     },
-    update: {}, // No update because the record already exists
-    create: {
-      groupId: groupId,
-      userId: userId,
-    },
+    update: {}, // No update because the record exists
+    create: { groupId, userId },
   });
-  return { group, failure: false };
+  return { group };
 };
 
 const leaveGroup = async (userId: string, groupId: string) => {
   const group = await prisma.UserGroup.delete({
-    where: {
-      groupId: groupId,
-      userId: userId,
-    },
+    where: { userId_groupId: { groupId, userId } },
+  });
+  return { group };
+};
+
+const createGroup = async (groupName: string) => {
+  const groupExists = await prisma.group.findFirst({
+    where: { groupName },
+  });
+  if (groupExists) {
+    return { message: "Group already exists", failure: true };
+  }
+  const group = await prisma.group.create({
+    data: { groupName },
   });
   return { group, failure: false };
 };
 
-const createGroup = async (groupName: string) => {
-  await prisma.group.create({
-    data: {
-      groupName: groupName,
-    },
-  });
-  return { message: "Group created", failure: false };
-};
-
 const deleteGroup = async (groupId: string) => {
   await prisma.group.delete({
-    where: {
-      id: groupId,
-    },
+    where: { id: groupId },
   });
-  await prisma.UserGroup.delete({
-    where: {
-      groupId: groupId,
-    },
+  await prisma.UserGroup.deleteMany({
+    where: { groupId },
   });
   return { message: "Group deleted", failure: false };
 };
@@ -190,11 +160,11 @@ const deleteGroup = async (groupId: string) => {
 export default {
   sendMessage,
   likeMessage,
+  unLikeMessage,
   addFriend,
   deleteFriend,
   joinGroup,
   leaveGroup,
   createGroup,
-  unLikeMessage,
   deleteGroup,
 };

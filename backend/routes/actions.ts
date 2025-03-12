@@ -1,6 +1,6 @@
 import { Router } from "express";
 import userController from "../controllers/userController";
-import messageController from "../controllers/actionController";
+import actionController from "../controllers/actionController";
 import { messageValidator } from "./validators/messageValidators";
 
 const router = Router();
@@ -10,56 +10,63 @@ router.post(
   messageValidator,
   userController.verifyToken,
   userController.authUser,
-  messageController.sendMessage
+  actionController.sendMessage
 );
 
 router.post(
   "/likeMessage",
   userController.verifyToken,
   userController.authUser,
-  messageController.likeMessage
+  actionController.likeMessage
 );
 
 router.delete(
   "/unLikeMessage",
   userController.verifyToken,
   userController.authUser,
-  messageController.unLikeMessage
+  actionController.unLikeMessage
 );
 
 router.post(
   "/addFriend",
   userController.verifyToken,
   userController.authUser,
-  messageController.addFriend
+  actionController.addFriend
 );
 
 router.delete(
   "/removeFriend",
   userController.verifyToken,
   userController.authUser,
-  messageController.deleteFriend
+  actionController.deleteFriend
+);
+
+router.post(
+  "/createGroup",
+  userController.verifyToken,
+  userController.authUser,
+  actionController.makeGroup
 );
 
 router.post(
   "/joinGroup",
   userController.verifyToken,
   userController.authUser,
-  messageController.joinGroup
+  actionController.joinGroup
 );
 
 router.delete(
   "/leaveGroup",
   userController.verifyToken,
   userController.authUser,
-  messageController.leaveGroup
+  actionController.leaveGroup
 );
 
 router.delete(
   "/deleteGroup",
   userController.verifyToken,
   userController.authUser,
-  messageController.deleteGroup
+  actionController.deleteGroup
 );
 
 export default router;

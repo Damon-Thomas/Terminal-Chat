@@ -16,6 +16,7 @@ const sendMessage = asyncHandler(async (req, res) => {
       sentTo,
       destinationType
     );
+    console.log("newMessage", newMessage);
     res.status(200).json(newMessage);
   } catch (e) {
     console.log("error creating message", e);
@@ -24,34 +25,30 @@ const sendMessage = asyncHandler(async (req, res) => {
 });
 
 const likeMessage = asyncHandler(async (req, res, next) => {
-  console.log("like message body", req.body);
-  console.log("req.user", req.user);
   const userId = req.user.id;
-  console.log("userId", userId);
+
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
 
   const { messageId } = req.body;
-  console.log("messageId", messageId);
-  const newLike = await actionQueries.likeMessage(userId, messageId);
-  console.log("newLike", newLike);
-  if (newLike.failure) {
-    res.status(400).json(newLike);
-  } else {
-    res.status(200).json(newLike);
+  try {
+    const newLike = await actionQueries.likeMessage(userId, messageId);
+    res.status(200).json({ newLike, failure: false });
+  } catch (e) {
+    console.log("error liking message", e);
+    res.status(400).json({ error: e, failure: true });
   }
 });
 
 const unLikeMessage = asyncHandler(async (req, res, next) => {
-  console.log("unlike message body", req.body);
   const userId = req.user.id;
-  console.log("userId", userId);
+
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { messageId } = req.body;
-  console.log("messageId", messageId);
+
   try {
     const unLike = await actionQueries.unLikeMessage(userId, messageId);
     res.status(200).json(unLike);
@@ -62,64 +59,70 @@ const unLikeMessage = asyncHandler(async (req, res, next) => {
 });
 
 const addFriend = asyncHandler(async (req, res, next) => {
-  console.log("add friend body", req.body);
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
-  console.log("add friend body", req.body);
+
   const { friendId } = req.body;
-  const newFriend = await actionQueries.addFriend(userId, friendId);
-  if (newFriend.failure) {
-    res.status(400).json(newFriend);
-  } else {
-    res.status(200).json(newFriend);
+
+  try {
+    const newFriend = await actionQueries.addFriend(userId, friendId);
+    res.status(200).json({ newFriend, failure: false });
+  } catch (e) {
+    console.log("error adding friend", e);
+    res.status(400).json({ e, failure: true });
   }
 });
 
 const deleteFriend = asyncHandler(async (req, res, next) => {
-  console.log("delete friend body", req.body);
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
-  console.log("delete friend body", req.body);
   const { friendId } = req.body;
-  const deleteFriend = await actionQueries.deleteFriend(userId, friendId);
-  if (deleteFriend.failure) {
-    res.status(400).json(deleteFriend);
-  } else {
-    res.status(200).json(deleteFriend);
+  try {
+    const deleteFriend = await actionQueries.deleteFriend(userId, friendId);
+    res.status(200).json({ deleteFriend, failure: false });
+  } catch (e) {
+    console.log("error deleting friend", e);
+    res.status(400).json({ e, failure: true });
   }
 });
 
 const makeGroup = asyncHandler(async (req, res, next) => {
-  console.log("make group body", req.body);
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupName } = req.body;
-  const newGroup = await actionQueries.createGroup(groupName);
-  if (newGroup.failure) {
-    res.status(400).json(newGroup);
-  } else {
-    res.status(200).json(newGroup);
+  try {
+    const newGroup = await actionQueries.createGroup(groupName);
+    if (newGroup.failure) {
+      return res
+        .status(400)
+        .json({ newGroup, failure: true, message: "Group already Exists" });
+    } else {
+      res.status(200).json(newGroup);
+    }
+  } catch (e) {
+    console.log("error making group", e);
+    res.status(400).json({ e, failure: true });
   }
 });
 
 const joinGroup = asyncHandler(async (req, res, next) => {
-  console.log("join group body", req.body);
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupId } = req.body;
-  const joinGroup = await actionQueries.joinGroup(userId, groupId);
-  if (joinGroup.failure) {
-    res.status(400).json(joinGroup);
-  } else {
-    res.status(200).json(joinGroup);
+  try {
+    const joinGroup = await actionQueries.joinGroup(userId, groupId);
+    res.status(200).json({ joinGroup, failure: false });
+  } catch (e) {
+    console.log("error joining group", e);
+    res.status(400).json({ e, failure: true });
   }
 });
 
@@ -129,16 +132,16 @@ const leaveGroup = asyncHandler(async (req, res, next) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupId } = req.body;
-  const leaveGroup = await actionQueries.leaveGroup(userId, groupId);
-  if (leaveGroup.failure) {
-    res.status(400).json(leaveGroup);
-  } else {
-    res.status(200).json(leaveGroup);
+  try {
+    const leaveGroup = await actionQueries.leaveGroup(userId, groupId);
+    res.status(200).json({ leaveGroup, failure: false });
+  } catch (e) {
+    console.log("error leaving group", e);
+    res.status(400).json({ e, failure: true });
   }
 });
 
 const deleteGroup = asyncHandler(async (req, res, next) => {
-  console.log("delete group body", req.body);
   const { groupId } = req.body;
   try {
     const deleteGroup = await actionQueries.deleteGroup(groupId);
