@@ -242,6 +242,50 @@ describe("Test CRUD operations for user", () => {
       expect(result.status).toBe(200);
     });
 
+    //
+    //
+    //
+    //Messages
+    describe("Test get operations for messages", () => {
+      test("Get User Messages", async () => {
+        const result = await request(app)
+          .get("/messages/userMessages")
+          .set("Authorization", `Bearer ${token}`);
+        expect(result.status).toBe(200);
+      });
+    });
+
+    //
+    //
+    //
+    //Contacts
+    describe("Test get operations for contacts", () => {
+      test("Get User Contacts", async () => {
+        const result = await request(app)
+          .get("/contacts/userContacts")
+          .set("Authorization", `Bearer ${token}`);
+        expect(result.status).toBe(200);
+      });
+    });
+
+    //
+    //
+    //
+    //Profile
+    describe("Test get operations for profile", () => {
+      test("Get User Profile", async () => {
+        const result = await request(app)
+          .get("/profile/getProfile")
+          .set("Authorization", `Bearer ${token}`);
+        expect(result.status).toBe(200);
+      });
+    });
+
+    //
+    //
+    //
+    //Tear Down
+
     test("Delete group", async () => {
       const result = await request(app)
         .delete("/action/deleteGroup")

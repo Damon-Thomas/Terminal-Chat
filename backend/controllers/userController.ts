@@ -9,6 +9,11 @@ interface AuthenticatedRequest extends Request {
   token?: string;
 }
 
+const fullAuth = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
+  verifyToken(req, res, next);
+  authUser(req, res, next);
+});
+
 const authUser = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
   jwt.verify(req.token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
     if (err) {
@@ -175,4 +180,5 @@ export default {
   authUser,
   logoutUser,
   deleteUser,
+  fullAuth,
 };
