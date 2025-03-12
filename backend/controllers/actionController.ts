@@ -119,6 +119,16 @@ const leaveGroup = asyncHandler(async (req, res, next) => {
   }
 });
 
+const deleteGroup = asyncHandler(async (req, res, next) => {
+  const { groupId } = req.body;
+  try {
+    const deleteGroup = await messageQueries.deleteGroup(groupId);
+    res.status(200).json({ deleteGroup, failure: false });
+  } catch {
+    res.status(400).json({ deleteGroup, failure: true });
+  }
+});
+
 export default {
   sendMessage,
   likeMessage,
@@ -128,4 +138,5 @@ export default {
   makeGroup,
   joinGroup,
   leaveGroup,
+  deleteGroup,
 };

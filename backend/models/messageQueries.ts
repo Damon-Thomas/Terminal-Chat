@@ -143,10 +143,24 @@ const leaveGroup = async (userId: string, groupId: string) => {
 const createGroup = async (groupName: string) => {
   await prisma.group.create({
     data: {
-      name: groupName,
+      groupName: groupName,
     },
   });
   return { message: "Group created", failure: false };
+};
+
+const deleteGroup = async (groupId: string) => {
+  await prisma.group.delete({
+    where: {
+      id: groupId,
+    },
+  });
+  await prisma.UserGroup.delete({
+    where: {
+      groupId: groupId,
+    },
+  });
+  return { message: "Group deleted", failure: false };
 };
 
 export default {
@@ -158,4 +172,5 @@ export default {
   leaveGroup,
   createGroup,
   unLikeMessage,
+  deleteGroup,
 };
