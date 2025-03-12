@@ -16,6 +16,7 @@ router.post(
 router.post(
   "/likeMessage",
   userController.verifyToken,
+  userController.authUser,
   messageController.likeMessage
 );
 

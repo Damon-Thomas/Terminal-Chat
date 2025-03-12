@@ -69,8 +69,6 @@ describe("Test CRUD operations for user", () => {
       confirmPassword: "password",
     });
     userId2 = result.body.id;
-    console.log("body", result.body);
-    console.log("userId2 setter", userId2, "userId", userId);
 
     expect(result.status).toBe(200);
     expect(result.body.username).toBe("Julie");
@@ -123,7 +121,6 @@ describe("Test CRUD operations for user", () => {
     let messageId: string;
     let groupId: string;
     test("Create message to user", async () => {
-      console.log("userId2", userId2);
       const result = await request(app)
         .post("/action/createMessage")
         .send({
@@ -132,15 +129,16 @@ describe("Test CRUD operations for user", () => {
           destinationType: "user",
         })
         .set("Authorization", `Bearer ${token}`);
-      console.log("Create message result: ", result.body);
+
       expect(result.status).toBe(200);
       expect(result.body.newMessage.content).toBe("Hello World");
       expect(result.body.failure).toBe(false);
 
-      messageId = result.body.id;
+      messageId = result.body.newMessage.id;
     });
 
     test("Like message", async () => {
+      console.log("Message id: ", messageId);
       const result = await request(app)
         .post("/action/likeMessage")
         .send({
@@ -148,6 +146,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
+      console.log("Like message result: ", result.body);
     });
 
     test("Unlike message", async () => {
@@ -158,6 +157,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
+      console.log("Unlike message result: ", result.body);
     });
 
     test("Add friend", async () => {
@@ -168,6 +168,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
+      console.log("Add friend result: ", result.body);
     });
 
     test("Add friend duplicate", async () => {
@@ -188,6 +189,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
+      console.log("Remove friend result: ", result.body);
     });
 
     test("Make Group", async () => {

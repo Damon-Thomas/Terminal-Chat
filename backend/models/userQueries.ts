@@ -47,6 +47,13 @@ const deleteUser = async (username: string) => {
     return user;
   } else {
     try {
+      //remove likes from messages
+      await prisma.MessageLikes.deleteMany({
+        where: {
+          userId: user.id,
+        },
+      });
+      stepsCompleted++;
       //delete all messages sent by user
       await prisma.message.deleteMany({
         where: {
@@ -74,14 +81,6 @@ const deleteUser = async (username: string) => {
       await prisma.UserFriend.deleteMany({
         where: {
           OR: [{ userId: user.id }, { friendId: user.id }],
-        },
-      });
-      stepsCompleted++;
-
-      //remove likes from messages
-      await prisma.MessageLikes.deleteMany({
-        where: {
-          userId: user.id,
         },
       });
       stepsCompleted++;
