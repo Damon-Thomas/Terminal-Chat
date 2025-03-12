@@ -7,7 +7,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles"
+    "dev": "NODE_ENV=development && node app.js",
+    "test": "NODE_ENV=test && jest --detectOpenHandles"
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",

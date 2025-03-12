@@ -12,6 +12,7 @@ import http from "http";
 
 describe("Test CRUD operations for user", () => {
   let token: string;
+
   let server: http.Server;
 
   beforeAll((done) => {
@@ -84,6 +85,10 @@ describe("Test CRUD operations for user", () => {
     expect(result.status).toBe(200);
     expect(result.body.token).toBeDefined();
     token = result.body.token;
+  });
+
+  describe("Test message operations", () => {
+    const message = await request(app);
   });
 
   test("Logout user", async () => {
