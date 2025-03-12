@@ -9,6 +9,7 @@ router.post(
   "/createMessage",
   messageValidator,
   userController.verifyToken,
+  userController.authUser,
   messageController.sendMessage
 );
 
@@ -21,36 +22,42 @@ router.post(
 router.delete(
   "/unLikeMessage",
   userController.verifyToken,
+  userController.authUser,
   messageController.unLikeMessage
 );
 
 router.post(
   "/addFriend",
   userController.verifyToken,
+  userController.authUser,
   messageController.addFriend
 );
 
 router.delete(
   "/removeFriend",
   userController.verifyToken,
+  userController.authUser,
   messageController.deleteFriend
 );
 
 router.post(
   "/joinGroup",
   userController.verifyToken,
+  userController.authUser,
   messageController.joinGroup
 );
 
 router.delete(
   "/leaveGroup",
   userController.verifyToken,
+  userController.authUser,
   messageController.leaveGroup
 );
 
 router.delete(
   "/deleteGroup",
   userController.verifyToken,
+  userController.authUser,
   messageController.deleteGroup
 );
 

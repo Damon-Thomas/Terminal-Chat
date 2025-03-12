@@ -1,23 +1,27 @@
 import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
-import messageQueries from "../models/messageQueries";
+import actionQueries from "../models/actionQueries";
 
 const sendMessage = asyncHandler(async (req, res) => {
+  console.log("in send message");
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ failure: true, errors: errors.array() });
   }
   const { message, sentTo, destinationType } = req.body;
-  const newMessage = await messageQueries.sendMessage(
-    req.user.id,
-    message,
-    sentTo,
-    destinationType
-  );
-  if (newMessage.failure) {
-    res.status(400).json(newMessage);
-  } else {
+  console.log("body", req.body);
+  console.log("user", req.user);
+  try {
+    const newMessage = await actionQueries.sendMessage(
+      req.user.id,
+      message,
+      sentTo,
+      destinationType
+    );
     res.status(200).json(newMessage);
+  } catch (e) {
+    console.log("error creating message", e);
+    res.status(400).json(e);
   }
 });
 
@@ -27,7 +31,7 @@ const likeMessage = asyncHandler(async (req, res, next) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { messageId } = req.body;
-  const newLike = await messageQueries.likeMessage(userId, messageId);
+  const newLike = await actionQueries.likeMessage(userId, messageId);
   if (newLike.failure) {
     res.status(400).json(newLike);
   } else {
@@ -41,7 +45,7 @@ const unLikeMessage = asyncHandler(async (req, res, next) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { messageId } = req.body;
-  const unLike = await messageQueries.unLikeMessage(userId, messageId);
+  const unLike = await actionQueries.unLikeMessage(userId, messageId);
   if (unLike.failure) {
     res.status(400).json(unLike);
   } else {
@@ -54,8 +58,9 @@ const addFriend = asyncHandler(async (req, res, next) => {
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
+  console.log("add friend body", req.body);
   const { friendId } = req.body;
-  const newFriend = await messageQueries.addFriend(userId, friendId);
+  const newFriend = await actionQueries.addFriend(userId, friendId);
   if (newFriend.failure) {
     res.status(400).json(newFriend);
   } else {
@@ -68,8 +73,9 @@ const deleteFriend = asyncHandler(async (req, res, next) => {
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
+  console.log("delete friend body", req.body);
   const { friendId } = req.body;
-  const deleteFriend = await messageQueries.deleteFriend(userId, friendId);
+  const deleteFriend = await actionQueries.deleteFriend(userId, friendId);
   if (deleteFriend.failure) {
     res.status(400).json(deleteFriend);
   } else {
@@ -83,7 +89,7 @@ const makeGroup = asyncHandler(async (req, res, next) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupName } = req.body;
-  const newGroup = await messageQueries.createGroup(groupName);
+  const newGroup = await actionQueries.createGroup(groupName);
   if (newGroup.failure) {
     res.status(400).json(newGroup);
   } else {
@@ -97,7 +103,7 @@ const joinGroup = asyncHandler(async (req, res, next) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupId } = req.body;
-  const joinGroup = await messageQueries.joinGroup(userId, groupId);
+  const joinGroup = await actionQueries.joinGroup(userId, groupId);
   if (joinGroup.failure) {
     res.status(400).json(joinGroup);
   } else {
@@ -111,7 +117,7 @@ const leaveGroup = asyncHandler(async (req, res, next) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupId } = req.body;
-  const leaveGroup = await messageQueries.leaveGroup(userId, groupId);
+  const leaveGroup = await actionQueries.leaveGroup(userId, groupId);
   if (leaveGroup.failure) {
     res.status(400).json(leaveGroup);
   } else {
@@ -122,7 +128,7 @@ const leaveGroup = asyncHandler(async (req, res, next) => {
 const deleteGroup = asyncHandler(async (req, res, next) => {
   const { groupId } = req.body;
   try {
-    const deleteGroup = await messageQueries.deleteGroup(groupId);
+    const deleteGroup = await actionQueries.deleteGroup(groupId);
     res.status(200).json({ deleteGroup, failure: false });
   } catch {
     res.status(400).json({ deleteGroup, failure: true });

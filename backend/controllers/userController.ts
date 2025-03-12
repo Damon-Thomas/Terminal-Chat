@@ -12,7 +12,6 @@ interface AuthenticatedRequest extends Request {
 const authUser = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
   jwt.verify(req.token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
     if (err) {
-      console.log("jwt not verified");
       res.sendStatus(403);
     } else {
       const user = await userQueries.getUser(decoded.user.username);
@@ -20,7 +19,7 @@ const authUser = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
         res.sendStatus(403);
       } else {
         req.user = user;
-        console.log("authUser2", req.user);
+
         next();
       }
     }
@@ -41,12 +40,11 @@ const generateToken = asyncHandler(async (req: AuthenticatedRequest, res) => {
     { expiresIn: "1d" } as JwtSignOptions,
     (err: Error | null, token: string | undefined) => {
       if (err) {
-        console.log("jwt not signed");
         res.sendStatus(403);
       } else {
-        console.log("generateToken", token);
-        res.json({
+        res.status(200).json({
           token: token,
+          id: req.user.id,
           username: req.user.username,
           success: true,
         });
@@ -58,7 +56,7 @@ const generateToken = asyncHandler(async (req: AuthenticatedRequest, res) => {
 const verifyToken = asyncHandler(
   async (req: AuthenticatedRequest, res, next) => {
     const bearerHeader = req.headers["authorization"];
-    console.log("verifyToken", bearerHeader);
+
     if (typeof bearerHeader !== "undefined") {
       const bearer = bearerHeader.split(" ");
       const bearerToken = bearer[1];
@@ -71,7 +69,6 @@ const verifyToken = asyncHandler(
 );
 
 const logIN = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
-  console.log("login", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400).json({ errors: errors.array() });
@@ -92,12 +89,11 @@ const logIN = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
       return;
     } else {
       req.user = userExists;
-      console.log("user acquired", req.user);
+
       // Ensure req.user is set before calling next()
       next();
     }
   } catch (error: any) {
-    console.log("error", error);
     res.status(400).json({ message: error.message, failure: true });
   }
 });
@@ -115,10 +111,10 @@ const createUser = asyncHandler(
     try {
       const user = await userQueries.createUser(username, hashedPassword);
       if (!user || user.failure) {
-        res.json({ message: "User not created", failure: true });
+        res.status(400).json({ message: "User not created", failure: true });
         return;
       }
-      console.log("user created");
+
       next();
     } catch (err: any) {
       if (
@@ -137,14 +133,12 @@ const createUser = asyncHandler(
 );
 
 const logoutUser = asyncHandler(async (req, res) => {
-  console.log("logout start");
   const user = req.user;
-  console.log("logout user", user);
+
   if (user) {
     try {
-      console.log("pre query");
       await userQueries.loginUpdate(user.id);
-      console.log("post query");
+
       res.status(200).json({ message: "Logged out", failure: false });
     } catch {
       res

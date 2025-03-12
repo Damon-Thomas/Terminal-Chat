@@ -13,6 +13,7 @@ import http from "http";
 //user login and signup tests
 describe("Test CRUD operations for user", () => {
   let token: string;
+  let token2: string;
   let userId: string;
   let userId2: string;
   let server: http.Server;
@@ -68,6 +69,8 @@ describe("Test CRUD operations for user", () => {
       confirmPassword: "password",
     });
     userId2 = result.body.id;
+    console.log("body", result.body);
+    console.log("userId2 setter", userId2, "userId", userId);
 
     expect(result.status).toBe(200);
     expect(result.body.username).toBe("Julie");
@@ -104,11 +107,23 @@ describe("Test CRUD operations for user", () => {
     token = result.body.token;
   });
 
+  test("Login 2nd user", async () => {
+    const result = await request(app).post("/user/login").send({
+      username: "Julie",
+      password: "password",
+    });
+    expect(result.status).toBe(200);
+    expect(result.body.token).toBeDefined();
+    token2 = result.body.token;
+  });
+  //
+  //
   // actions tests
   describe("Test action operations", () => {
     let messageId: string;
     let groupId: string;
     test("Create message to user", async () => {
+      console.log("userId2", userId2);
       const result = await request(app)
         .post("/action/createMessage")
         .send({
@@ -117,8 +132,10 @@ describe("Test CRUD operations for user", () => {
           destinationType: "user",
         })
         .set("Authorization", `Bearer ${token}`);
+      console.log("Create message result: ", result.body);
       expect(result.status).toBe(200);
-      expect(result.body.message).toBe("Hello World");
+      expect(result.body.newMessage.content).toBe("Hello World");
+      expect(result.body.failure).toBe(false);
 
       messageId = result.body.id;
     });
@@ -131,7 +148,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Like message result: ", result);
     });
 
     test("Unlike message", async () => {
@@ -142,7 +158,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Unlike message result: ", result);
     });
 
     test("Add friend", async () => {
@@ -153,7 +168,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Add friend result: ", result);
     });
 
     test("Add friend duplicate", async () => {
@@ -174,7 +188,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Remove friend result: ", result);
     });
 
     test("Make Group", async () => {
@@ -185,7 +198,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Make group result: ", result);
+      console.log("Make group result: ", result.body);
       groupId = result.body.id;
     });
 
@@ -197,7 +210,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Join group result: ", result);
+      console.log("Join group result: ", result.body);
     });
 
     test("Message Group", async () => {
@@ -211,7 +224,7 @@ describe("Test CRUD operations for user", () => {
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
       expect(result.body.message).toBe("Hello Group");
-      console.log("Message group result: ", result);
+      console.log("Message group result: ", result.body);
     });
 
     test("Leave group", async () => {
@@ -222,7 +235,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Leave group result: ", result);
+      console.log("Leave group result: ", result.body);
     });
 
     test("Delete group", async () => {
@@ -233,7 +246,7 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("Delete group result: ", result);
+      console.log("Delete group result: ", result.body);
     });
   });
 
@@ -247,7 +260,7 @@ describe("Test CRUD operations for user", () => {
           password: "password",
         })
         .set("Authorization", `Bearer ${token}`);
-      console.log("Logout result: ", result.body.message);
+
       expect(result.status).toBe(200);
     } else {
       console.log("Token is undefined");
@@ -255,10 +268,17 @@ describe("Test CRUD operations for user", () => {
     }
   });
 
-  test("Delete user", async () => {
+  test("Delete user 1", async () => {
     const result = await request(app)
       .delete("/user/deleteUser")
       .set("Authorization", `Bearer ${token}`);
+    expect(result.status).toBe(200);
+  });
+
+  test("Delete user 2", async () => {
+    const result = await request(app)
+      .delete("/user/deleteUser")
+      .set("Authorization", `Bearer ${token2}`);
     expect(result.status).toBe(200);
   });
 });

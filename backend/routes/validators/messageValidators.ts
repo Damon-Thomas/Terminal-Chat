@@ -4,10 +4,7 @@ const messageValidator = [
   body("message")
     .trim()
     .isLength({ min: 1, max: 150 })
-    .withMessage("Message required length 1-150")
-    .bail()
-    .isAlphanumeric()
-    .withMessage("Must be Alphanumeric"),
+    .withMessage("Message required length 1-150"),
 ];
 
 export { messageValidator };

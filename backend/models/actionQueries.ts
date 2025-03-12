@@ -7,7 +7,7 @@ const sendMessage = async (
   sentTo: string,
   destinationType: "user" | "group"
 ) => {
-  const user = await userQueries.getUser(sentTo);
+  const user = await userQueries.getUserById(sentTo);
   if (!user) {
     return { message: "User not found", failure: true };
   }
