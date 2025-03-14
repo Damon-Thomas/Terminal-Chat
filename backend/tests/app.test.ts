@@ -9,6 +9,7 @@ import {
   beforeAll,
 } from "@jest/globals";
 import http from "http";
+import e from "express";
 
 //user login and signup tests
 describe("Test CRUD operations for user", () => {
@@ -260,11 +261,26 @@ describe("Test CRUD operations for user", () => {
     //
     //Contacts
     describe("Test get operations for contacts", () => {
-      test("Get User Contacts", async () => {
+      test("Get Currently Talking Users", async () => {
         const result = await request(app)
-          .get("/contacts/userContacts")
+          .get("/contacts/activeUserContacts")
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.users).toBeDefined();
+      });
+
+      test("Get Messages between users", async () => {
+        const result = await request(app)
+          .get("/contacts/getMessagesBetweenUsers")
+          .send({
+            sentToId: userId2,
+          })
+          .set("Authorization", `Bearer ${token}`);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        console.log(result.body);
+        expect(result.body.messages[0].content).toBe("Hello World");
       });
     });
 

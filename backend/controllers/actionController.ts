@@ -16,7 +16,7 @@ const sendMessage = asyncHandler(async (req, res) => {
       sentTo,
       destinationType
     );
-    console.log("newMessage", newMessage);
+
     res.status(200).json(newMessage);
   } catch (e) {
     console.log("error creating message", e);

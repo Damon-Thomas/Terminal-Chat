@@ -7,16 +7,6 @@ const sendMessage = async (
   sentTo: string,
   destinationType: "user" | "group"
 ) => {
-  console.log(
-    "userId",
-    userId,
-    "sentTo",
-    sentTo,
-    "message",
-    message,
-    "destinationType",
-    destinationType
-  );
   if (destinationType === "user" && sentTo === userId) {
     return { message: "Cannot send message to self", failure: true };
   }

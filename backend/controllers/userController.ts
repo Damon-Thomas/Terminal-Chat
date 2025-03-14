@@ -12,6 +12,7 @@ interface AuthenticatedRequest extends Request {
 const fullAuth = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
   verifyToken(req, res, next);
   authUser(req, res, next);
+  next();
 });
 
 const authUser = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
