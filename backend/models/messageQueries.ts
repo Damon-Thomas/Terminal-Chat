@@ -1,18 +1,21 @@
 import prisma from "./client";
 
-const messagesFromUsertoUser = async (authorId: string, sentToId: string) => {
-  return prisma.message.findMany({
+const getMessagesBetweenUsers = async (userId: string, sentToId: string) => {
+  return await prisma.message.findMany({
     where: {
       OR: [
         {
-          authorId,
-          sentToId,
+          authorId: userId,
+          sentToId: sentToId,
         },
         {
           authorId: sentToId,
-          sentToId: authorId,
+          sentToId: userId,
         },
       ],
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 };
@@ -25,4 +28,4 @@ const messagesToGroup = async (groupId: string) => {
   });
 };
 
-export default { messagesFromUsertoUser, messagesToGroup };
+export default { getMessagesBetweenUsers, messagesToGroup };

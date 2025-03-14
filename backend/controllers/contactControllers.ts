@@ -16,16 +16,28 @@ const getActiveUserContacts = async (req, res) => {
   }
 };
 
-const getMessagesBetweenUsers = asyncHandler(async (req, res) => {
-  const { sentToId } = req.body;
+const getUserGroups = asyncHandler(async (req, res) => {
   const userId = req.user.id;
-  console.log("getMessagesBetweenUsers", userId, sentToId);
+
   try {
-    const messages = await contactQueries.getMessagesBetweenUsers(
-      userId,
-      sentToId
-    );
-    res.status(200).json({ messages, failure: false });
+    const groups = await contactQueries.getGroupsUserHasJoined(userId);
+    console.log("GGGGG", groups);
+    res.status(200).json({ groups, failure: false });
+  } catch (error) {
+    res.status(400).json({ message: error.message, error, failure: true });
+  }
+});
+
+const getGroupMembers = asyncHandler(async (req, res) => {
+  const { groupId } = req.body;
+  if (!groupId) {
+    return res
+      .status(400)
+      .json({ failure: true, message: "Group not found", received: req.body });
+  }
+  try {
+    const members = await contactQueries.getGroupMembers(groupId);
+    res.status(200).json({ members, failure: false });
   } catch (error) {
     res.status(400).json({ message: error.message, error, failure: true });
   }
@@ -34,4 +46,6 @@ const getMessagesBetweenUsers = asyncHandler(async (req, res) => {
 export default {
   getActiveUserContacts,
   getMessagesBetweenUsers,
+  getUserGroups,
+  getGroupMembers,
 };

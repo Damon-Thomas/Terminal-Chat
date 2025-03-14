@@ -58,7 +58,7 @@ model UserGroup {
   group    Group    @relation(fields: [groupId], references: [id])
   joinedAt DateTime @default(now())
 
-  @@id([userId, groupId])
+  @@id([userId, groupId]) 
 }
 
 model UserFriend {

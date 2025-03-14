@@ -119,7 +119,7 @@ const joinGroup = asyncHandler(async (req, res, next) => {
   const { groupId } = req.body;
   try {
     const joinGroup = await actionQueries.joinGroup(userId, groupId);
-    res.status(200).json({ joinGroup, failure: false });
+    res.status(200).json({ ...joinGroup, failure: false });
   } catch (e) {
     console.log("error joining group", e);
     res.status(400).json({ e, failure: true });
@@ -143,11 +143,13 @@ const leaveGroup = asyncHandler(async (req, res, next) => {
 
 const deleteGroup = asyncHandler(async (req, res, next) => {
   const { groupId } = req.body;
+  console.log("deleteGroup", groupId);
   try {
     const deleteGroup = await actionQueries.deleteGroup(groupId);
     res.status(200).json({ deleteGroup, failure: false });
-  } catch {
-    res.status(400).json({ deleteGroup, failure: true });
+  } catch (e) {
+    console.log("error deleting group", e);
+    res.status(400).json({ e, failure: true });
   }
 });
 

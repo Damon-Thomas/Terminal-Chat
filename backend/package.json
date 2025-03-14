@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development && node app.js",
-    "test": "NODE_ENV=test && jest --detectOpenHandles"
+    "test": "NODE_ENV=test && jest --detectOpenHandles",
+    "testHandles": "NODE_ENV=test && jest --detectOpenHandles"
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",

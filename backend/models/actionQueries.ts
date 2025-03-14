@@ -109,10 +109,10 @@ const joinGroup = async (userId: string, groupId: string) => {
   // Use upsert with the composite key (assuming it's defined as groupId_userId)
   const group = await prisma.UserGroup.upsert({
     where: {
-      userId_groupId: { groupId, userId },
+      userId_groupId: { userId, groupId },
     },
     update: {}, // No update because the record exists
-    create: { groupId, userId },
+    create: { userId, groupId },
   });
   return { group };
 };
@@ -138,13 +138,16 @@ const createGroup = async (groupName: string) => {
 };
 
 const deleteGroup = async (groupId: string) => {
-  await prisma.group.delete({
-    where: { id: groupId },
-  });
+  if (!groupId) {
+    return { message: "Invalid group id" };
+  }
   await prisma.UserGroup.deleteMany({
     where: { groupId },
   });
-  return { message: "Group deleted", failure: false };
+  await prisma.group.delete({
+    where: { id: groupId },
+  });
+  return { message: "Group deleted" };
 };
 
 export default {

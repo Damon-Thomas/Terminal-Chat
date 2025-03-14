@@ -12,10 +12,17 @@ router.get(
 );
 
 router.get(
-  "/getMessagesBetweenUsers",
+  "/getGroups",
   userController.verifyToken,
   userController.authUser,
-  contactControllers.getMessagesBetweenUsers
+  contactControllers.getUserGroups
+);
+
+router.get(
+  "/getGroupMembers",
+  userController.verifyToken,
+  userController.authUser,
+  contactControllers.getGroupMembers
 );
 
 export default router;

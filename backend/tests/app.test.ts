@@ -18,6 +18,9 @@ describe("Test CRUD operations for user", () => {
   let userId: string;
   let userId2: string;
   let server: http.Server;
+  let messageId: string;
+  let groupId: string;
+  let groupId2: string;
 
   beforeAll((done) => {
     server = app.listen(3000, () => {
@@ -119,8 +122,6 @@ describe("Test CRUD operations for user", () => {
   //
   // actions tests
   describe("Test action operations", () => {
-    let messageId: string;
-    let groupId: string;
     test("Create message to user", async () => {
       const result = await request(app)
         .post("/action/createMessage")
@@ -198,6 +199,21 @@ describe("Test CRUD operations for user", () => {
       groupId = result.body.group.id;
     });
 
+    test("Make 2nd Group with another user", async () => {
+      const result = await request(app)
+        .post("/action/createGroup")
+        .send({
+          groupName: "Test Group 2",
+        })
+        .set("Authorization", `Bearer ${token2}`);
+
+      console.log("Token 2", token2);
+      console.log("Result", result.body);
+      expect(result.status).toBe(200);
+      console.log("group 2", result.body);
+      groupId2 = result.body.group.id;
+    });
+
     test("Make Group duplicate", async () => {
       const result = await request(app)
         .post("/action/createGroup")
@@ -218,6 +234,27 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
+      console.log("join group", result.body);
+    });
+
+    test("Join 2nd Group", async () => {
+      const result = await request(app)
+        .post("/action/joinGroup")
+        .send({
+          groupId: groupId2,
+        })
+        .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(200);
+    });
+
+    test("2nd user joins group2", async () => {
+      const result = await request(app)
+        .post("/action/joinGroup")
+        .send({
+          groupId: groupId2,
+        })
+        .set("Authorization", `Bearer ${token2}`);
+      expect(result.status).toBe(200);
     });
 
     test("Message Group", async () => {
@@ -233,26 +270,34 @@ describe("Test CRUD operations for user", () => {
       expect(result.body.content).toBe("Hello Group");
     });
 
-    test("Leave group", async () => {
-      const result = await request(app)
-        .delete("/action/leaveGroup")
-        .send({
-          groupId: groupId,
-        })
-        .set("Authorization", `Bearer ${token}`);
-      expect(result.status).toBe(200);
-    });
-
     //
     //
     //
     //Messages
     describe("Test get operations for messages", () => {
-      test("Get User Messages", async () => {
+      test("Get Messages between users", async () => {
         const result = await request(app)
-          .get("/messages/userMessages")
+          .get("/messages/getMessagesBetweenUsers")
+          .send({
+            sentToId: userId2,
+          })
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        console.log(result.body);
+        expect(result.body.messages[0].content).toBe("Hello World");
+      });
+
+      test("Get Group Messages", async () => {
+        const result = await request(app)
+          .get("/messages/getMessagesToGroup")
+          .send({
+            groupId: groupId,
+          })
+          .set("Authorization", `Bearer ${token}`);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.messages[0].content).toBe("Hello Group");
       });
     });
 
@@ -270,17 +315,42 @@ describe("Test CRUD operations for user", () => {
         expect(result.body.users).toBeDefined();
       });
 
-      test("Get Messages between users", async () => {
+      test("Get a users groups", async () => {
         const result = await request(app)
-          .get("/contacts/getMessagesBetweenUsers")
+          .get("/contacts/getGroups")
           .send({
-            sentToId: userId2,
+            groupId: groupId,
           })
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         console.log(result.body);
-        expect(result.body.messages[0].content).toBe("Hello World");
+      });
+
+      test("Get group members", async () => {
+        const result = await request(app)
+          .get("/contacts/getGroupMembers")
+          .send({
+            groupId: groupId,
+          })
+          .set("Authorization", `Bearer ${token}`);
+        console.log("Group 1", result.body, result.body.members, groupId);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.members.length).toBe(1);
+      });
+
+      test("Get group members 2", async () => {
+        const result = await request(app)
+          .get("/contacts/getGroupMembers")
+          .send({
+            groupId: groupId2,
+          })
+          .set("Authorization", `Bearer ${token2}`);
+        console.log("Group 2", result.body, result.body.members, groupId2);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.members.length).toBe(2);
       });
     });
 
@@ -302,6 +372,16 @@ describe("Test CRUD operations for user", () => {
     //
     //Tear Down
 
+    test("Leave group", async () => {
+      const result = await request(app)
+        .delete("/action/leaveGroup")
+        .send({
+          groupId: groupId,
+        })
+        .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(200);
+    });
+
     test("Delete group", async () => {
       const result = await request(app)
         .delete("/action/deleteGroup")
@@ -309,6 +389,17 @@ describe("Test CRUD operations for user", () => {
           groupId: groupId,
         })
         .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(200);
+    });
+
+    test("Delete group 2", async () => {
+      const result = await request(app)
+        .delete("/action/deleteGroup")
+        .send({
+          groupId: groupId2,
+        })
+        .set("Authorization", `Bearer ${token2}`);
+      console.log("Delete group 2", result.body);
       expect(result.status).toBe(200);
     });
   });
