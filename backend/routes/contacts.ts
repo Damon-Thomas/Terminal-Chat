@@ -25,4 +25,25 @@ router.get(
   contactControllers.getGroupMembers
 );
 
+router.get(
+  "/getFriendsList",
+  userController.verifyToken,
+  userController.authUser,
+  contactControllers.getFriendsList
+);
+
+router.get(
+  "/getNonContactUsers",
+  userController.verifyToken,
+  userController.authUser,
+  contactControllers.getNonContactUsers
+);
+
+router.get(
+  "/getNonJoinedGroups",
+  userController.verifyToken,
+  userController.authUser,
+  contactControllers.getNonJoinedGroups
+);
+
 export default router;

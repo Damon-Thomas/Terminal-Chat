@@ -40,8 +40,14 @@ const generateToken = asyncHandler(async (req: AuthenticatedRequest, res) => {
     expiresIn: string;
   }
 
+  const user = req.user;
+  if (!user) {
+    res.status(400).json({ message: "User not found", failure: true });
+    return;
+  }
+
   jwt.sign(
-    { user: req.user } as TokenPayload,
+    { user } as TokenPayload,
     process.env.JWT_SECRET_KEY as string,
     { expiresIn: "1d" } as JwtSignOptions,
     (err: Error | null, token: string | undefined) => {

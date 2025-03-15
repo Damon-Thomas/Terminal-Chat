@@ -4,7 +4,6 @@ import contactQueries from "../models/contactQueries";
 
 // const getActiveUserContacts = asyncHandler(async (req, res) => {
 const getActiveUserContacts = async (req, res) => {
-  console.log("getActiveUserContacts", req.user.id);
   if (!req.user.id) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
@@ -21,7 +20,6 @@ const getUserGroups = asyncHandler(async (req, res) => {
 
   try {
     const groups = await contactQueries.getGroupsUserHasJoined(userId);
-    console.log("GGGGG", groups);
     res.status(200).json({ groups, failure: false });
   } catch (error) {
     res.status(400).json({ message: error.message, error, failure: true });
@@ -43,9 +41,42 @@ const getGroupMembers = asyncHandler(async (req, res) => {
   }
 });
 
+const getFriendsList = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const friends = await contactQueries.getFriendsList(userId);
+    res.status(200).json({ friends, failure: false });
+  } catch (error) {
+    res.status(400).json({ message: error.message, error, failure: true });
+  }
+});
+const getNonContactUsers = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const { page } = req.body || 1;
+  try {
+    const users = await contactQueries.getNonContactUsers(userId, page);
+    res.status(200).json({ users, failure: false });
+  } catch (error) {
+    res.status(400).json({ message: error.message, error, failure: true });
+  }
+});
+
+const getNonJoinedGroups = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const { page } = req.body || 1;
+  try {
+    const groups = await contactQueries.getNonJoinedGroups(userId, page);
+    res.status(200).json({ groups, failure: false });
+  } catch (error) {
+    res.status(400).json({ message: error.message, error, failure: true });
+  }
+});
+
 export default {
   getActiveUserContacts,
-  getMessagesBetweenUsers,
+  getFriendsList,
   getUserGroups,
   getGroupMembers,
+  getNonContactUsers,
+  getNonJoinedGroups,
 };

@@ -15,7 +15,6 @@ const getMessagesToGroup = asyncHandler(async (req, res) => {
 const getMessagesBetweenUsers = asyncHandler(async (req, res) => {
   const { sentToId } = req.body;
   const userId = req.user.id;
-  console.log("getMessagesBetweenUsers", userId, sentToId);
   try {
     const messages = await messageQueries.getMessagesBetweenUsers(
       userId,

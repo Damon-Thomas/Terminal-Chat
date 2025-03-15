@@ -15,8 +15,10 @@ import e from "express";
 describe("Test CRUD operations for user", () => {
   let token: string;
   let token2: string;
+  let token3: string;
   let userId: string;
   let userId2: string;
+  let userId3: string;
   let server: http.Server;
   let messageId: string;
   let groupId: string;
@@ -76,6 +78,21 @@ describe("Test CRUD operations for user", () => {
 
     expect(result.status).toBe(200);
     expect(result.body.username).toBe("Julie");
+    expect(result.body.token).toBeDefined();
+    expect(result.body.success).toBe(true);
+  });
+
+  test("Create 3rd user", async () => {
+    const result = await request(app).post("/user/createUser").send({
+      username: "Alice",
+      password: "password",
+      confirmPassword: "password",
+    });
+    console.log("result", result.body);
+    userId3 = result.body.id;
+    token3 = result.body.token;
+    expect(result.status).toBe(200);
+    expect(result.body.username).toBe("Alice");
     expect(result.body.token).toBeDefined();
     expect(result.body.success).toBe(true);
   });
@@ -168,19 +185,30 @@ describe("Test CRUD operations for user", () => {
       expect(result.status).toBe(200);
     });
 
-    test("Add friend duplicate", async () => {
+    test("Add friend 2", async () => {
+      console.log("userId3", userId3);
       const result = await request(app)
         .post("/action/addFriend")
         .send({
-          friendId: userId2,
+          friendId: userId3,
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
     });
 
-    test("Remove friend", async () => {
+    test("User 2 adds user 1", async () => {
       const result = await request(app)
-        .delete("/action/removeFriend")
+        .post("/action/addFriend")
+        .send({
+          friendId: userId,
+        })
+        .set("Authorization", `Bearer ${token2}`);
+      expect(result.status).toBe(200);
+    });
+
+    test("Add friend duplicate", async () => {
+      const result = await request(app)
+        .post("/action/addFriend")
         .send({
           friendId: userId2,
         })
@@ -206,11 +234,7 @@ describe("Test CRUD operations for user", () => {
           groupName: "Test Group 2",
         })
         .set("Authorization", `Bearer ${token2}`);
-
-      console.log("Token 2", token2);
-      console.log("Result", result.body);
       expect(result.status).toBe(200);
-      console.log("group 2", result.body);
       groupId2 = result.body.group.id;
     });
 
@@ -234,7 +258,6 @@ describe("Test CRUD operations for user", () => {
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
-      console.log("join group", result.body);
     });
 
     test("Join 2nd Group", async () => {
@@ -284,7 +307,6 @@ describe("Test CRUD operations for user", () => {
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
-        console.log(result.body);
         expect(result.body.messages[0].content).toBe("Hello World");
       });
 
@@ -324,7 +346,6 @@ describe("Test CRUD operations for user", () => {
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
-        console.log(result.body);
       });
 
       test("Get group members", async () => {
@@ -334,7 +355,6 @@ describe("Test CRUD operations for user", () => {
             groupId: groupId,
           })
           .set("Authorization", `Bearer ${token}`);
-        console.log("Group 1", result.body, result.body.members, groupId);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.members.length).toBe(1);
@@ -347,10 +367,84 @@ describe("Test CRUD operations for user", () => {
             groupId: groupId2,
           })
           .set("Authorization", `Bearer ${token2}`);
-        console.log("Group 2", result.body, result.body.members, groupId2);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.members.length).toBe(2);
+      });
+
+      test("Get friends list", async () => {
+        const result = await request(app)
+          .get("/contacts/getFriendsList")
+          .set("Authorization", `Bearer ${token}`);
+        console.log("friends list", result.body.friends);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.friends.length).toBe(1);
+      });
+
+      test("User 1 Get non contact users", async () => {
+        const result = await request(app)
+          .get("/contacts/getNonContactUsers")
+          .send({
+            page: 1,
+          })
+          .set("Authorization", `Bearer ${token}`);
+        console.log("non contact users", result.body);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.users).toBeDefined();
+      });
+
+      test("User 2 Get non contact users", async () => {
+        const result = await request(app)
+          .get("/contacts/getNonContactUsers")
+          .send({
+            page: 1,
+          })
+          .set("Authorization", `Bearer ${token2}`);
+        console.log("non contact users", result.body);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.users).toBeDefined();
+      });
+
+      test("Get non contact users out of range", async () => {
+        const result = await request(app)
+          .get("/contacts/getNonContactUsers")
+          .send({
+            page: 100,
+          })
+          .set("Authorization", `Bearer ${token}`);
+        console.log("non contact users out of range", result.body);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.users).toBeDefined();
+      });
+
+      test("Get non joined groups", async () => {
+        const result = await request(app)
+          .get("/contacts/getNonJoinedGroups")
+          .send({
+            page: 1,
+          })
+          .set("Authorization", `Bearer ${token2}`);
+        console.log("non joined groups", result.body);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.groups).toBeDefined();
+      });
+
+      test("Get non joined groups out of range", async () => {
+        const result = await request(app)
+          .get("/contacts/getNonJoinedGroups")
+          .send({
+            page: 100,
+          })
+          .set("Authorization", `Bearer ${token}`);
+        console.log("non joined groups out of range", result.body);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.groups).toBeDefined();
       });
     });
 
@@ -371,6 +465,16 @@ describe("Test CRUD operations for user", () => {
     //
     //
     //Tear Down
+
+    test("Remove friend", async () => {
+      const result = await request(app)
+        .delete("/action/removeFriend")
+        .send({
+          friendId: userId2,
+        })
+        .set("Authorization", `Bearer ${token}`);
+      expect(result.status).toBe(200);
+    });
 
     test("Leave group", async () => {
       const result = await request(app)
@@ -399,7 +503,6 @@ describe("Test CRUD operations for user", () => {
           groupId: groupId2,
         })
         .set("Authorization", `Bearer ${token2}`);
-      console.log("Delete group 2", result.body);
       expect(result.status).toBe(200);
     });
   });
@@ -433,6 +536,15 @@ describe("Test CRUD operations for user", () => {
     const result = await request(app)
       .delete("/user/deleteUser")
       .set("Authorization", `Bearer ${token2}`);
+    expect(result.status).toBe(200);
+  });
+
+  test("Delete user 3", async () => {
+    console.log("token3", token3);
+    const result = await request(app)
+      .delete("/user/deleteUser")
+      .set("Authorization", `Bearer ${token3}`);
+    console.log("result del 3", result.body);
     expect(result.status).toBe(200);
   });
 });

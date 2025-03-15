@@ -50,7 +50,6 @@ const getGroupsUserHasJoined = async (userId: string) => {
 };
 
 const getGroupMembers = async (groupId: string) => {
-  console.log("Query Group Id", groupId);
   return await prisma.UserGroup.findMany({
     where: {
       groupId: groupId,
@@ -62,7 +61,7 @@ const getGroupMembers = async (groupId: string) => {
 };
 
 const getFriendsList = async (userId: string) => {
-  return await prisma.user.findUnique({
+  return await prisma.user.findMany({
     where: {
       id: userId,
     },
@@ -72,8 +71,54 @@ const getFriendsList = async (userId: string) => {
   });
 };
 
+const getNonContactUsers = async (userId: string, page: number) => {
+  const takeStart = (page - 1) * 10;
+  const friends = await prisma.user.findMany({
+    where: {
+      id: userId,
+    },
+    select: {
+      friends: true,
+    },
+  });
+  const friendIds = [];
+  friends.forEach((friend) => {
+    friendIds.push(friend.friends[0].friendId);
+  });
+  return await prisma.user.findMany({
+    where: {
+      id: {
+        not: userId,
+        notIn: friendIds,
+      },
+    },
+    take: 10,
+    skip: takeStart,
+  });
+};
+
+const getNonJoinedGroups = async (userId: string, page: number) => {
+  const takeStart = (page - 1) * 10;
+  return await prisma.Group.findMany({
+    where: {
+      members: {
+        none: {
+          userId: userId,
+        },
+      },
+    },
+    take: 10,
+    skip: takeStart,
+    orderBy: {
+      Message: {
+        _count: "desc",
+      },
+    },
+  });
+};
+
 const getUserContacts = async (userId: string) => {
-  return await prisma.user.findUnique({
+  return await prisma.user.findMany({
     where: {
       id: userId,
     },
@@ -89,6 +134,7 @@ export default {
   getGroupsUserHasJoined,
   getFriendsList,
   getCurrentConversationUsers,
-  getMessagesBetweenUsers,
   getGroupMembers,
+  getNonContactUsers,
+  getNonJoinedGroups,
 };
