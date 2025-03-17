@@ -10,6 +10,7 @@ import {
 } from "@jest/globals";
 import http from "http";
 import e from "express";
+import exp from "constants";
 
 //user login and signup tests
 describe("Test CRUD operations for user", () => {
@@ -457,7 +458,28 @@ describe("Test CRUD operations for user", () => {
         const result = await request(app)
           .get("/profile/getProfile")
           .set("Authorization", `Bearer ${token}`);
+        console.log("profile", result.body);
         expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.color).toBe("#74121D");
+        expect(result.body.bio).toBe("Bio");
+        expect(result.body.intro).toBe("Intro");
+      });
+      test("Update User Profile", async () => {
+        const result = await request(app)
+          .post("/profile/updateProfile")
+          .send({
+            color: "#000000",
+            bio: "Hello World",
+            intro: "Hello",
+          })
+          .set("Authorization", `Bearer ${token}`);
+        console.log("updated profile", result.body);
+        expect(result.status).toBe(200);
+        expect(result.body.failure).toBe(false);
+        expect(result.body.color).toBe("#000000");
+        expect(result.body.bio).toBe("Hello World");
+        expect(result.body.intro).toBe("Hello");
       });
     });
 
