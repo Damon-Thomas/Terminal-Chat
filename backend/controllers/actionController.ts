@@ -186,16 +186,22 @@ const leaveGroup = asyncHandler(async (req, res, next) => {
 });
 
 const deleteGroup = asyncHandler(async (req, res, next) => {
-  const { groupId, masterKey } = req.body;
+  const { groupId } = req.body;
   console.log("deleteGroup", groupId);
-  if (masterKey !== process.env.MASTER_KEY) {
-    return res
-      .status(400)
-      .json({ failure: true, message: "Master Key is incorrect" });
-  }
   try {
-    const deleteGroup = await actionQueries.deleteGroup(groupId);
-    res.status(200).json({ deleteGroup, failure: false });
+    const deleteGroup = await actionQueries.deleteGroup(groupId, req.user.id);
+    if (
+      deleteGroup &&
+      deleteGroup.failure &&
+      deleteGroup.message === "User is not the group administrator!"
+    ) {
+      return res.status(403).json({ ...deleteGroup });
+    }
+    if (deleteGroup && !deleteGroup.failure) {
+      res.status(200).json({ ...deleteGroup });
+    } else {
+      res.status(400).json({ ...deleteGroup });
+    }
   } catch (e) {
     console.log("error deleting group", e);
     res.status(400).json({ e, failure: true });

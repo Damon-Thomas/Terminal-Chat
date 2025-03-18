@@ -89,7 +89,6 @@ describe("Test CRUD operations for user", () => {
       password: "password",
       confirmPassword: "password",
     });
-    console.log("result", result.body);
     userId3 = result.body.id;
     token3 = result.body.token;
     expect(result.status).toBe(200);
@@ -187,7 +186,6 @@ describe("Test CRUD operations for user", () => {
     });
 
     test("Add friend 2", async () => {
-      console.log("userId3", userId3);
       const result = await request(app)
         .post("/action/addFriend")
         .send({
@@ -224,6 +222,7 @@ describe("Test CRUD operations for user", () => {
           groupName: "Test Group",
         })
         .set("Authorization", `Bearer ${token}`);
+      console.log("create group result", result.body);
       expect(result.status).toBe(200);
       groupId = result.body.group.id;
     });
@@ -324,6 +323,56 @@ describe("Test CRUD operations for user", () => {
       });
     });
 
+    test("Set pinned message", async () => {
+      const result = await request(app)
+        .put("/action/setPinnedMessage")
+        .send({
+          groupId: groupId,
+          content: "Pinned Message",
+        })
+        .set("Authorization", `Bearer ${token}`);
+      console.log("Pinned Message", result.body);
+      expect(result.status).toBe(200);
+      expect(result.body.pinnedMessage.content).toBe("Pinned Message");
+    });
+
+    test("Non admin set pinned message", async () => {
+      const result = await request(app)
+        .put("/action/setPinnedMessage")
+        .send({
+          groupId: groupId,
+          content: "Hostile Takeover",
+        })
+        .set("Authorization", `Bearer ${token2}`);
+      console.log("Hostile Takeover", result.body);
+      expect(result.status).toBe(403);
+      expect(result.body.message).toBe("User is not the group administrator!");
+    });
+
+    test("Overwrite pinned message", async () => {
+      const result = await request(app)
+        .put("/action/setPinnedMessage")
+        .send({
+          groupId: groupId,
+          content: "Pinned Message Updated",
+        })
+        .set("Authorization", `Bearer ${token}`);
+      console.log("Pinned Message Updated", result.body);
+      expect(result.status).toBe(200);
+      expect(result.body.pinnedMessage.content).toBe("Pinned Message Updated");
+    });
+
+    test("Delete pinned message", async () => {
+      const result = await request(app)
+        .delete("/action/deletePinnedMessage")
+        .send({
+          groupId: groupId,
+        })
+        .set("Authorization", `Bearer ${token}`);
+      console.log("Delete Pinned Message", result.body);
+      expect(result.status).toBe(200);
+    });
+
     //
     //
     //
@@ -377,7 +426,6 @@ describe("Test CRUD operations for user", () => {
         const result = await request(app)
           .get("/contacts/getFriendsList")
           .set("Authorization", `Bearer ${token}`);
-        console.log("friends list", result.body.friends);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.friends.length).toBe(1);
@@ -390,7 +438,6 @@ describe("Test CRUD operations for user", () => {
             page: 1,
           })
           .set("Authorization", `Bearer ${token}`);
-        console.log("non contact users", result.body);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.users).toBeDefined();
@@ -403,7 +450,6 @@ describe("Test CRUD operations for user", () => {
             page: 1,
           })
           .set("Authorization", `Bearer ${token2}`);
-        console.log("non contact users", result.body);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.users).toBeDefined();
@@ -416,7 +462,6 @@ describe("Test CRUD operations for user", () => {
             page: 100,
           })
           .set("Authorization", `Bearer ${token}`);
-        console.log("non contact users out of range", result.body);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.users).toBeDefined();
@@ -429,7 +474,6 @@ describe("Test CRUD operations for user", () => {
             page: 1,
           })
           .set("Authorization", `Bearer ${token2}`);
-        console.log("non joined groups", result.body);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.groups).toBeDefined();
@@ -442,7 +486,6 @@ describe("Test CRUD operations for user", () => {
             page: 100,
           })
           .set("Authorization", `Bearer ${token}`);
-        console.log("non joined groups out of range", result.body);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.groups).toBeDefined();
@@ -458,7 +501,6 @@ describe("Test CRUD operations for user", () => {
         const result = await request(app)
           .get("/profile/getProfile")
           .set("Authorization", `Bearer ${token}`);
-        console.log("profile", result.body);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.color).toBe("#74121D");
@@ -474,7 +516,6 @@ describe("Test CRUD operations for user", () => {
             intro: "Hello",
           })
           .set("Authorization", `Bearer ${token}`);
-        console.log("updated profile", result.body);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.color).toBe("#000000");
@@ -508,6 +549,18 @@ describe("Test CRUD operations for user", () => {
       expect(result.status).toBe(200);
     });
 
+    test("Wrong user delete group", async () => {
+      const result = await request(app)
+        .delete("/action/deleteGroup")
+        .send({
+          groupId: groupId,
+        })
+        .set("Authorization", `Bearer ${token2}`);
+      console.log("Wrong User Delete Group", result.body);
+      expect(result.status).toBe(403);
+      expect(result.body.message).toBe("User is not the group administrator!");
+    });
+
     test("Delete group", async () => {
       const result = await request(app)
         .delete("/action/deleteGroup")
@@ -515,6 +568,7 @@ describe("Test CRUD operations for user", () => {
           groupId: groupId,
         })
         .set("Authorization", `Bearer ${token}`);
+      console.log("Delete Group", result.body);
       expect(result.status).toBe(200);
     });
 
@@ -525,6 +579,7 @@ describe("Test CRUD operations for user", () => {
           groupId: groupId2,
         })
         .set("Authorization", `Bearer ${token2}`);
+      console.log("Delete Group 2", result.body);
       expect(result.status).toBe(200);
     });
   });
@@ -539,7 +594,6 @@ describe("Test CRUD operations for user", () => {
           password: "password",
         })
         .set("Authorization", `Bearer ${token}`);
-
       expect(result.status).toBe(200);
     } else {
       console.log("Token is undefined");
@@ -562,11 +616,9 @@ describe("Test CRUD operations for user", () => {
   });
 
   test("Delete user 3", async () => {
-    console.log("token3", token3);
     const result = await request(app)
       .delete("/user/deleteUser")
       .set("Authorization", `Bearer ${token3}`);
-    console.log("result del 3", result.body);
     expect(result.status).toBe(200);
   });
 });

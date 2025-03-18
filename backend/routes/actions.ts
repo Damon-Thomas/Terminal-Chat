@@ -76,7 +76,7 @@ router.put(
   actionController.setPinnedMessage
 );
 
-router.put(
+router.delete(
   "/deletePinnedMessage",
   userController.verifyToken,
   userController.authUser,

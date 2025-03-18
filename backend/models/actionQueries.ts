@@ -80,7 +80,7 @@ const deletePinnedMessage = async (userId: string, groupId: string) => {
 
   const pinnedMessage = await prisma.group.update({
     where: { id: groupId },
-    data: { PinnedMessage: null },
+    data: { PinnedMessage: { disconnect: true } },
   });
   return { pinnedMessage, failure: false };
 };
@@ -190,7 +190,7 @@ const createGroup = async (groupName: string, administratorId: string) => {
 
 const deleteGroup = async (groupId: string, userId: string) => {
   if (!groupId || !userId) {
-    return { message: "Invalid input" };
+    return { message: "Invalid input", failure: true };
   }
 
   const administratorId = await prisma.group.findUnique({
@@ -198,11 +198,11 @@ const deleteGroup = async (groupId: string, userId: string) => {
     select: { administratorId: true },
   });
   if (!administratorId || administratorId.administratorId !== userId) {
-    return { message: "User is not the group administrator!" };
+    return { message: "User is not the group administrator!", failure: true };
   }
 
   if (!administratorId) {
-    return { message: "Group not found" };
+    return { message: "Group not found", failure: true };
   }
 
   if (administratorId.administratorId === userId) {
@@ -212,7 +212,7 @@ const deleteGroup = async (groupId: string, userId: string) => {
     await prisma.group.delete({
       where: { id: groupId },
     });
-    return { message: "Group deleted" };
+    return { message: "Group deleted", failure: false };
   }
 };
 
