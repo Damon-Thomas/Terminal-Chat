@@ -40,8 +40,10 @@ model Message {
   sentToId      String?
   sentTo        User?          @relation("ReceivedMessages", fields: [sentToId], references: [id])
   sentToGroupId String?
-  sentToGroup   Group?         @relation(fields: [sentToGroupId], references: [id])
+  sentToGroup   Group?         @relation("GroupMessages", fields: [sentToGroupId], references: [id])
   likes         MessageLikes[]
+  PinnedMessage Boolean        @default(false)
+  Group         Group[]
 }
 
 model Group {
@@ -51,7 +53,9 @@ model Group {
   groupName       String      @unique
   createdAt       DateTime    @default(now())
   members         UserGroup[]
-  Message         Message[]
+  Message         Message[]   @relation("GroupMessages")
+  PinnedMessage   Message?    @relation(fields: [PinnedMessageId], references: [id])
+  PinnedMessageId String?
 }
 
 model UserGroup {

@@ -34,6 +34,57 @@ const sendMessage = async (
   return { ...newMessage, failure: false };
 };
 
+const setPinnedMessage = async (
+  userId: string,
+  groupId: string,
+  content: string
+) => {
+  const pinnedMessageVerifier = await prisma.group.findUnique({
+    where: { id: groupId, administratorId: userId },
+  });
+  if (!pinnedMessageVerifier) {
+    return { message: "User is not the group administrator!", failure: true };
+  }
+  const updatedGroup = await prisma.group.update({
+    where: { id: groupId },
+    data: {
+      PinnedMessage: {
+        upsert: {
+          // create the pinned message if it doesn't exist
+          create: {
+            content: content,
+            authorId: userId,
+            // You can optionally fill in other required fields (e.g. filename, filePath, etc.)
+          },
+          // update the pinned message if it already exists
+          update: {
+            content: content,
+          },
+        },
+      },
+    },
+    include: {
+      PinnedMessage: true,
+    },
+  });
+  return { pinnedMessage: updatedGroup.PinnedMessage, failure: false };
+};
+
+const deletePinnedMessage = async (userId: string, groupId: string) => {
+  const pinnedMessageVerifier = await prisma.group.findUnique({
+    where: { id: groupId, administratorId: userId },
+  });
+  if (!pinnedMessageVerifier) {
+    return { message: "User is not the group administrator!", failure: true };
+  }
+
+  const pinnedMessage = await prisma.group.update({
+    where: { id: groupId },
+    data: { PinnedMessage: null },
+  });
+  return { pinnedMessage, failure: false };
+};
+
 const likeMessage = async (userId: string, messageId: string) => {
   const message = await prisma.message.findUnique({
     where: { id: messageId },
@@ -165,19 +216,6 @@ const deleteGroup = async (groupId: string, userId: string) => {
   }
 };
 
-// const createPinnedMessage = async (messageId: string, groupId: string) => {
-//   const group = await prisma.group.findUnique({
-//     where: { id: groupId },
-//   });
-//   if (!group) {
-//     return { message: "Group not found", failure: true };
-//   }
-//   const pinnedMessage = await prisma.PinnedMessage.create({
-//     data: { messageId, groupId },
-//   });
-//   return { pinnedMessage, failure: false };
-// };
-
 export default {
   sendMessage,
   likeMessage,
@@ -188,4 +226,6 @@ export default {
   leaveGroup,
   createGroup,
   deleteGroup,
+  setPinnedMessage,
+  deletePinnedMessage,
 };
