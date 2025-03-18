@@ -142,8 +142,13 @@ const leaveGroup = asyncHandler(async (req, res, next) => {
 });
 
 const deleteGroup = asyncHandler(async (req, res, next) => {
-  const { groupId } = req.body;
+  const { groupId, masterKey } = req.body;
   console.log("deleteGroup", groupId);
+  if (masterKey !== process.env.MASTER_KEY) {
+    return res
+      .status(400)
+      .json({ failure: true, message: "Master Key is incorrect" });
+  }
   try {
     const deleteGroup = await actionQueries.deleteGroup(groupId);
     res.status(200).json({ deleteGroup, failure: false });
