@@ -124,7 +124,7 @@ const leaveGroup = async (userId: string, groupId: string) => {
   return { group };
 };
 
-const createGroup = async (groupName: string) => {
+const createGroup = async (groupName: string, administratorId: string) => {
   const groupExists = await prisma.group.findFirst({
     where: { groupName },
   });
@@ -132,23 +132,51 @@ const createGroup = async (groupName: string) => {
     return { message: "Group already exists", failure: true };
   }
   const group = await prisma.group.create({
-    data: { groupName },
+    data: { groupName, administratorId },
   });
   return { group, failure: false };
 };
 
-const deleteGroup = async (groupId: string) => {
-  if (!groupId) {
-    return { message: "Invalid group id" };
+const deleteGroup = async (groupId: string, userId: string) => {
+  if (!groupId || !userId) {
+    return { message: "Invalid input" };
   }
-  await prisma.UserGroup.deleteMany({
-    where: { groupId },
-  });
-  await prisma.group.delete({
+
+  const administratorId = await prisma.group.findUnique({
     where: { id: groupId },
+    select: { administratorId: true },
   });
-  return { message: "Group deleted" };
+  if (!administratorId || administratorId.administratorId !== userId) {
+    return { message: "User is not the group administrator!" };
+  }
+
+  if (!administratorId) {
+    return { message: "Group not found" };
+  }
+
+  if (administratorId.administratorId === userId) {
+    await prisma.UserGroup.deleteMany({
+      where: { groupId },
+    });
+    await prisma.group.delete({
+      where: { id: groupId },
+    });
+    return { message: "Group deleted" };
+  }
 };
+
+// const createPinnedMessage = async (messageId: string, groupId: string) => {
+//   const group = await prisma.group.findUnique({
+//     where: { id: groupId },
+//   });
+//   if (!group) {
+//     return { message: "Group not found", failure: true };
+//   }
+//   const pinnedMessage = await prisma.PinnedMessage.create({
+//     data: { messageId, groupId },
+//   });
+//   return { pinnedMessage, failure: false };
+// };
 
 export default {
   sendMessage,

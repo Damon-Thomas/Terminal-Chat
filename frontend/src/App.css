@@ -1,3 +1,128 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 /* Hacker-style dark web chat theme */
 
 :root {
@@ -34,29 +159,72 @@ body {
 }
 
 .glitch-message-title {
-  background: rgba(51, 255, 51, 0.1);
+  /* background: rgba(51, 255, 51, 0.1); */
   padding: 8px;
-  border-left: 3px solid var(--text-color);
+  /* border-left: 3px solid var(--text-color); */
   margin: 5px 0;
   font-size: 3rem;
-  animation: glitch-text 1s infinite alternate;
+  animation: heavy-glitch 1s infinite alternate;
 }
 
-.glitch-message {
-  background: rgba(51, 255, 51, 0.1);
+.demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.glitch-received-message {
+  /* background: rgba(51, 255, 51, 0.1); */
   padding: 8px;
   border-left: 3px solid var(--text-color);
   margin: 5px 0;
   font-size: 14px;
-  animation: glitch-text 1s infinite alternate;
+  animation: subtle-glitch 1s infinite alternate;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .received-message {
   color: var(--text-color);
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.receivedMessageTypes,
+.sentMessageTypes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 2rem);
+  border: 2px solid #33ff33;
+  padding: 1rem;
 }
 
 .user-message {
   color: var(--secondary-text-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-glitch-message {
+  color: var(--secondary-text-color);
+  padding: 8px;
+  border-right: 3px solid var(--secondary-text-color);
+  display: flex;
+  justify-content: flex-end;
+
+  margin: 5px 0;
+  font-size: 14px;
+  animation: subtle-glitch 1s infinite alternate;
 }
 
 .system-message {
@@ -100,6 +268,91 @@ button:hover {
   }
 }
 
+/* Heavy Glitch Effect */
+@keyframes heavy-glitch {
+  0% {
+    text-shadow: 3px 3px 0 #ff0000, -3px -3px 0 #00ffff;
+    transform: skewX(10deg);
+  }
+  25% {
+    text-shadow: -3px -3px 0 #ff0000, 3px 3px 0 #00ffff;
+    transform: skewX(-10deg);
+  }
+  50% {
+    text-shadow: 3px -3px 0 #ff0000, -3px 3px 0 #00ffff;
+    transform: skewX(5deg);
+  }
+  75% {
+    text-shadow: -3px 3px 0 #ff0000, 3px -3px 0 #00ffff;
+    transform: skewX(-5deg);
+  }
+  100% {
+    text-shadow: 3px 3px 0 #ff0000, -3px -3px 0 #00ffff;
+    transform: skewX(0deg);
+  }
+}
+
+/* Subtle Glitch Effect */
+@keyframes subtle-glitch {
+  0% {
+    text-shadow: 0.5px 0.5px 0 #ff0000, -0.5px -0.5px 0 #00ffff;
+  }
+  100% {
+    text-shadow: -0.5px -0.5px 0 #ff0000, 0.5px 0.5px 0 #00ffff;
+  }
+}
+
+/* Glitch Horizontal Shift */
+@keyframes glitch-horizontal {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(2px);
+  }
+  50% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Glitch Vertical Shift */
+@keyframes glitch-vertical {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(2px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+  75% {
+    transform: translateY(1px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Rapid Opacity Flicker */
+@keyframes glitch-opacity {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 /* Flicker Animation */
 @keyframes flicker {
   0% {
@@ -107,6 +360,18 @@ button:hover {
   }
   50% {
     opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes flicker2 {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
   }
   100% {
     opacity: 1;

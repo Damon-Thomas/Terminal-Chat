@@ -97,7 +97,7 @@ const makeGroup = asyncHandler(async (req, res, next) => {
   }
   const { groupName } = req.body;
   try {
-    const newGroup = await actionQueries.createGroup(groupName);
+    const newGroup = await actionQueries.createGroup(groupName, userId);
     if (newGroup.failure) {
       return res
         .status(400)

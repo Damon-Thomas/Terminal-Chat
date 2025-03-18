@@ -14,17 +14,18 @@ datasource db {
 }
 
 model User {
-  id               String         @id @unique @default(uuid())
-  username         String         @unique
-  password         String
-  sentMessages     Message[]      @relation("SentMessages")
-  receivedMessages Message[]      @relation("ReceivedMessages")
-  groups           UserGroup[]
-  friends          UserFriend[]   @relation("UsertoFriend")
-  Profile          Profile[]
-  lastLogin        DateTime       @default(now())
-  MessageLikes     MessageLikes[]
-  UserFriend       UserFriend[]
+  id                 String         @id @unique @default(uuid())
+  username           String         @unique
+  password           String
+  sentMessages       Message[]      @relation("SentMessages")
+  receivedMessages   Message[]      @relation("ReceivedMessages")
+  groups             UserGroup[]
+  groupsAdministered Group[]
+  friends            UserFriend[]   @relation("UsertoFriend")
+  Profile            Profile[]
+  lastLogin          DateTime       @default(now())
+  MessageLikes       MessageLikes[]
+  UserFriend         UserFriend[]
 }
 
 model Message {
@@ -44,11 +45,13 @@ model Message {
 }
 
 model Group {
-  id        String      @id @unique @default(uuid())
-  groupName String      @unique
-  createdAt DateTime    @default(now())
-  members   UserGroup[]
-  Message   Message[]
+  id              String      @id @unique @default(uuid())
+  administratorId String
+  administrator   User        @relation(fields: [administratorId], references: [id])
+  groupName       String      @unique
+  createdAt       DateTime    @default(now())
+  members         UserGroup[]
+  Message         Message[]
 }
 
 model UserGroup {
@@ -58,7 +61,7 @@ model UserGroup {
   group    Group    @relation(fields: [groupId], references: [id])
   joinedAt DateTime @default(now())
 
-  @@id([userId, groupId]) 
+  @@id([userId, groupId])
 }
 
 model UserFriend {
