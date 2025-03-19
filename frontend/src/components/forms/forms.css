@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+.formContainer {
+  @apply fixed inset-0 flex items-center justify-center gap-4 p-6 bg-black/50 w-full sm:w-4/5 md:w-3/5 lg:w-2/5 h-fit;
+}
+
+/* Full viewport overlay */
+.modalOverlay {
+  @apply fixed inset-0 flex items-center justify-center bg-black/50;
+}
+
+/* Actual modal container */
+.modalContainer {
+  @apply flex flex-col  p-6 w-full sm:w-4/5 md:w-3/5 lg:w-2/5 h-fit rounded;
+}
+
+.formWrapper {
+  @apply flex flex-col space-y-4;
+}
+
+.formWrapper {
+  @apply flex flex-col p-2 gap-2 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-10;
+}

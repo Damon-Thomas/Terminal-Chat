@@ -1,0 +1,66 @@
+/* typewritter effects */
+
+.typewriter {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  --content: "Sign Up";
+  --steps: 7;
+}
+
+.typewriter::before {
+  content: var(--content);
+  position: absolute;
+  left: 0;
+  color: var(--text-color);
+  overflow: hidden;
+  width: 0;
+  white-space: nowrap;
+  animation: typing-fix 2s steps(var(--steps)) forwards;
+}
+
+.typewriter::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: var(--text-color);
+  animation: cursor-blink 0.7s steps(2) infinite,
+    cursor-move 2s steps(var(--steps)) forwards, cursor-hide 0.1s forwards 4s;
+}
+
+@keyframes typing-fix {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes cursor-blink {
+  from,
+  to {
+    background: transparent;
+  }
+  50% {
+    background: var(--text-color);
+  }
+}
+
+@keyframes cursor-move {
+  from {
+    left: 0;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes cursor-hide {
+  to {
+    opacity: 0;
+  }
+}

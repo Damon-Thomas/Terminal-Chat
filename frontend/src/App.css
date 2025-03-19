@@ -232,37 +232,6 @@ body {
   color: var(--accent-color);
 }
 
-.formContainer {
-  @apply fixed inset-0 flex items-center justify-center gap-4 p-6 bg-black/50 w-full sm:w-4/5 md:w-3/5 lg:w-2/5 h-fit;
-}
-
-/* Full viewport overlay */
-.modalOverlay {
-  @apply fixed inset-0 flex items-center justify-center bg-black/50;
-}
-
-/* Actual modal container */
-.modalContainer {
-  @apply flex flex-col  p-6 w-full sm:w-4/5 md:w-3/5 lg:w-2/5 h-fit rounded;
-}
-
-.formWrapper {
-  @apply flex flex-col gap-4;
-}
-
-.input-box {
-  width: 100%;
-  max-width: 800px;
-  border: 2px solid var(--border-color);
-  background: #111;
-  color: var(--text-color);
-  font-family: var(--font-family);
-  padding: 10px;
-  font-size: 16px;
-  outline: none;
-  animation: flicker 1.5s infinite alternate;
-}
-
 button {
   background: var(--background-color);
   color: var(--text-color);
@@ -469,70 +438,7 @@ button:hover {
   @apply flex items-center justify-center;
 }
 
-.typewriter-title {
-  position: relative;
-  display: inline-block;
-  color: transparent;
-}
-
-.typewriter-title::before {
-  content: "Sign Up";
-  position: absolute;
-  left: 0;
-  color: var(--text-color);
-  overflow: hidden;
-  width: 0;
-  white-space: nowrap;
-  animation: typing-fix 2s steps(7) forwards;
-}
-
-.typewriter-title::after {
-  content: "";
-  position: absolute;
-  right: -2px;
-  top: 0;
-  height: 100%;
-  width: 2px;
-  background: var(--text-color);
-  animation: cursor-blink 0.7s steps(2) infinite,
-    cursor-move 2s steps(7) forwards, cursor-hide 0.1s forwards 4s; /* Changed from 2s to 4s to add 2 second delay */
-}
-
-@keyframes typing-fix {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes cursor-blink {
-  from,
-  to {
-    background: transparent;
-  }
-  50% {
-    background: var(--text-color);
-  }
-}
-
-@keyframes cursor-move {
-  from {
-    left: 0;
-  }
-  to {
-    left: 100%;
-  }
-}
-
-@keyframes cursor-hide {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes typewriter-reveal {
+/* @keyframes typewriter-reveal {
   to {
     width: 0;
   }
@@ -542,4 +448,4 @@ button:hover {
   50% {
     border-color: transparent;
   }
-}
+} */

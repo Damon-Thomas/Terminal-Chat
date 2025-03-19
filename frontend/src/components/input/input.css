@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+.input-box {
+  width: 100%;
+  max-width: 800px;
+  border: 2px solid var(--border-color);
+  color: var(--secondary-text-color);
+  background: #111;
+  /* color: var(--text-color); */
+  font-family: var(--font-family);
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  outline: none;
+  animation: flicker 1.5s infinite alternate;
+}
+
+.inputWrapper {
+  @apply flex flex-col justify-start items-start gap-2;
+}

@@ -1,15 +1,11 @@
-import { useState } from "react";
-import SignUp from "./auth/signup";
+import SignUp from "./components/forms/auth/signup.tsx";
 import "./App.css";
-import FormContainer from "./auth/formContainer";
+import "./components/genCSS/typewriter.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <FormContainer>
-      <SignUp />
-    </FormContainer>
+    <SignUp />
+
     // <div className="main demo-container">
     //   <h1 className="glitch-message-title">Glitch Title</h1>
 
