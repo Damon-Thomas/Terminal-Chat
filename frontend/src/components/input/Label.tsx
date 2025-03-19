@@ -15,7 +15,7 @@ export default function Label({
     initTypewriter();
   }, []);
   return (
-    <label className={className + " label typewriter"} htmlFor={htmlFor}>
+    <label className={className + " label "} htmlFor={htmlFor}>
       {text}
     </label>
   );

@@ -1,3 +1,4 @@
+import Button from "../../Buttons/Button.tsx";
 import Input from "../../input/Input.tsx";
 import InputWrapper from "../../input/InputWrapper.tsx";
 import Label from "../../input/Label.tsx";
@@ -13,7 +14,13 @@ export default function SignUp() {
       <Form>
         <InputWrapper>
           <Label htmlFor="usernameSU" text="Username" className="" />
-          <Input className="" type="text" id="usernameSU" name="usernameSU" />
+          <Input
+            className=""
+            type="text"
+            id="usernameSU"
+            name="usernameSU"
+            required
+          />
         </InputWrapper>
         <InputWrapper>
           <Label htmlFor="passwordSU" text="Password" className="" />
@@ -22,6 +29,7 @@ export default function SignUp() {
             type="password"
             id="passwordSU"
             name="passwordSU"
+            required
           />
         </InputWrapper>
         <InputWrapper>
@@ -35,10 +43,13 @@ export default function SignUp() {
             type="password"
             id="confirmpasswordSU"
             name="confirmpasswordSU"
+            required
           />
         </InputWrapper>
 
-        <button type="submit">Submit</button>
+        <Button type="submit" className="" onClick={() => {}}>
+          Submit
+        </Button>
       </Form>
     </ModalContainer>
   );

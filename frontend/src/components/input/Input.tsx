@@ -5,11 +5,13 @@ export default function Input({
   className,
   id,
   name,
+  required = false,
 }: {
   type: string;
   className: string;
   id: string;
   name: string;
+  required?: boolean;
 }) {
   return (
     <input
@@ -17,6 +19,7 @@ export default function Input({
       className={className + "input-box"}
       id={id}
       name={name}
+      required={required}
     />
   );
 }
