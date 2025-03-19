@@ -4,8 +4,6 @@
   position: relative;
   display: inline-block;
   color: transparent;
-  --content: "Sign Up";
-  --steps: 7;
 }
 
 .typewriter::before {
