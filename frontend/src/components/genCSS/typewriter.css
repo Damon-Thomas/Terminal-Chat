@@ -1,22 +1,40 @@
-/* typewritter effects */
-
+/* Base typewriter styles */
 .typewriter {
   position: relative;
   display: inline-block;
   color: transparent;
+  /* Default animation durations */
+  --typing-duration: 2s;
+  --cursor-blink-duration: 0.7s;
+  --cursor-move-duration: 2s;
+  --endDelay: 4s;
 }
 
+/* Color handling for the ::before element */
+.typewriter.default::before {
+  color: var(--text-color);
+}
+
+.typewriter.system::before {
+  color: var(--accent-color);
+}
+
+.typewriter.user::before {
+  color: var(--secondary-text-color);
+}
+
+/* Base text animation */
 .typewriter::before {
   content: var(--content);
   position: absolute;
   left: 0;
-  color: var(--text-color);
   overflow: hidden;
   width: 0;
   white-space: nowrap;
-  animation: typing-fix 2s steps(var(--steps)) forwards;
+  animation: typing-fix var(--typing-duration) steps(var(--steps)) forwards;
 }
 
+/* Generic cursor element */
 .typewriter::after {
   content: "";
   position: absolute;
@@ -24,11 +42,39 @@
   top: 0;
   height: 100%;
   width: 2px;
-  background: var(--text-color);
-  animation: cursor-blink 0.7s steps(2) infinite,
-    cursor-move 2s steps(var(--steps)) forwards, cursor-hide 0.1s forwards 4s;
 }
 
+/* Cursor and color for the ::after element by modifier */
+.typewriter.default::after {
+  background: var(--text-color);
+  animation: cursor-blink-default var(--cursor-blink-duration) steps(2) infinite,
+    cursor-move var(--cursor-move-duration) steps(var(--steps)) forwards,
+    cursor-hide 0.1s forwards var(--endDelay);
+}
+
+.typewriter.system::after {
+  background: var(--accent-color);
+  animation: cursor-blink-system var(--cursor-blink-duration) steps(2) infinite,
+    cursor-move var(--cursor-move-duration) steps(var(--steps)) forwards,
+    cursor-hide 0.1s forwards var(--endDelay);
+}
+
+.typewriter.user::after {
+  background: var(--secondary-text-color);
+  animation: cursor-blink-user var(--cursor-blink-duration) steps(2) infinite,
+    cursor-move var(--cursor-move-duration) steps(var(--steps)) forwards,
+    cursor-hide 0.1s forwards var(--endDelay);
+}
+
+/* Fast modifier overrides the default timing variables */
+.fast {
+  --typing-duration: 1s;
+  --cursor-blink-duration: 0.35s;
+  --cursor-move-duration: 1s;
+  --endDelay: 1s;
+}
+
+/* Keyframes remain the same */
 @keyframes typing-fix {
   from {
     width: 0;
@@ -38,13 +84,33 @@
   }
 }
 
-@keyframes cursor-blink {
+@keyframes cursor-blink-default {
   from,
   to {
     background: transparent;
   }
   50% {
     background: var(--text-color);
+  }
+}
+
+@keyframes cursor-blink-system {
+  from,
+  to {
+    background: transparent;
+  }
+  50% {
+    background: var(--accent-color);
+  }
+}
+
+@keyframes cursor-blink-user {
+  from,
+  to {
+    background: transparent;
+  }
+  50% {
+    background: var(--secondary-text-color);
   }
 }
 

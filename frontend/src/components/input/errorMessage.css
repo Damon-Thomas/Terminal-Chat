@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.errorWrapper {
+  @apply h-2 sm:h-3 md:h-4 lg:h-6;
+}
+
+.error-message {
+  @apply text-xs sm:text-xs md:text-sm lg:text-base;
+}

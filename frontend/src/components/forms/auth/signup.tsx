@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Button from "../../Buttons/Button.tsx";
 import Input from "../../input/Input.tsx";
 import InputWrapper from "../../input/InputWrapper.tsx";
@@ -13,32 +13,60 @@ import {
   CurrentUserContextType,
 } from "../../../context/CurrentUserContext.ts";
 import user from "../../../fetchers/user.ts";
+import ErrorMessage from "../../input/errorMessage.tsx";
 
 export default function SignUp() {
   const { setCurrentUser } = useContext(
     CurrentUserContext
   ) as CurrentUserContextType;
 
+  const [errors, setErrors] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   async function signUp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
+    let errors = false;
+    const clientErrors = {
+      username: "",
+      password: "",
+      confirmPassword: "",
+    };
     const usernameLI = form.elements.namedItem(
       "usernameSU"
     ) as HTMLInputElement;
+    if (usernameLI.value.length < 1 || usernameLI.value.length > 20) {
+      clientErrors.username = "Username must be 1-20 characters";
+      errors = true;
+    }
     const passwordLI = form.elements.namedItem(
       "passwordSU"
     ) as HTMLInputElement;
+    if (passwordLI.value.length < 1 || passwordLI.value.length > 20) {
+      clientErrors.password = "Password must be 1-20 characters";
+      errors = true;
+    }
     const confirmpasswordSU = form.elements.namedItem(
       "confirmpasswordSU"
     ) as HTMLInputElement;
     if (passwordLI.value !== confirmpasswordSU.value) {
-      console.log("Passwords do not match");
+      clientErrors.confirmPassword = "Passwords must match";
+      errors = true;
+    }
+    if (errors) {
+      setErrors(clientErrors);
       return;
     }
     const info = await user.logIn(usernameLI.value, passwordLI.value);
     if (info && info.success) {
       setCurrentUser(info);
     } else {
+      if (info && info.success === false && info.errors) {
+        setErrors(info.errors);
+      }
       console.log("Error logging in");
     }
   }
@@ -48,13 +76,8 @@ export default function SignUp() {
       <Form onSubmit={signUp}>
         <InputWrapper>
           <Label htmlFor="usernameSU" text="Username" className="" />
-          <Input
-            className=""
-            type="text"
-            id="usernameSU"
-            name="usernameSU"
-            required
-          />
+          <Input className="" type="text" id="usernameSU" name="usernameSU" />
+          <ErrorMessage>{errors.username}</ErrorMessage>
         </InputWrapper>
         <InputWrapper>
           <Label htmlFor="passwordSU" text="Password" className="" />
@@ -63,8 +86,8 @@ export default function SignUp() {
             type="password"
             id="passwordSU"
             name="passwordSU"
-            required
           />
+          <ErrorMessage>{errors.password}</ErrorMessage>
         </InputWrapper>
         <InputWrapper>
           <Label
@@ -77,8 +100,8 @@ export default function SignUp() {
             type="password"
             id="confirmpasswordSU"
             name="confirmpasswordSU"
-            required
           />
+          <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
         </InputWrapper>
 
         <Button type="submit" className="" onClick={() => {}}>

@@ -11,7 +11,7 @@ export default function FormTitle({ title }: { title: string }) {
 
   return (
     <div className="titleContainer">
-      <span className="typewriter formTitle">{title}</span>
+      <span className="typewriter default formTitle">{title}</span>
     </div>
   );
 }

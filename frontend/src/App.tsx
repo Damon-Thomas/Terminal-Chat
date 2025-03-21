@@ -7,8 +7,8 @@ import LogIn from "./components/forms/auth/login.tsx";
 function App() {
   return (
     <UserContext>
-      {/* <SignUp /> */}
-      <LogIn />
+      <SignUp />
+      {/* <LogIn /> */}
     </UserContext>
   );
 }
