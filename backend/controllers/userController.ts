@@ -26,6 +26,19 @@ const authUser = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
   });
 });
 
+const getUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
+  const user = req.user;
+  if (user) {
+    res.status(200).json({
+      id: user.id,
+      username: user.username,
+      success: true,
+    });
+  } else {
+    res.status(400).json({ message: "User not found", failure: true });
+  }
+});
+
 const generateToken = asyncHandler(async (req: AuthenticatedRequest, res) => {
   interface TokenPayload {
     user: any;

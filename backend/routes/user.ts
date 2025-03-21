@@ -15,6 +15,13 @@ router.post(
   userController.generateToken
 );
 
+router.get(
+  "/verify",
+  userController.verifyToken,
+  userController.authUser,
+  userController.getUser
+);
+
 router.post(
   "/login",
   loginInputValidator,
