@@ -13,21 +13,53 @@ import FormTitle from "../FormTitle.tsx";
 import ModalContainer from "../ModalContainer.tsx";
 import TestAccountButton from "./TestAccountButton.tsx";
 import user from "../../../fetchers/user.ts";
+import "./auth.css";
+import { useState } from "react";
+import ErrorMessage from "../../input/errorMessage.tsx";
 
-export default function LogIn() {
+export default function LogIn({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+}) {
   const { setCurrentUser } = useContext(
     CurrentUserContext
   ) as CurrentUserContextType;
 
+  const [errors, setErrors] = useState({
+    username: "",
+    password: "",
+  });
+
   async function logIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
+    let errors = false;
+    const clientErrors = {
+      username: "",
+      password: "",
+    };
     const usernameLI = form.elements.namedItem(
       "usernameLI"
     ) as HTMLInputElement;
+    if (usernameLI.value.length < 1 || usernameLI.value.length > 20) {
+      clientErrors.username = "Username must be 1-20 characters";
+      errors = true;
+    }
+
     const passwordLI = form.elements.namedItem(
       "passwordLI"
     ) as HTMLInputElement;
+    if (passwordLI.value.length < 1 || passwordLI.value.length > 20) {
+      clientErrors.password = "Password must be 1-20 characters";
+      errors = true;
+    }
+    if (errors) {
+      setErrors(clientErrors);
+      return;
+    }
     const info = await user.logIn(usernameLI.value, passwordLI.value);
     if (info && info.success) {
       setCurrentUser(info);
@@ -37,18 +69,20 @@ export default function LogIn() {
   }
 
   return (
-    <ModalContainer>
+    <ModalContainer isOpen={open} onClose={() => setOpen(false)}>
+      <Button
+        className="modalCloseButton"
+        onClick={() => setOpen(false)}
+        type="button"
+      >
+        X
+      </Button>
       <FormTitle title="Log In" />
       <Form onSubmit={logIn}>
         <InputWrapper>
           <Label htmlFor="usernameLI" text="Username" className="" />
-          <Input
-            className=""
-            type="text"
-            id="usernameLI"
-            name="usernameLI"
-            required
-          />
+          <Input className="" type="text" id="usernameLI" name="usernameLI" />
+          <ErrorMessage>{errors.username}</ErrorMessage>
         </InputWrapper>
         <InputWrapper>
           <Label htmlFor="passwordLI" text="Password" className="" />
@@ -57,8 +91,8 @@ export default function LogIn() {
             type="password"
             id="passwordLI"
             name="passwordLI"
-            required
           />
+          <ErrorMessage>{errors.password}</ErrorMessage>
         </InputWrapper>
         <Button type="submit" className="" onClick={() => {}}>
           Submit

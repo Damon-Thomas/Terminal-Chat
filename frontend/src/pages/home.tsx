@@ -6,6 +6,7 @@ import {
 } from "../context/CurrentUserContext.ts";
 import user from "../fetchers/user.ts";
 import { useContext, useEffect, useState } from "react";
+import NonUserHome from "./subPages/NonUserHome.tsx";
 
 export default function Home() {
   const { currentUser, setCurrentUser } = useContext(
@@ -40,7 +41,7 @@ export default function Home() {
   ) : (
     <div>
       <h1>Not Logged in</h1>
-      <Outlet />
+      <NonUserHome />
     </div>
   );
 }

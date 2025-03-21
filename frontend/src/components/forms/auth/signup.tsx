@@ -14,8 +14,15 @@ import {
 } from "../../../context/CurrentUserContext.ts";
 import user from "../../../fetchers/user.ts";
 import ErrorMessage from "../../input/errorMessage.tsx";
+import "./auth.css";
 
-export default function SignUp() {
+export default function SignUp({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+}) {
   const { setCurrentUser } = useContext(
     CurrentUserContext
   ) as CurrentUserContextType;
@@ -71,7 +78,19 @@ export default function SignUp() {
     }
   }
   return (
-    <ModalContainer>
+    <ModalContainer
+      isOpen={open}
+      onClose={() => {
+        setOpen(true);
+      }}
+    >
+      <Button
+        className="modalCloseButton"
+        onClick={() => setOpen(false)}
+        type="button"
+      >
+        X
+      </Button>
       <FormTitle title="Sign Up" />
       <Form onSubmit={signUp}>
         <InputWrapper>
