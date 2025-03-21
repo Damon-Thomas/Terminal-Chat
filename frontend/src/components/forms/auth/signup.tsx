@@ -6,6 +6,7 @@ import Form from "../Form.tsx";
 import "../forms.css";
 import FormTitle from "../FormTitle.tsx";
 import ModalContainer from "../ModalContainer.tsx";
+import TestAccountButton from "./TestAccountButton.tsx";
 
 export default function SignUp() {
   return (
@@ -50,6 +51,7 @@ export default function SignUp() {
         <Button type="submit" className="" onClick={() => {}}>
           Submit
         </Button>
+        <TestAccountButton />
       </Form>
     </ModalContainer>
   );
