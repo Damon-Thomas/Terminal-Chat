@@ -12,17 +12,10 @@ export default function NonUserHome() {
     setSignupModal(false);
     setLoginModal(true);
   }
-  function closeLogin() {
-    setLoginModal(false);
-  }
   function openSignup() {
     setLoginModal(false);
     setSignupModal(true);
   }
-  function closeSignup() {
-    setSignupModal(false);
-  }
-
   return (
     <div>
       <Button className="" onClick={openSignup} type="button">

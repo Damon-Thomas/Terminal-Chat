@@ -64,12 +64,15 @@ export default function LogIn({
     if (info && info.success) {
       setCurrentUser(info);
     } else {
+      if (info && info.success === false && info.errors) {
+        setErrors(info.errors);
+      }
       console.log("Error logging in");
     }
   }
 
   return (
-    <ModalContainer isOpen={open} onClose={() => setOpen(false)}>
+    <ModalContainer isOpen={open} onClose={() => setOpen(true)}>
       <Button
         className="modalCloseButton"
         onClick={() => setOpen(false)}

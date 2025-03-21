@@ -39,8 +39,8 @@ export default function Home() {
       <Outlet />
     </div>
   ) : (
-    <div>
-      <h1>Not Logged in</h1>
+    <div className="h-screen w-screen flex flex-col gap-4 justify-center items-center">
+      <h1 className="text-lg md:text-2xl lg:text-4xl">Not Logged in</h1>
       <NonUserHome />
     </div>
   );
