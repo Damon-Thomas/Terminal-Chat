@@ -22,7 +22,7 @@ export default function TestAccountButton() {
       console.log("Error logging into test account");
       const createInfo = await user.signUp("TestAccount", "password");
       if (createInfo && createInfo.success) {
-        testAccount();
+        setCurrentUser(createInfo);
       } else {
         console.log("Error creating test account");
         //Here we can handle errors logging into test account

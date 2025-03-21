@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import Button from "../../Buttons/Button.tsx";
 import Input from "../../input/Input.tsx";
 import InputWrapper from "../../input/InputWrapper.tsx";
@@ -7,12 +8,44 @@ import "../forms.css";
 import FormTitle from "../FormTitle.tsx";
 import ModalContainer from "../ModalContainer.tsx";
 import TestAccountButton from "./TestAccountButton.tsx";
+import {
+  CurrentUserContext,
+  CurrentUserContextType,
+} from "../../../context/CurrentUserContext.ts";
+import user from "../../../fetchers/user.ts";
 
 export default function SignUp() {
+  const { setCurrentUser } = useContext(
+    CurrentUserContext
+  ) as CurrentUserContextType;
+
+  async function signUp(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const usernameLI = form.elements.namedItem(
+      "usernameSU"
+    ) as HTMLInputElement;
+    const passwordLI = form.elements.namedItem(
+      "passwordSU"
+    ) as HTMLInputElement;
+    const confirmpasswordSU = form.elements.namedItem(
+      "confirmpasswordSU"
+    ) as HTMLInputElement;
+    if (passwordLI.value !== confirmpasswordSU.value) {
+      console.log("Passwords do not match");
+      return;
+    }
+    const info = await user.logIn(usernameLI.value, passwordLI.value);
+    if (info && info.success) {
+      setCurrentUser(info);
+    } else {
+      console.log("Error logging in");
+    }
+  }
   return (
     <ModalContainer>
       <FormTitle title="Sign Up" />
-      <Form>
+      <Form onSubmit={signUp}>
         <InputWrapper>
           <Label htmlFor="usernameSU" text="Username" className="" />
           <Input

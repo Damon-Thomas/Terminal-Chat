@@ -1,11 +1,5 @@
 .button {
-  background-image: linear-gradient(
-    90deg,
-    var(--secondary-text-color) 50%,
-    var(--text-color) 50%
-  );
-  background-size: 200% 100%;
-  background-position: right bottom;
+  background-color: var(--text-color);
   border: none;
   color: var(--background-color);
   font-weight: bold;
@@ -17,21 +11,4 @@
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 0; /* blocky look */
-  transition: background-position 1s steps(10);
-}
-
-@keyframes hackerFlicker {
-  0%,
-  100% {
-    text-shadow: none;
-    filter: brightness(100%);
-  }
-  50% {
-    text-shadow: 0 0 10px var(--secondary-text-color);
-    filter: brightness(150%);
-  }
-}
-
-.button:hover {
-  background-position: left bottom;
 }
