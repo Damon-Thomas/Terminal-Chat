@@ -32,7 +32,7 @@ const likeMessage = async (userId: string, messageId: string) => {
   if (!message) {
     return { message: "Message not found", failure: true };
   }
-  const likeChecker = await prisma.MessageLikes.findFirst({
+  const likeChecker = await prisma.messageLikes.findFirst({
     where: {
       userId: userId,
       messageId: messageId,
@@ -41,7 +41,7 @@ const likeMessage = async (userId: string, messageId: string) => {
   if (likeChecker) {
     return { message: "Message already liked", failure: true };
   }
-  const newLike = await prisma.MessageLikes.create({
+  const newLike = await prisma.messageLikes.create({
     data: {
       userId: userId,
       messageId: messageId,
@@ -60,7 +60,7 @@ const unLikeMessage = async (userId: string, messageId: string) => {
   if (!message) {
     return { message: "Message not found", failure: true };
   }
-  const likeChecker = await prisma.MessageLikes.findFirst({
+  const likeChecker = await prisma.messageLikes.findFirst({
     where: {
       userId: userId,
       messageId: messageId,
@@ -69,10 +69,12 @@ const unLikeMessage = async (userId: string, messageId: string) => {
   if (!likeChecker) {
     return { message: "Message not liked", failure: true };
   }
-  const likeDeleter = await prisma.MessageLikes.delete({
+  const likeDeleter = await prisma.messageLikes.delete({
     where: {
-      userId: userId,
-      messageId: messageId,
+      userId_messageId: {
+        userId: userId,
+        messageId: messageId,
+      },
     },
   });
 
@@ -84,14 +86,8 @@ const addFriend = async (userId: string, friendId: string) => {
   if (!friend) {
     return { message: "Friend not found", failure: true };
   }
-  const friendMaker = await prisma.UserFriend.findFirst({
-    where: {
-      userId: userId,
-      friendId: friendId,
-    },
-
-    update: {}, // No update because the record already exists
-    create: {
+  const friendMaker = await prisma.userFriend.create({
+    data: {
       userId: userId,
       friendId: friendId,
     },
@@ -105,10 +101,12 @@ const deleteFriend = async (userId: string, friendId: string) => {
   if (!friend) {
     return { message: "Friend not found", failure: true };
   }
-  const friendDeleter = await prisma.UserFriend.delete({
+  const friendDeleter = await prisma.userFriend.delete({
     where: {
-      userId: userId,
-      friendId: friendId,
+      userId_friendId: {
+        userId: userId,
+        friendId: friendId,
+      },
     },
   });
 
@@ -116,13 +114,8 @@ const deleteFriend = async (userId: string, friendId: string) => {
 };
 
 const joinGroup = async (userId: string, groupId: string) => {
-  const group = await prisma.UserGroup.findUnique({
-    where: {
-      groupId: groupId,
-      userId: userId,
-    },
-    update: {}, // No update because the record already exists
-    create: {
+  const group = await prisma.userGroup.create({
+    data: {
       groupId: groupId,
       userId: userId,
     },
@@ -131,7 +124,7 @@ const joinGroup = async (userId: string, groupId: string) => {
 };
 
 const leaveGroup = async (userId: string, groupId: string) => {
-  const group = await prisma.UserGroup.delete({
+  const group = await prisma.userGroup.deleteMany({
     where: {
       groupId: groupId,
       userId: userId,
@@ -140,13 +133,39 @@ const leaveGroup = async (userId: string, groupId: string) => {
   return { group, failure: false };
 };
 
-const createGroup = async (groupName: string) => {
+const createGroup = async (groupName: string, administratorId: string) => {
   await prisma.group.create({
     data: {
-      name: groupName,
+      groupName: groupName,
+      administratorId: administratorId,
     },
   });
   return { message: "Group created", failure: false };
+};
+
+const messagesToGroup = async (groupId: string) => {
+  const messages = await prisma.message.findMany({
+    where: { sentToGroupId: groupId },
+  });
+  return messages;
+};
+
+const getMessagesBetweenUsers = async (userId: string, sentToId: string) => {
+  const messages = await prisma.message.findMany({
+    where: {
+      OR: [
+        {
+          authorId: userId,
+          sentToId: sentToId,
+        },
+        {
+          authorId: sentToId,
+          sentToId: userId,
+        },
+      ],
+    },
+  });
+  return messages;
 };
 
 export default {
@@ -158,4 +177,6 @@ export default {
   leaveGroup,
   createGroup,
   unLikeMessage,
+  messagesToGroup,
+  getMessagesBetweenUsers,
 };

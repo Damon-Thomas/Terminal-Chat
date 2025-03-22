@@ -10,20 +10,28 @@ interface AuthenticatedRequest extends Request {
 }
 
 const authUser = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
-  jwt.verify(req.token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
-    if (err) {
+  interface DecodedToken {
+    user: {
+      username: string;
+    };
+  }
+
+  try {
+    const decoded = jwt.verify(
+      req.token as string,
+      process.env.JWT_SECRET_KEY as string
+    ) as DecodedToken;
+
+    const user = await userQueries.getUser(decoded.user.username);
+    if (!user) {
       res.sendStatus(403);
     } else {
-      const user = await userQueries.getUser(decoded.user.username);
-      if (!user) {
-        res.sendStatus(403);
-      } else {
-        req.user = user;
-
-        next();
-      }
+      req.user = user;
+      next();
     }
-  });
+  } catch (err) {
+    res.sendStatus(403);
+  }
 });
 
 const getUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
@@ -43,9 +51,6 @@ const generateToken = asyncHandler(async (req: AuthenticatedRequest, res) => {
   interface TokenPayload {
     user: any;
   }
-  interface JwtSignOptions {
-    expiresIn: string;
-  }
 
   const user = req.user;
   if (!user) {
@@ -56,15 +61,17 @@ const generateToken = asyncHandler(async (req: AuthenticatedRequest, res) => {
   jwt.sign(
     { user } as TokenPayload,
     process.env.JWT_SECRET_KEY as string,
-    { expiresIn: "1d" } as JwtSignOptions,
+    { expiresIn: "1d" },
     (err: Error | null, token: string | undefined) => {
-      if (err) {
-        res.sendStatus(403);
+      if (err || !token) {
+        res
+          .status(403)
+          .json({ message: "Failed to generate token", failure: true });
       } else {
         res.status(200).json({
           token: token,
-          id: req.user.id,
-          username: req.user.username,
+          id: user.id,
+          username: user.username,
           success: true,
         });
       }
@@ -151,7 +158,7 @@ const createUser = asyncHandler(
   }
 );
 
-const logoutUser = asyncHandler(async (req, res) => {
+const logoutUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const user = req.user;
 
   if (user) {
@@ -194,4 +201,5 @@ export default {
   authUser,
   logoutUser,
   deleteUser,
+  getUser,
 };

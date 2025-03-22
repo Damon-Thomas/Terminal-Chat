@@ -92,7 +92,7 @@ const likeMessage = async (userId: string, messageId: string) => {
   if (!message) {
     return { message: "Message not found", failure: true };
   }
-  const likeChecker = await prisma.MessageLikes.findFirst({
+  const likeChecker = await prisma.messageLikes.findFirst({
     where: {
       userId: userId,
       messageId: messageId,
@@ -101,7 +101,7 @@ const likeMessage = async (userId: string, messageId: string) => {
   if (likeChecker) {
     return { message: "Message already liked", failure: true };
   }
-  const newLike = await prisma.MessageLikes.create({
+  const newLike = await prisma.messageLikes.create({
     data: { userId: userId, messageId: messageId },
   });
   return { newLike, failure: false };
@@ -114,13 +114,13 @@ const unLikeMessage = async (userId: string, messageId: string) => {
   if (!message) {
     return { message: "Message not found", failure: true };
   }
-  const likeChecker = await prisma.MessageLikes.findFirst({
+  const likeChecker = await prisma.messageLikes.findFirst({
     where: { userId: userId, messageId: messageId },
   });
   if (!likeChecker) {
     return { message: "Message not liked", failure: true };
   }
-  const likeDeleter = await prisma.MessageLikes.delete({
+  const likeDeleter = await prisma.messageLikes.delete({
     where: {
       userId_messageId: { userId, messageId },
     },
@@ -135,7 +135,7 @@ const addFriend = async (userId: string, friendId: string) => {
   }
 
   // Use upsert to either insert if the record does not exist.
-  const friendMaker = await prisma.UserFriend.upsert({
+  const friendMaker = await prisma.userFriend.upsert({
     where: {
       userId_friendId: { userId: userId, friendId: friendId },
     },
@@ -150,7 +150,7 @@ const deleteFriend = async (userId: string, friendId: string) => {
   if (!friend) {
     return { message: "Friend not found", failure: true };
   }
-  const friendDeleter = await prisma.UserFriend.delete({
+  const friendDeleter = await prisma.userFriend.delete({
     where: { userId_friendId: { userId, friendId } },
   });
   return { friendDeleter, failure: false };
@@ -158,7 +158,7 @@ const deleteFriend = async (userId: string, friendId: string) => {
 
 const joinGroup = async (userId: string, groupId: string) => {
   // Use upsert with the composite key (assuming it's defined as groupId_userId)
-  const group = await prisma.UserGroup.upsert({
+  const group = await prisma.userGroup.upsert({
     where: {
       userId_groupId: { userId, groupId },
     },
@@ -169,7 +169,7 @@ const joinGroup = async (userId: string, groupId: string) => {
 };
 
 const leaveGroup = async (userId: string, groupId: string) => {
-  const group = await prisma.UserGroup.delete({
+  const group = await prisma.userGroup.delete({
     where: { userId_groupId: { groupId, userId } },
   });
   return { group };
@@ -206,7 +206,7 @@ const deleteGroup = async (groupId: string, userId: string) => {
   }
 
   if (administratorId.administratorId === userId) {
-    await prisma.UserGroup.deleteMany({
+    await prisma.userGroup.deleteMany({
       where: { groupId },
     });
     await prisma.group.delete({

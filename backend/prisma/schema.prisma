@@ -92,6 +92,6 @@ model Profile {
   profilePic String? @db.VarChar(255) // add default profile image link
   bio        String  @default("Bio")
   intro      String  @default("Intro")
-  userId     String
+  userId     String  @unique
   user       User    @relation(fields: [userId], references: [id])
 }
