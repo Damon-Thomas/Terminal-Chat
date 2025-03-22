@@ -5,7 +5,8 @@ const sendMessage = async (
   userId: string,
   message: string,
   sentTo: string,
-  destinationType: "user" | "group"
+  destinationType: "user" | "group",
+  pinned: boolean = false
 ) => {
   if (destinationType === "user" && sentTo === userId) {
     return { message: "Cannot send message to self", failure: true };
@@ -29,6 +30,7 @@ const sendMessage = async (
       content: message,
       sentToId: destinationType === "user" ? sentTo : null,
       sentToGroupId: destinationType === "group" ? sentTo : null,
+      PinnedMessage: pinned,
     },
   });
   return { ...newMessage, failure: false };

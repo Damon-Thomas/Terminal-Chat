@@ -8,42 +8,42 @@ router.get(
   "/activeUserContacts",
   userController.verifyToken,
   userController.authUser,
-  contactControllers.getActiveUserContacts
+  contactControllers.getActiveUserContacts as any
 );
 
 router.get(
   "/getGroups",
   userController.verifyToken,
   userController.authUser,
-  contactControllers.getUserGroups
+  contactControllers.getUserGroups as any
 );
 
 router.get(
   "/getGroupMembers",
   userController.verifyToken,
   userController.authUser,
-  contactControllers.getGroupMembers
+  contactControllers.getGroupMembers as any
 );
 
 router.get(
   "/getFriendsList",
   userController.verifyToken,
   userController.authUser,
-  contactControllers.getFriendsList
+  contactControllers.getFriendsList as any
 );
 
 router.get(
   "/getNonContactUsers",
   userController.verifyToken,
   userController.authUser,
-  contactControllers.getNonContactUsers
+  contactControllers.getNonContactUsers as any
 );
 
 router.get(
   "/getNonJoinedGroups",
   userController.verifyToken,
   userController.authUser,
-  contactControllers.getNonJoinedGroups
+  contactControllers.getNonJoinedGroups as any
 );
 
 export default router;

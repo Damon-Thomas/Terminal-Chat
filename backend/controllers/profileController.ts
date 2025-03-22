@@ -16,7 +16,7 @@ interface Profile {
   intro: string;
 }
 
-const getProfile = async (req: UserRequest, res: Response): Promise<void> => {
+const getProfile = async (req: UserRequest, res: Response) => {
   console.log(req.user.id);
   const profile: Profile | null = await profileQueries.getProfile(req.user.id);
   if (profile) {
@@ -26,11 +26,8 @@ const getProfile = async (req: UserRequest, res: Response): Promise<void> => {
   }
 };
 
-//fix this
-const updateProfile = async (
-  req: UserRequest,
-  res: Response
-): Promise<void> => {
+//add profile pic handling
+const updateProfile = async (req: UserRequest, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400).json({ errors: errors.array(), failure: true });

@@ -8,13 +8,13 @@ router.get(
   "/getProfile",
   userController.verifyToken,
   userController.authUser,
-  profileController.getProfile
+  profileController.getProfile as any
 );
 router.post(
   "/updateProfile",
   userController.verifyToken,
   userController.authUser,
-  profileController.updateProfile
+  profileController.updateProfile as any
 );
 
 export default router;

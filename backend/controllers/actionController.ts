@@ -1,8 +1,11 @@
 import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import actionQueries from "../models/actionQueries";
+import { Request, Response } from "express";
+import { UserRequest } from "./profileController";
+import { User } from "@prisma/client";
 
-const sendMessage = asyncHandler(async (req, res) => {
+const sendMessage = async (req: UserRequest, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ failure: true, errors: errors.array() });
@@ -23,9 +26,9 @@ const sendMessage = asyncHandler(async (req, res) => {
     console.log("error creating message", e);
     res.status(400).json(e);
   }
-});
+};
 
-const setPinnedMessage = asyncHandler(async (req, res) => {
+const setPinnedMessage = async (req: UserRequest, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ failure: true, errors: errors.array() });
@@ -45,9 +48,9 @@ const setPinnedMessage = asyncHandler(async (req, res) => {
     console.log("error setting pinned message", e);
     res.status(400).json({ error: e, failure: true });
   }
-});
+};
 
-const deletePinnedMessage = asyncHandler(async (req, res) => {
+const deletePinnedMessage = async (req: UserRequest, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ failure: true, errors: errors.array() });
@@ -66,9 +69,9 @@ const deletePinnedMessage = asyncHandler(async (req, res) => {
     console.log("error deleting pinned message", e);
     res.status(400).json({ error: e, failure: true });
   }
-});
+};
 
-const likeMessage = asyncHandler(async (req, res, next) => {
+const likeMessage = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
 
   if (!userId) {
@@ -83,9 +86,9 @@ const likeMessage = asyncHandler(async (req, res, next) => {
     console.log("error liking message", e);
     res.status(400).json({ error: e, failure: true });
   }
-});
+};
 
-const unLikeMessage = asyncHandler(async (req, res, next) => {
+const unLikeMessage = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
 
   if (!userId) {
@@ -100,9 +103,9 @@ const unLikeMessage = asyncHandler(async (req, res, next) => {
     console.log("error unliking message", e);
     res.status(400).json(e);
   }
-});
+};
 
-const addFriend = asyncHandler(async (req, res, next) => {
+const addFriend = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
@@ -117,9 +120,9 @@ const addFriend = asyncHandler(async (req, res, next) => {
     console.log("error adding friend", e);
     res.status(400).json({ e, failure: true });
   }
-});
+};
 
-const deleteFriend = asyncHandler(async (req, res, next) => {
+const deleteFriend = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
@@ -132,9 +135,9 @@ const deleteFriend = asyncHandler(async (req, res, next) => {
     console.log("error deleting friend", e);
     res.status(400).json({ e, failure: true });
   }
-});
+};
 
-const makeGroup = asyncHandler(async (req, res, next) => {
+const makeGroup = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
@@ -153,9 +156,9 @@ const makeGroup = asyncHandler(async (req, res, next) => {
     console.log("error making group", e);
     res.status(400).json({ e, failure: true });
   }
-});
+};
 
-const joinGroup = asyncHandler(async (req, res, next) => {
+const joinGroup = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
@@ -168,9 +171,9 @@ const joinGroup = asyncHandler(async (req, res, next) => {
     console.log("error joining group", e);
     res.status(400).json({ e, failure: true });
   }
-});
+};
 
-const leaveGroup = asyncHandler(async (req, res, next) => {
+const leaveGroup = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
   if (!userId) {
     return res.status(400).json({ failure: true, message: "User not found" });
@@ -183,9 +186,9 @@ const leaveGroup = asyncHandler(async (req, res, next) => {
     console.log("error leaving group", e);
     res.status(400).json({ e, failure: true });
   }
-});
+};
 
-const deleteGroup = asyncHandler(async (req, res, next) => {
+const deleteGroup = async (req: UserRequest, res: Response) => {
   const { groupId } = req.body;
   console.log("deleteGroup", groupId);
   try {
@@ -206,7 +209,7 @@ const deleteGroup = asyncHandler(async (req, res, next) => {
     console.log("error deleting group", e);
     res.status(400).json({ e, failure: true });
   }
-});
+};
 
 export default {
   sendMessage,

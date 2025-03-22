@@ -10,77 +10,77 @@ router.post(
   messageValidator,
   userController.verifyToken,
   userController.authUser,
-  actionController.sendMessage
+  actionController.sendMessage as any
 );
 
 router.post(
   "/likeMessage",
   userController.verifyToken,
   userController.authUser,
-  actionController.likeMessage
+  actionController.likeMessage as any
 );
 
 router.delete(
   "/unLikeMessage",
   userController.verifyToken,
   userController.authUser,
-  actionController.unLikeMessage
+  actionController.unLikeMessage as any
 );
 
 router.post(
   "/addFriend",
   userController.verifyToken,
   userController.authUser,
-  actionController.addFriend
+  actionController.addFriend as any
 );
 
 router.delete(
   "/removeFriend",
   userController.verifyToken,
   userController.authUser,
-  actionController.deleteFriend
+  actionController.deleteFriend as any
 );
 
 router.post(
   "/createGroup",
   userController.verifyToken,
   userController.authUser,
-  actionController.makeGroup
+  actionController.makeGroup as any
 );
 
 router.post(
   "/joinGroup",
   userController.verifyToken,
   userController.authUser,
-  actionController.joinGroup
+  actionController.joinGroup as any
 );
 
 router.delete(
   "/leaveGroup",
   userController.verifyToken,
   userController.authUser,
-  actionController.leaveGroup
+  actionController.leaveGroup as any
 );
 
 router.delete(
   "/deleteGroup",
   userController.verifyToken,
   userController.authUser,
-  actionController.deleteGroup
+  actionController.deleteGroup as any
 );
 
 router.put(
   "/setPinnedMessage",
   userController.verifyToken,
   userController.authUser,
-  actionController.setPinnedMessage
+  actionController.setPinnedMessage as any
 );
 
 router.delete(
   "/deletePinnedMessage",
   userController.verifyToken,
   userController.authUser,
-  actionController.deletePinnedMessage
+  actionController.deletePinnedMessage as any
 );
 
 export default router;
