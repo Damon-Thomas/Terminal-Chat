@@ -8,7 +8,9 @@ export default function NotFound() {
         <p className="text-lg">Page Not Found</p>
       </div>
       <a href="/" className="">
-        <Button>Go back to home</Button>
+        <Button className="" type="button" onClick={() => {}}>
+          Go back to home
+        </Button>
       </a>
     </div>
   );

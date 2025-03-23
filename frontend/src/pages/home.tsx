@@ -7,6 +7,8 @@ import {
 import user from "../fetchers/user.ts";
 import { useContext, useEffect, useState } from "react";
 import NonUserHome from "./subPages/NonUserHome.tsx";
+import User from "../fetchers/user.ts";
+import UserHomePage from "./UserHomePage.tsx";
 
 export default function Home() {
   const { currentUser, setCurrentUser } = useContext(
@@ -35,8 +37,8 @@ export default function Home() {
   }, [setCurrentUser]);
   return currentUser && currentUser.id !== "" ? (
     <div>
-      <h1>Logged in</h1>
-      <Outlet />
+      <h1>Logged in as: {currentUser.username}</h1>
+      <UserHomePage />
     </div>
   ) : (
     <div className="h-screen w-screen flex flex-col gap-4 justify-center items-center">

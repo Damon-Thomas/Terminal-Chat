@@ -35,6 +35,7 @@ export default function SignUp({
 
   async function signUp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    console.log("Signing up");
     const form = event.target as HTMLFormElement;
     let errors = false;
     const clientErrors = {
@@ -67,7 +68,12 @@ export default function SignUp({
       setErrors(clientErrors);
       return;
     }
-    const info = await user.logIn(usernameLI.value, passwordLI.value);
+    console.log("No client errors");
+    const info = await user.signUp(
+      usernameLI.value,
+      passwordLI.value,
+      confirmpasswordSU.value
+    );
     if (info && info.success) {
       setCurrentUser(info);
     } else {

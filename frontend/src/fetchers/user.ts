@@ -1,4 +1,8 @@
-const signUp = async (username: string, password: string) => {
+const signUp = async (
+  username: string,
+  password: string,
+  confirmPassword: string
+) => {
   const response = await fetch(
     `${import.meta.env.VITE_ApiHost}/user/createUser`,
     {
@@ -6,7 +10,7 @@ const signUp = async (username: string, password: string) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password, confirmPassword }),
     }
   );
   const data = await response.json();
@@ -41,7 +45,7 @@ const verifyToken = async () => {
     return false;
   }
   const response = await fetch(`${import.meta.env.VITE_ApiHost}/user/verify`, {
-    method: "POST",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

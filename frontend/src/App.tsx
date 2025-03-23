@@ -1,6 +1,6 @@
 import "./App.css";
 import "./components/genCSS/typewriter.css";
-import UserContext from "./context/userContext.tsx";
+import UserContext from "./context/UserContext.tsx";
 import NotFound from "./pages/404.tsx";
 import {
   createBrowserRouter,

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 
 html,
 body,
@@ -84,7 +85,9 @@ video {
   margin: 0;
   padding: 0;
   border: 0;
-
+  font-family: "VT323", monospace;
+  letter-spacing: 2px; /* Space out characters */
+  line-height: 1.5; /* Adjust vertical spacing */
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -131,14 +134,21 @@ table {
   --text-color: #33ff33; /* Neon green */
   --secondary-text-color: #00ffff; /* Cyan */
   --accent-color: #ff0000; /* Red for warnings or alerts */
+  --third-color: #ffcc00; /* Yellow for warnings */
   --border-color: #33ff3355; /* Transparent green */
-  --font-family: "Courier New", Courier, monospace;
+  --font-primary: "VT323", monospace;
+}
+
+/* Paragraph & Text */
+p {
+  font-size: 1.5rem;
+  line-height: 1.6;
 }
 
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-  font-family: var(--font-family);
+  font-family: var(--font-primary);
   margin: 0;
   padding: 0;
   display: flex;
