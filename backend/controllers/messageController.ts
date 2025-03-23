@@ -1,9 +1,9 @@
 import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
-import "../types/express"; // Import the extended Request type
+// import "../types/express.js"; // Import the extended Request type
 import { Request, Response } from "express";
-import messageQueries from "../models/messageQueries";
-import { UserRequest } from "./profileController";
+import messageQueries from "../models/messageQueries.js";
+import { UserRequest } from "./profileController.js";
 
 // Extend Express types here
 declare namespace Express {

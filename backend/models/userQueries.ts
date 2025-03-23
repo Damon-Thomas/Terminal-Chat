@@ -1,4 +1,4 @@
-import prisma from "./client";
+import prisma from "./client.js";
 
 const createUser = async (username: string, password: string) => {
   const newUser = await prisma.user.create({

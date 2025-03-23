@@ -1,5 +1,5 @@
-import prisma from "./client";
-import userQueries from "./userQueries";
+import prisma from "./client.js";
+import userQueries from "./userQueries.js";
 
 const sendMessage = async (
   userId: string,

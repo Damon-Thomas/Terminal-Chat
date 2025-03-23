@@ -1,6 +1,6 @@
 import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
-import profileQueries from "../models/profileQueries";
+import profileQueries from "../models/profileQueries.js";
 import { Request, Response } from "express";
 
 export interface UserRequest extends Request {

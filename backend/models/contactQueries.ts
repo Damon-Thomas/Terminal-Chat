@@ -1,4 +1,4 @@
-import prisma from "./client";
+import prisma from "./client.js";
 
 const getCurrentConversationUsers = async (userId: string) => {
   //Users that the user has sent messages to

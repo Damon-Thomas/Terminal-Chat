@@ -2,7 +2,7 @@ import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import userQueries from "../models/userQueries";
+import userQueries from "../models/userQueries.js";
 import { Request } from "express";
 interface AuthenticatedRequest extends Request {
   user?: any;

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import userController from "../controllers/userController";
-import actionController from "../controllers/actionController";
-import { messageValidator } from "./validators/messageValidators";
+import userController from "../controllers/userController.js";
+import actionController from "../controllers/actionController.js";
+import { messageValidator } from "./validators/messageValidators.js";
 
 const router = Router();
 

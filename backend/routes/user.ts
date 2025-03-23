@@ -1,9 +1,9 @@
 import { Router } from "express";
-import userController from "../controllers/userController";
+import userController from "../controllers/userController.js";
 import {
   loginInputValidator,
   registerValidator,
-} from "./validators/userValidators";
+} from "./validators/userValidators.js";
 
 const router = Router();
 

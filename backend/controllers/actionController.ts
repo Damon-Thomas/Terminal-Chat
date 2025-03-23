@@ -1,8 +1,8 @@
 import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
-import actionQueries from "../models/actionQueries";
+import actionQueries from "../models/actionQueries.js";
 import { Request, Response } from "express";
-import { UserRequest } from "./profileController";
+import { UserRequest } from "./profileController.js";
 import { User } from "@prisma/client";
 
 const sendMessage = async (req: UserRequest, res: Response) => {

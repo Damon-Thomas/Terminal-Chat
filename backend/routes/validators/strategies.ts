@@ -1,32 +1,27 @@
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
-interface JwtOptions {
-  jwtFromRequest: any;
-  secretOrKey: string | undefined;
-}
+import {
+  Strategy as JwtStrategy,
+  ExtractJwt,
+  StrategyOptions,
+} from "passport-jwt";
+import userQueries from "../../models/userQueries.js";
 
-const opts: JwtOptions = {
+const opts: StrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.SECRET_KEY,
+  secretOrKey: process.env.SECRET_KEY || "fallback-dev-secret",
 };
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.SECRET_KEY; //normally store this in process.env.secret
-interface JwtPayload {
-  email: string;
-}
 
-interface DoneCallback {
-  (error: any, user?: boolean): void;
-}
-
-const strategy = new JwtStrategy(
-  opts,
-  (jwt_payload: JwtPayload, done: DoneCallback) => {
-    if (jwt_payload.email === "paul@nanosoft.co.za") {
-      return done(null, true);
+const strategy = new JwtStrategy(opts, async (jwt_payload, done) => {
+  try {
+    // Find user in database by ID from token
+    const user = await userQueries.getUserById(jwt_payload.id);
+    if (user) {
+      return done(null, user);
+    } else {
+      return done(null, false);
     }
-    return done(null, false);
+  } catch (error) {
+    return done(error, false);
   }
-);
+});
 
 export default strategy;

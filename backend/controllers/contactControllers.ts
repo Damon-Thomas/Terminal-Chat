@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
-import contactQueries from "../models/contactQueries";
-import { UserRequest } from "./profileController";
+import contactQueries from "../models/contactQueries.js";
+import { UserRequest } from "./profileController.js";
 import { Request, Response } from "express";
 
 interface GroupRequest extends Request {
