@@ -45,7 +45,7 @@ export default function NonContacts() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-lg md:text-2xl lg:text-4xl">Non Contacts</h1>
+      <h1 className="text-lg md:text-2xl lg:text-4xl">New People</h1>
       <div className="flex flex-wrap gap-4">
         {nonContacts.map((user) =>
           !user.friend ? (

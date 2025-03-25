@@ -103,7 +103,7 @@ export default function GroupContacts() {
   return (
     <div className="flex flex-col gap-4">
       <div className="userGroups">
-        <h1 className="text-lg md:text-2xl lg:text-4xl">User Groups</h1>
+        <h1 className="text-lg md:text-2xl lg:text-4xl">Groups</h1>
         <div className="flex flex-wrap gap-4">
           {groupsOnPage.map((group) =>
             group.joined ? (

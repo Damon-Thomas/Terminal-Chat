@@ -55,8 +55,14 @@ const verifyToken = async () => {
   return data;
 };
 
+function logOut() {
+  localStorage.removeItem("token");
+  location.href = "/";
+}
+
 export default {
   signUp,
   logIn,
   verifyToken,
+  logOut,
 };

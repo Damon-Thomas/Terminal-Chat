@@ -2,13 +2,13 @@ import Button from "../Buttons/Button";
 
 export default function ContactSpace() {
   function friendButtonHandler() {
-    console.log("Friend Button Clicked");
+    location.href = "/friends";
   }
   function groupButtonHandler() {
-    console.log("Group Button Clicked");
+    location.href = "/groups";
   }
   function meetSomeoneButtonHandler() {
-    console.log("Meet Someone Button Clicked");
+    location.href = "/meet";
   }
 
   return (

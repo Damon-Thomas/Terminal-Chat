@@ -76,7 +76,7 @@ export default function FriendContacts() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-lg md:text-2xl lg:text-4xl">Non Contacts</h1>
+      <h1 className="text-lg md:text-2xl lg:text-4xl">Friends</h1>
       <div className="flex flex-wrap gap-4">
         {friendPage.map((user) =>
           !user.friend ? (
