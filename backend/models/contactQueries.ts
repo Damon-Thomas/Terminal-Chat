@@ -61,14 +61,26 @@ const getGroupMembers = async (groupId: string) => {
 };
 
 const getFriendsList = async (userId: string) => {
-  return await prisma.user.findMany({
+  const friends = await prisma.user.findMany({
     where: {
       id: userId,
     },
     select: {
-      friends: true,
+      friends: {
+        select: {
+          friend: {
+            select: {
+              id: true,
+              username: true,
+              lastLogin: true,
+            },
+          },
+        },
+      },
     },
   });
+
+  return friends[0].friends.map((friend) => friend.friend);
 };
 
 const getNonContactUsers = async (userId: string, page: number) => {
@@ -82,9 +94,13 @@ const getNonContactUsers = async (userId: string, page: number) => {
     },
   });
   const friendIds: string[] = [];
-  friends.forEach((friend) => {
-    friendIds.push(friend.friends[0].friendId);
-  });
+  if (friends && friends.length > 0) {
+    friends.forEach((friend) => {
+      if (friend.friends && friend.friends.length > 0) {
+        friendIds.push(friend.friends[0].friendId);
+      }
+    });
+  }
   return await prisma.user.findMany({
     where: {
       id: {

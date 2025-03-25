@@ -16,14 +16,16 @@ export default function NonContacts() {
   useEffect(() => {
     async function getNonContacts() {
       const users = await getContacts.getNonContactUsers(page);
-      const updatedUsers = users.map((user: User) => ({
+
+      const updatedUsers = users.users.map((user: User) => ({
         ...user,
         friend: false,
       }));
-      if (users) {
-        setNonContacts(users);
-      } else {
+      console.log("Updated users", updatedUsers);
+      if (updatedUsers && updatedUsers.length > 0) {
         setNonContacts(updatedUsers);
+      } else {
+        setNonContacts([]);
       }
     }
     getNonContacts();

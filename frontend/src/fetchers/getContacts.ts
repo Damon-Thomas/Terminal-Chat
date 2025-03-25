@@ -9,7 +9,15 @@ const getFriendsList = async () => {
       },
     }
   );
-  return friends.json();
+  if (friends.ok) {
+    const data = await friends.json();
+    if (!data.failure) {
+      return data.friends;
+    }
+  } else {
+    console.log("Error getting friends list");
+    return [];
+  }
 };
 
 const getActiveUserContacts = async () => {
@@ -59,7 +67,7 @@ const getNonContactUsers = async (page: number) => {
   const users = await fetch(
     `${import.meta.env.VITE_ApiHost}/contacts/getNonContactUsers`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,

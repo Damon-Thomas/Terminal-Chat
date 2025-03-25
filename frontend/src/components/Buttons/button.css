@@ -1,14 +1,23 @@
+@import "tailwindcss";
+
 .button {
+  @apply text-base sm:text-lg md:text-xl lg:text-2xl;
   background-color: var(--text-color);
-  border: none;
+  border: 1px solid var(--text-color);
   color: var(--background-color);
-  font-weight: bold;
+  /* font-weight: bold; */
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  /* font-size: 1.5rem; */
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 0; /* blocky look */
+}
+
+.button:hover {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
 }

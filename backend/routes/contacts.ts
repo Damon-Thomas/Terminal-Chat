@@ -32,7 +32,7 @@ router.get(
   contactControllers.getFriendsList as any
 );
 
-router.get(
+router.post(
   "/getNonContactUsers",
   userController.verifyToken,
   userController.authUser,

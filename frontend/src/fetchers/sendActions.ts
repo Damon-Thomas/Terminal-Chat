@@ -4,7 +4,7 @@ const createMessage = async (
   destinationType: "Group" | "User"
 ) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/actions/createMessage`,
+    `${import.meta.env.VITE_ApiHost}/action/createMessage`,
     {
       method: "POST",
       headers: {
@@ -19,7 +19,7 @@ const createMessage = async (
 
 const likeMessage = async (messageId: string) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/actions/likeMessage`,
+    `${import.meta.env.VITE_ApiHost}/action/likeMessage`,
     {
       method: "POST",
       headers: {
@@ -34,7 +34,7 @@ const likeMessage = async (messageId: string) => {
 
 const unLikeMessage = async (messageId: string) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/actions/unLikeMessage`,
+    `${import.meta.env.VITE_ApiHost}/action/unLikeMessage`,
     {
       method: "DELETE",
       headers: {
@@ -49,7 +49,7 @@ const unLikeMessage = async (messageId: string) => {
 
 const addFriend = async (friendId: string) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/actions/addFriend`,
+    `${import.meta.env.VITE_ApiHost}/action/addFriend`,
     {
       method: "POST",
       headers: {
@@ -64,7 +64,7 @@ const addFriend = async (friendId: string) => {
 
 const removeFriend = async (friendId: string) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/actions/removeFriend`,
+    `${import.meta.env.VITE_ApiHost}/action/removeFriend`,
     {
       method: "DELETE",
       headers: {
@@ -79,7 +79,7 @@ const removeFriend = async (friendId: string) => {
 
 const createGroup = async (groupName: string) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/actions/createGroup`,
+    `${import.meta.env.VITE_ApiHost}/action/createGroup`,
     {
       method: "POST",
       headers: {
@@ -94,7 +94,7 @@ const createGroup = async (groupName: string) => {
 
 const joinGroup = async (groupId: string) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/actions/joinGroup`,
+    `${import.meta.env.VITE_ApiHost}/action/joinGroup`,
     {
       method: "POST",
       headers: {
@@ -109,7 +109,7 @@ const joinGroup = async (groupId: string) => {
 
 const leaveGroup = async (groupId: string) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/actions/leaveGroup`,
+    `${import.meta.env.VITE_ApiHost}/action/leaveGroup`,
     {
       method: "DELETE",
       headers: {
