@@ -83,15 +83,15 @@ export default function FriendContacts() {
             <div key={user.id} className="flex flex-col gap-2">
               <h2>{user.username}</h2>
               <Button onClick={() => {}}>Message</Button>
-              <Button onClick={() => removeFriend(user.id)}>
-                Delete Friend
-              </Button>
+              <Button onClick={() => addFriend(user.id)}>Add Friend</Button>
             </div>
           ) : (
             <div key={user.id} className="flex flex-col gap-2">
               <h2>{user.username}</h2>
               <Button onClick={() => {}}>Message</Button>
-              <Button onClick={() => addFriend(user.id)}>Add Friend</Button>
+              <Button onClick={() => removeFriend(user.id)}>
+                Delete Friend
+              </Button>
             </div>
           )
         )}

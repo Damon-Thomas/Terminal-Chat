@@ -2,7 +2,7 @@ import Button from "../Buttons/Button";
 
 export default function UserSpace() {
   function messageButtonHandler() {
-    console.log("Message Button Clicked");
+    location.href = "/messages";
   }
   function profileButtonHandler() {
     console.log("Profile Button Clicked");

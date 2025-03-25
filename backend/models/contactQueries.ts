@@ -95,10 +95,8 @@ const getNonContactUsers = async (userId: string, page: number) => {
   });
   const friendIds: string[] = [];
   if (friends && friends.length > 0) {
-    friends.forEach((friend) => {
-      if (friend.friends && friend.friends.length > 0) {
-        friendIds.push(friend.friends[0].friendId);
-      }
+    friends[0].friends.forEach((friend) => {
+      friendIds.push(friend.friendId);
     });
   }
   return await prisma.user.findMany({
