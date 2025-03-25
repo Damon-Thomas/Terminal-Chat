@@ -2,7 +2,19 @@ import React from "react";
 import "./sidebarStyles.css";
 import SideItem from "./SideItem";
 
-export default function MessageSideBar() {
+type Contact =
+  | { username: string; groupName?: never } // User object
+  | { groupName: string; username?: never }; // Group object
+
+type MessageSideBarProps = {
+  setSelectedContact: React.Dispatch<React.SetStateAction<Contact | null>>;
+};
+
+export default function MessageSideBar({
+  setSelectedContact,
+}: {
+  setSelectedContact: MessageSideBarProps;
+}) {
   const [trigger, setTrigger] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [groups, setGroups] = React.useState([]);
