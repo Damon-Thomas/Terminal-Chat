@@ -1,5 +1,6 @@
 import Button from "../../components/Buttons/Button";
 import user from "../../fetchers/user";
+import "./headerStyles.css";
 
 export default function Header() {
   function handleHomeClick() {
@@ -10,7 +11,7 @@ export default function Header() {
   }
 
   return (
-    <div className="header flex justify-between items-center">
+    <div className="header ">
       <Button onClick={handleHomeClick}>Home</Button>
       <Button onClick={logout}>Log Out</Button>
     </div>

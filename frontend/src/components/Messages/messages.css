@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.messageArea {
+  @apply flex w-full h-full justify-center items-center;
+}

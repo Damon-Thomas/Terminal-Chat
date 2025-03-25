@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.header {
+  @apply flex justify-center;
+}
