@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+.sidebarPreview {
+  @apply z-10 hidden sm:block fixed h-screen left-0 bg-white w-15;
+}
+
+.logo {
+  @apply flex justify-center items-center pt-2;
+}
+
+.sideContentStyleLink {
+  @apply h-full gap-4 sidebarDetails flex flex-col justify-center items-center;
+}
+
+.hiddenbar {
+  @apply bg-amber-200 pl-15;
+}
+
+.sidebar-icon path {
+  transition: d 0.5s ease;
+}
+
+.sidebar-icon.open path:last-child {
+  d: path("m14 9 3 3-3 3");
+}
+
+.sidebar-icon.closed path:last-child {
+  d: path("m16 15-3-3 3-3");
+}
+
+.sidebarItem {
+  @apply h-10 p-2 w-45 overflow-hidden text-black;
+}

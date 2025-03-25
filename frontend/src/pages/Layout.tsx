@@ -3,7 +3,7 @@ import Header from "./header/Header";
 
 export default function Layout() {
   return (
-    <div>
+    <div className="layout h-screen w-screen flex ">
       <Header />
       <Outlet />
     </div>
