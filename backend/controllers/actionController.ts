@@ -11,7 +11,7 @@ const sendMessage = async (req: UserRequest, res: Response) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ failure: true, errors: errors.array() });
   }
-  const { message, sentTo, destinationType, pinned } = req.body;
+  const { message, sentTo, username, destinationType, pinned } = req.body;
   if (!sentTo) {
     return res
       .status(400)
@@ -21,6 +21,7 @@ const sendMessage = async (req: UserRequest, res: Response) => {
     const newMessage = await actionQueries.sendMessage(
       req.user.id,
       message,
+      username,
       sentTo,
       destinationType,
       pinned

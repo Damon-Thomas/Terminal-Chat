@@ -11,11 +11,13 @@ export default function MessageCreator({
   group = false,
   messageSentTo,
   messages,
+  username,
   setMessages,
 }: {
   group: boolean;
   messageSentTo: string;
   messages: Array<Message>;
+  username: string;
   setMessages: React.Dispatch<React.SetStateAction<Array<Message>>>;
 }) {
   const [content, setContent] = useState("");
@@ -23,10 +25,11 @@ export default function MessageCreator({
   const [error, setError] = useState("");
 
   async function sendMessage() {
-    console.log("messageSentTo", messageSentTo);
+    console.log("messageSentTo", messageSentTo, username);
     const response = await sendActions.createMessage(
       content,
       messageSentTo,
+      username,
       group ? "group" : "user",
       false //pinned
     );
@@ -37,6 +40,7 @@ export default function MessageCreator({
         {
           id: response.id,
           createdAt: new Date().toISOString(),
+          username,
           content,
           authorId: user.id,
           likes: [],

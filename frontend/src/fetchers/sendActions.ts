@@ -1,6 +1,7 @@
 const createMessage = async (
   message: string,
   sentTo: string,
+  username: string,
   destinationType: "group" | "user",
   pinned: boolean
 ) => {
@@ -12,7 +13,13 @@ const createMessage = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify({ message, sentTo, destinationType, pinned }),
+      body: JSON.stringify({
+        message,
+        sentTo,
+        username,
+        destinationType,
+        pinned,
+      }),
     }
   );
   return response.json();

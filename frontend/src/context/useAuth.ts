@@ -9,6 +9,7 @@ const useAuth = () => {
     );
   }
   const { currentUser } = context;
+  console.log("currentUser", currentUser);
   return { user: currentUser };
 };
 

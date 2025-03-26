@@ -14,7 +14,9 @@ const sendMessage = async (
     return { message: "Cannot send message to self", failure: true };
   }
   if (destinationType === "user") {
+    console.log("id of sent to", sentTo);
     const user = await userQueries.getUserById(sentTo);
+    console.log("user", user);
     if (!user) {
       return { message: "User not found", failure: true };
     }
