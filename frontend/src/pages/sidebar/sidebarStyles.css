@@ -11,6 +11,10 @@
   position: relative;
 }
 
+.sideTitle {
+  @apply font-bold;
+}
+
 .triggerIcon {
   @apply absolute top-0 -right-8;
 }

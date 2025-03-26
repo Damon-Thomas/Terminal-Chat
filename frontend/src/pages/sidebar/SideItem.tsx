@@ -1,3 +1,13 @@
-export default function SideItem({ children }: { children: string }) {
-  return <div className="sideItem">{children}</div>;
+export default function SideItem({
+  children,
+  clickHandler,
+}: {
+  children: string;
+  clickHandler: () => void;
+}) {
+  return (
+    <div className="sideItem" onClick={clickHandler}>
+      {children}
+    </div>
+  );
 }

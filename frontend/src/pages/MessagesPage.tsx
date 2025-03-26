@@ -3,6 +3,9 @@ import MessageSideBar from "./sidebar/MessageSideBar";
 import "./pageStyles/messagePageStyles.css";
 import { useCallback, useEffect, useState } from "react";
 import getMessages from "../fetchers/getMessages";
+import MessageCreator from "../components/Messages/MessageCreator";
+import Message from "../components/Messages/Message";
+import useAuth from "../context/useAuth";
 
 type Contact =
   | { id: string; username: string; groupName?: never } // User object
@@ -21,6 +24,7 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [group, setGroup] = useState(false);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const { user } = useAuth();
 
   const fetchMessages = useCallback(async () => {
     if (group && selectedContact) {
@@ -63,11 +67,18 @@ export default function MessagesPage() {
               <h1>Messages with {selectedContact.username}</h1>
             )}
             {messages.map((message) => (
-              <div className="message">
-                <p>{message.content}</p>
-                <p>{message.authorId}</p>
-              </div>
+              <Message
+                content={message.content}
+                authorId={message.authorId}
+                user={user.id === message.authorId}
+              ></Message>
             ))}
+            <MessageCreator
+              group={group}
+              messageSentTo={selectedContact ? selectedContact.id : ""}
+              messages={messages}
+              setMessages={setMessages}
+            ></MessageCreator>
           </div>
         ) : null}
       </MessageArea>

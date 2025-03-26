@@ -9,7 +9,7 @@ const useAuth = () => {
     );
   }
   const { currentUser } = context;
-  return { currentUser };
+  return { user: currentUser };
 };
 
 export default useAuth;

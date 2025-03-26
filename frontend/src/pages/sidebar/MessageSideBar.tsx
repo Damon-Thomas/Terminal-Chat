@@ -1,24 +1,89 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./sidebarStyles.css";
 import SideItem from "./SideItem";
+import getContacts from "../../fetchers/getContacts";
+import SideTitle from "./SideTitle";
 
 type Contact =
-  | { username: string; groupName?: never } // User object
-  | { groupName: string; username?: never }; // Group object
+  | { id: string; username: string; groupName?: never } // User object
+  | { id: string; groupName: string; username?: never }; // Group object
 
+type Group = {
+  id: string;
+  groupName: string;
+};
+
+type Convo = {
+  id: string;
+  username: string;
+  groupName: string;
+  lastMessage: string;
+  lastMessageTime: string;
+  unreadMessages: number;
+};
 type MessageSideBarProps = {
-  setSelectedContact: React.Dispatch<React.SetStateAction<Contact | null>>;
+  setSelectedContact: React.Dispatch<React.SetStateAction<Contact>>;
 };
 
 export default function MessageSideBar({
   setSelectedContact,
-}: {
-  setSelectedContact: MessageSideBarProps;
-}) {
+}: MessageSideBarProps) {
   const [trigger, setTrigger] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [groups, setGroups] = React.useState([]);
-  const [friends, setFriends] = React.useState([]);
+  const [groupSelection, setGroupSelection] = React.useState<Group[]>([]);
+  const [groupPage, setGroupPage] = React.useState(1);
+  const [convos, setConvos] = React.useState([]);
+  const [convoSelection, setConvoSelection] = React.useState<Convo[]>([]);
+  const [convoPage, setConvoPage] = React.useState(1);
+
+  const groupClickHandler = (group: Group) => {
+    setSelectedContact({ id: group.id, groupName: group.groupName });
+  };
+
+  const convoClickHandler = (convo: Convo) => {
+    setSelectedContact({ id: convo.id, username: convo.username });
+  };
+
+  useEffect(() => {
+    async function fetchGroups() {
+      const fetchedGroups = await getContacts.getUserGroups();
+      if (fetchedGroups.success) {
+        setGroups(fetchedGroups.groups);
+      }
+    }
+    async function fetchConvos() {
+      const convos = await getContacts.getActiveUserContacts();
+      if (convos.success) {
+        setConvos(convos.conversations);
+      }
+    }
+    fetchGroups();
+    fetchConvos();
+  }, []);
+
+  useEffect(() => {
+    function updateGroupSelection() {
+      const selection = groups.slice(groupPage * 5, groupPage * 5 + 5);
+      if (selection.length === 0 && groupPage > 0) {
+        setGroupPage((prev) => prev - 1);
+        updateGroupSelection();
+      } else {
+        setGroupSelection(selection);
+      }
+    }
+    function updateConvoSelection() {
+      const selection = convos.slice(convoPage * 5, convoPage * 5 + 5);
+      if (selection.length === 0 && convoPage > 0) {
+        setConvoPage((prev) => prev - 1);
+        updateConvoSelection();
+      } else {
+        setConvoSelection(selection);
+      }
+    }
+    updateGroupSelection();
+    updateConvoSelection();
+  }, [groupPage, convoPage, groups, convos]);
 
   return (
     <div className="sidebarOverlay">
@@ -32,7 +97,52 @@ export default function MessageSideBar({
         <aside className={`barContent`}>
           <div className="topSpace"></div>
           <div className="barContent">
-            <SideItem>content1 is still longer</SideItem>
+            <SideTitle>Groups</SideTitle>
+            {groupSelection.map((group, index) => (
+              <SideItem
+                clickHandler={() => groupClickHandler(group)}
+                key={index}
+              >
+                {group.groupName}
+              </SideItem>
+            ))}
+            <div className="pageNav">
+              <button
+                onClick={() => setGroupPage((prev) => prev - 1)}
+                disabled={groupPage === 0}
+              >
+                Prev
+              </button>
+              <button
+                onClick={() => setGroupPage((prev) => prev + 1)}
+                disabled={groupPage * 5 + 5 >= groups.length}
+              >
+                Next
+              </button>
+            </div>
+            <SideTitle>Conversations</SideTitle>
+            {convoSelection.map((convo, index) => (
+              <SideItem
+                clickHandler={() => convoClickHandler(convo)}
+                key={index}
+              >
+                {convo.username}
+              </SideItem>
+            ))}
+            <div className="pageNav">
+              <button
+                onClick={() => setConvoPage((prev) => prev - 1)}
+                disabled={convoPage === 0}
+              >
+                Prev
+              </button>
+              <button
+                onClick={() => setConvoPage((prev) => prev + 1)}
+                disabled={convoPage * 5 + 5 >= convos.length}
+              >
+                Next
+              </button>
+            </div>
           </div>
         </aside>
         <div className="z-10 triggerIcon">
