@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import getContacts from "../../fetchers/getContacts";
 import Button from "../Buttons/Button";
 import sendActions from "../../fetchers/sendActions";
+import GoToButton from "./GoToButton";
 
 export default function GroupContacts() {
   interface Group {
@@ -109,7 +110,14 @@ export default function GroupContacts() {
             group.joined ? (
               <div key={group.id} className="flex flex-col gap-2">
                 <h2>{group.groupName}</h2>
-                <Button onClick={() => {}}>Message Group</Button>
+                <GoToButton
+                  destination="/messages"
+                  group={true}
+                  id={group.id}
+                  username={group.groupName}
+                >
+                  Message Group
+                </GoToButton>
                 <Button
                   onClick={() => {
                     leaveGroup(group.id);

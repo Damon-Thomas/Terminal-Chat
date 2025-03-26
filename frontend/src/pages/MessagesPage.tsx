@@ -1,15 +1,12 @@
 import MessageArea from "../components/Messages/MessageArea";
 import MessageSideBar from "./sidebar/MessageSideBar";
 import "./pageStyles/messagePageStyles.css";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import getMessages from "../fetchers/getMessages";
 import MessageCreator from "../components/Messages/MessageCreator";
 import Message from "../components/Messages/Message";
 import useAuth from "../context/useAuth";
-
-type Contact =
-  | { id: string; username: string; groupName?: never } // User object
-  | { id: string; groupName: string; username?: never }; // Group object
+import contactActions from "../context/ContactActions";
 
 export type Message = {
   id: string;
@@ -22,8 +19,8 @@ export type Message = {
 
 export default function MessagesPage() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [group, setGroup] = useState(false);
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const selectedContact = contactActions.getStoredContact();
+  const group = selectedContact?.group;
   const { user } = useAuth();
 
   const fetchMessages = useCallback(async () => {
@@ -36,6 +33,12 @@ export default function MessagesPage() {
         setMessages([]);
       }
     } else if (selectedContact) {
+      console.log(
+        "selectedContact",
+        selectedContact.id,
+        selectedContact.username
+      );
+
       const retrieved = await getMessages.getUserToUserMessages(
         selectedContact.id
       );
@@ -57,12 +60,14 @@ export default function MessagesPage() {
 
   return (
     <div className="messageMain">
-      <MessageSideBar setSelectedContact={setSelectedContact}></MessageSideBar>
+      <MessageSideBar
+        setSelectedContact={contactActions.storeContact}
+      ></MessageSideBar>
       <MessageArea>
         {selectedContact ? (
           <div>
-            {group && selectedContact.groupName ? (
-              <h1>{selectedContact.groupName}</h1>
+            {group && selectedContact.username ? (
+              <h1>{selectedContact.username}</h1>
             ) : (
               <h1>Messages with {selectedContact.username}</h1>
             )}
@@ -74,7 +79,7 @@ export default function MessagesPage() {
               ></Message>
             ))}
             <MessageCreator
-              group={group}
+              group={group || false}
               messageSentTo={selectedContact ? selectedContact.id : ""}
               messages={messages}
               setMessages={setMessages}

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import getContacts from "../../fetchers/getContacts";
 import Button from "../Buttons/Button";
 import sendActions from "../../fetchers/sendActions";
+import { CurrentConvoContext } from "../../context/CurrentConvoContext";
+import contactActions from "../../context/ContactActions";
 
 export default function FriendContacts() {
   interface User {
@@ -14,6 +16,11 @@ export default function FriendContacts() {
   const [editedFriendContacts, setEditedFriendContacts] = useState<User[]>([]);
   const [friendPage, setFriendPage] = useState<User[]>([]);
   const [page, setPage] = useState(1);
+  // const context = useContext(CurrentConvoContext);
+  // if (!context) {
+  //   throw new Error("CurrentConvoContext is null. Ensure the provider is set.");
+  // }
+  // const { selectedContact, setSelectedContact } = context;
 
   useEffect(() => {
     async function getFriendContacts() {
@@ -74,6 +81,15 @@ export default function FriendContacts() {
     }
   }
 
+  function messageFriend(friendId: string, username: string) {
+    contactActions.storeContact({
+      id: friendId,
+      username: username,
+      group: false,
+    });
+    location.href = "/messages";
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-lg md:text-2xl lg:text-4xl">Friends</h1>
@@ -82,13 +98,17 @@ export default function FriendContacts() {
           !user.friend ? (
             <div key={user.id} className="flex flex-col gap-2">
               <h2>{user.username}</h2>
-              <Button onClick={() => {}}>Message</Button>
+              <Button onClick={() => messageFriend(user.id, user.username)}>
+                Message
+              </Button>
               <Button onClick={() => addFriend(user.id)}>Add Friend</Button>
             </div>
           ) : (
             <div key={user.id} className="flex flex-col gap-2">
               <h2>{user.username}</h2>
-              <Button onClick={() => {}}>Message</Button>
+              <Button onClick={() => messageFriend(user.id, user.username)}>
+                Message
+              </Button>
               <Button onClick={() => removeFriend(user.id)}>
                 Delete Friend
               </Button>

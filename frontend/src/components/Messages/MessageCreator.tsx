@@ -8,7 +8,7 @@ import sendActions from "../../fetchers/sendActions";
 import type { Message } from "../../pages/MessagesPage";
 
 export default function MessageCreator({
-  group,
+  group = false,
   messageSentTo,
   messages,
   setMessages,

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import getContacts from "../../fetchers/getContacts";
 import Button from "../Buttons/Button";
 import sendActions from "../../fetchers/sendActions";
+import GoToButton from "./GoToButton";
 
 export default function NonContacts() {
   interface User {
@@ -67,6 +68,14 @@ export default function NonContacts() {
             <div key={user.id} className="flex flex-col gap-2">
               <h2>{user.username}</h2>
               <p>Friend</p>
+              <GoToButton
+                destination="/messages"
+                id={user.id}
+                username={user.username}
+                group={false}
+              >
+                Message
+              </GoToButton>
             </div>
           )
         )}

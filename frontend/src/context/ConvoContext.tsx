@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CurrentConvoContext } from "./CurrentConvoContext";
 
-type Contact = { id: string; username: string };
+type Contact = { id: string; username: string; group: boolean };
 
 export default function ConvoContext({
   children,
@@ -11,6 +11,7 @@ export default function ConvoContext({
   const [selectedContact, setSelectedContact] = useState<Contact>({
     id: "",
     username: "",
+    group: false,
   });
 
   return (

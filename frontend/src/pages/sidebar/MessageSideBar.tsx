@@ -4,9 +4,7 @@ import SideItem from "./SideItem";
 import getContacts from "../../fetchers/getContacts";
 import SideTitle from "./SideTitle";
 
-type Contact =
-  | { id: string; username: string; groupName?: never } // User object
-  | { id: string; groupName: string; username?: never }; // Group object
+type Contact = { id: string; username: string; group: boolean };
 
 type Group = {
   id: string;
@@ -38,11 +36,19 @@ export default function MessageSideBar({
   const [convoPage, setConvoPage] = React.useState(1);
 
   const groupClickHandler = (group: Group) => {
-    setSelectedContact({ id: group.id, groupName: group.groupName });
+    setSelectedContact({
+      id: group.id,
+      username: group.groupName,
+      group: true,
+    });
   };
 
   const convoClickHandler = (convo: Convo) => {
-    setSelectedContact({ id: convo.id, username: convo.username });
+    setSelectedContact({
+      id: convo.id,
+      username: convo.username,
+      group: false,
+    });
   };
 
   useEffect(() => {
@@ -64,8 +70,10 @@ export default function MessageSideBar({
 
   useEffect(() => {
     function updateGroupSelection() {
-      const selection = groups.slice(groupPage * 5, groupPage * 5 + 5);
-      if (selection.length === 0 && groupPage > 0) {
+      const selection = groups.slice(groupPage * 5 - 5, groupPage * 5);
+      console.log("Group selection", selection, selection.length, groupPage);
+      if (selection.length === 0 && groupPage > 1) {
+        console.log("Updating group page");
         setGroupPage((prev) => prev - 1);
         updateGroupSelection();
       } else {
@@ -73,8 +81,8 @@ export default function MessageSideBar({
       }
     }
     function updateConvoSelection() {
-      const selection = convos.slice(convoPage * 5, convoPage * 5 + 5);
-      if (selection.length === 0 && convoPage > 0) {
+      const selection = convos.slice(convoPage * 5 - 5, convoPage * 5);
+      if (selection.length === 0 && convoPage > 1) {
         setConvoPage((prev) => prev - 1);
         updateConvoSelection();
       } else {
