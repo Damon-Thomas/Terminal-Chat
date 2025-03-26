@@ -10,6 +10,6 @@ export interface CurrentUserContextType {
   currentUser: CurrentUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<CurrentUser>>;
 }
-export const CurrentUserContext = createContext<CurrentUserContextType | null>(
-  null
+export const CurrentUserContext = createContext<CurrentUserContextType>(
+  {} as CurrentUserContextType
 );

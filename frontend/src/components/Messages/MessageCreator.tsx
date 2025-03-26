@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import useAuth from "../../context/useAuth";
 import LongInput from "../input/LongInput";
 import Button from "../Buttons/Button";
@@ -21,8 +21,16 @@ export default function MessageCreator({
   setMessages: React.Dispatch<React.SetStateAction<Array<Message>>>;
 }) {
   const [content, setContent] = useState("");
-  const { user } = useAuth();
   const [error, setError] = useState("");
+
+  // Get user data once and store in a ref
+  const { user } = useAuth();
+  const userRef = useRef(user);
+
+  // Update ref if user changes
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   async function sendMessage() {
     console.log("messageSentTo", messageSentTo, username);
@@ -42,7 +50,7 @@ export default function MessageCreator({
           createdAt: new Date().toISOString(),
           username,
           content,
-          authorId: user.id,
+          authorId: userRef.current.id,
           likes: [],
           PinnedMessage: false,
         },

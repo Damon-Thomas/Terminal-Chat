@@ -1,7 +1,7 @@
 import MessageArea from "../components/Messages/MessageArea";
 import MessageSideBar from "./sidebar/MessageSideBar";
 import "./pageStyles/messagePageStyles.css";
-import { use, useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import getMessages from "../fetchers/getMessages";
 import MessageCreator from "../components/Messages/MessageCreator";
 import Message from "../components/Messages/Message";
@@ -22,7 +22,14 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const group = selectedContact?.group;
+  // Get user data once and store in a ref
   const { user } = useAuth();
+  const userRef = useRef(user);
+
+  // Update ref if user changes
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   const fetchMessages = useCallback(async (contactId: string) => {
     const retrieved = await getMessages.getUserToUserMessages(contactId);

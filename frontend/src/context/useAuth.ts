@@ -1,16 +1,16 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { CurrentUserContext } from "./CurrentUserContext"; // Import the CurrentUserContext
 
-const useAuth = () => {
-  const context = useContext(CurrentUserContext); // Remove explicit type as it's inferred
-  if (!context) {
-    throw new Error(
-      "useAuth must be used within a CurrentUserContext.Provider"
-    );
-  }
-  const { currentUser } = context;
-  console.log("currentUser", currentUser);
-  return { user: currentUser };
-};
+export default function useAuth() {
+  const context = useContext(CurrentUserContext);
 
-export default useAuth;
+  // Memoize the returned object to prevent unnecessary re-renders
+  return useMemo(
+    () => ({
+      user: context.currentUser,
+      isAuthenticated: !!context.currentUser,
+      // other auth properties
+    }),
+    [context.currentUser]
+  );
+}
