@@ -15,7 +15,6 @@ import FriendContactPage from "./pages/contactPages/FriendContactPage.tsx";
 import GroupContactPage from "./pages/contactPages/GroupContactPage.tsx";
 import NonContactPage from "./pages/contactPages/NonContactPage.tsx";
 import MessagesPage from "./pages/MessagesPage.tsx";
-import ConvoContext from "./context/convoContext.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -35,9 +34,7 @@ const router = createBrowserRouter(
 function App() {
   return (
     <UserContext>
-      <ConvoContext>
-        <RouterProvider router={router} />
-      </ConvoContext>
+      <RouterProvider router={router} />
     </UserContext>
   );
 }
