@@ -85,10 +85,10 @@ export default function MessageCreator({
         placeholder="Type a message..."
         className="messageInput"
       />
-      <Button type="submit" className="messageButton">
+      <ErrorMessage>{error}</ErrorMessage>
+      <Button type="submit" className="messageButton" size="small">
         Send
       </Button>
-      <ErrorMessage>{error}</ErrorMessage>
     </Form>
   );
 }

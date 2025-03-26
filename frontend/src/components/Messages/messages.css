@@ -6,7 +6,7 @@
 }
 
 .displayMessages {
-  @apply overflow-y-auto scrollbar-thumb-amber-300 scrollbar-track-slate-800;
+  @apply overflow-y-auto p-4;
   scrollbar-gutter: stable;
 }
 
@@ -24,6 +24,10 @@
   @apply grow border-2 border-amber-300 rounded-lg p-2;
   background-color: var(--background-color);
   color: var(--text-color);
+}
+
+.formWrapper.messageCreator {
+  @apply flex flex-col gap-0;
 }
 
 /* .message {

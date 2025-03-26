@@ -16,6 +16,11 @@
   border-radius: 0; /* blocky look */
 }
 
+.button.small {
+  @apply text-sm sm:text-base md:text-lg lg:text-xl;
+  padding: 10px 20px;
+}
+
 .button:hover {
   background-color: var(--background-color);
   color: var(--text-color);
