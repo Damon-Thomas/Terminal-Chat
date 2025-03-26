@@ -6,7 +6,7 @@ import { CurrentUser } from "../context/CurrentUserContext";
 
 export default function Layout() {
   return (
-    <div className="layout h-screen w-screen flex flex-col ">
+    <div className="layout h-screen w-screen overflow-hidden flex flex-col ">
       <Header />
       <Outlet />
     </div>

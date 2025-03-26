@@ -1,5 +1,5 @@
 @import "tailwindcss";
 
 .messageMain {
-  @apply h-full w-screen flex grow;
+  @apply h-full w-screen flex grow relative;
 }

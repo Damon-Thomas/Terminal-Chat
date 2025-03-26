@@ -7,6 +7,7 @@ import MessageCreator from "../components/Messages/MessageCreator";
 import Message from "../components/Messages/Message";
 import useAuth from "../context/useAuth";
 import contactActions, { Contact } from "../context/ContactActions";
+import MessageContainer from "../components/Messages/MessageContainer";
 
 export type Message = {
   id: string;
@@ -56,35 +57,38 @@ export default function MessagesPage() {
   }, [selectedContact, fetchMessages]);
 
   return (
-    <div className="messageMain">
-      <MessageSideBar></MessageSideBar>
-      <MessageArea>
-        {selectedContact ? (
-          <div>
-            {group && selectedContact.username ? (
-              <h1>{selectedContact.username}</h1>
-            ) : (
-              <h1>Messages with {selectedContact.username}</h1>
-            )}
-            {messages.map((message) => (
-              <Message
-                key={message.id}
-                content={message.content}
-                username={message.username}
-                user={user.id === message.authorId}
-              ></Message>
-            ))}
-            <h1>You are {user.username}</h1>
-            <MessageCreator
-              group={group || false}
-              username={user.username}
-              messageSentTo={selectedContact ? selectedContact.id : ""}
-              messages={messages}
-              setMessages={setMessages}
-            ></MessageCreator>
-          </div>
-        ) : null}
-      </MessageArea>
+    <div className="relative flex w-full h-full overflow-hidden">
+      <MessageSideBar />
+      <div className="flex-1 overflow-hidden">
+        <MessageArea>
+          {selectedContact ? (
+            <div className="messageBox">
+              <MessageContainer>
+                {group && selectedContact.username ? (
+                  <p>{selectedContact.username}</p>
+                ) : (
+                  <p>Messages with {selectedContact.username}</p>
+                )}
+                {messages.map((message) => (
+                  <Message
+                    key={message.id}
+                    content={message.content}
+                    username={message.username}
+                    user={user.id === message.authorId}
+                  ></Message>
+                ))}
+              </MessageContainer>
+              <MessageCreator
+                group={group || false}
+                username={user.username}
+                messageSentTo={selectedContact ? selectedContact.id : ""}
+                messages={messages}
+                setMessages={setMessages}
+              ></MessageCreator>
+            </div>
+          ) : null}
+        </MessageArea>
+      </div>
     </div>
   );
 }

@@ -57,7 +57,7 @@ export default function MessageSideBar() {
     async function fetchConvos() {
       const convos = await getContacts.getActiveUserContacts();
       if (convos.success) {
-        setConvos(convos.conversations);
+        setConvos(convos.contacts);
       }
     }
     fetchGroups();
@@ -91,15 +91,8 @@ export default function MessageSideBar() {
 
   return (
     <div className="sidebarOverlay">
-      <div
-        className={`sidebar ${
-          trigger
-            ? "openBar translate-x-0"
-            : "closedBar -translate-x-[calc(100%)]"
-        }`}
-      >
-        <aside className={`barContent`}>
-          <div className="topSpace"></div>
+      <div className={`sidebar ${trigger ? "openBar" : "closedBar"}`}>
+        <aside className="barContent">
           <div className="barContent">
             <SideTitle>Groups</SideTitle>
             {groupSelection.map((group, index) => (
@@ -149,39 +142,69 @@ export default function MessageSideBar() {
             </div>
           </div>
         </aside>
-        <div className="z-10 triggerIcon">
-          <button
-            onClick={() => {
-              setTrigger(!trigger);
-              setOpen(!open);
-            }}
+      </div>
+
+      <div className={`triggerIcon ${!trigger ? "closed" : ""}`}>
+        <button
+          onClick={() => {
+            setTrigger(!trigger);
+            setOpen(!open);
+          }}
+        >
+          <svg
+            className={`w-6 h-6`}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            <svg
-              className={`ease-in duration-500 w-8 h-8 sidebar-icon ${
-                open ? "openIcon " : "closedIcon "
-              }`}
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect width="18" height="18" x="3" y="3" rx="2" />
-              <path d="M9 3v18" />
-              <path d="m16 15-3-3 3-3" />
-            </svg>
-          </button>
-        </div>
+            {trigger ? (
+              <>
+                {/* Close icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  className="lucide lucide-panel-right-close-icon lucide-panel-right-close"
+                >
+                  <rect width="18" height="18" x="3" y="3" rx="2" />
+                  <path d="M15 3v18" />
+                  <path d="m10 15-3-3 3-3" />
+                </svg>
+              </>
+            ) : (
+              <>
+                {/* Open icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  className="lucide lucide-panel-right-close-icon lucide-panel-right-close"
+                >
+                  <rect width="18" height="18" x="3" y="3" rx="2" />
+                  <path d="M15 3v18" />
+                  <path d="m8 9 3 3-3 3" />
+                </svg>
+              </>
+            )}
+          </svg>
+        </button>
       </div>
     </div>
   );
 }
-//panel open
-//<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-panel-left-open"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m14 9 3 3-3 3"/></svg>
-
-//panel close
-//<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-panel-left-close"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/></svg>

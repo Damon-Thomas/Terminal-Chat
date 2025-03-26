@@ -1,5 +1,80 @@
 @import "tailwindcss";
 
 .messageArea {
-  @apply flex w-full h-full justify-center items-center;
+  @apply ml-14 m-4 h-[calc(100%-32px)] overflow-hidden;
+  flex: 1 1 100%;
+}
+
+.displayMessages {
+  @apply overflow-y-auto scrollbar-thumb-amber-300 scrollbar-track-slate-800;
+  scrollbar-gutter: stable;
+}
+
+.messageBox {
+  @apply p-2 bg-slate-800 rounded-lg h-full flex flex-col gap-2;
+  text-overflow: wrap;
+  overflow-wrap: break-word;
+}
+
+.messageCreator {
+  @apply h-50 border-2 border-amber-300 rounded-lg p-2 flex flex-col;
+}
+
+.messageInputinput-box {
+  @apply grow border-2 border-amber-300 rounded-lg p-2;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* .message {
+  @apply flex flex-col;
+} */
+
+.received-message {
+  color: var(--text-color);
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+.user-message {
+  color: var(--secondary-text-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.glitch-received-message {
+  /* background: rgba(51, 255, 51, 0.1); */
+  padding: 0px 8px;
+  border-left: 3px solid var(--text-color);
+
+  animation: subtle-glitch 1s infinite alternate;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.user-glitch-message {
+  color: var(--secondary-text-color);
+  padding: 0px 8px;
+  border-right: 3px solid var(--secondary-text-color);
+  display: flex;
+  justify-content: flex-end;
+
+  animation: subtle-glitch 1s infinite alternate;
+}
+
+.message {
+  @apply flex flex-col gap-0;
+}
+
+.message-username {
+  @apply text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl;
+}
+
+.message-content {
+  @apply text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl;
+}
+
+.user-glitch-message .message-content,
+.user-glitch-message .message-username {
+  text-align: right;
 }

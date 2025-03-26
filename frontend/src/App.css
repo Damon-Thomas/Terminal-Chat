@@ -29,6 +29,8 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  scrollbar-color: var(--text-color) var(--background-color);
+  scrollbar-width: thin;
 }
 
 .chat-container {

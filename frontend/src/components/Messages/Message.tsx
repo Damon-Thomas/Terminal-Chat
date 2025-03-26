@@ -8,9 +8,13 @@ export default function Message({
   user: boolean;
 }) {
   return (
-    <div className={`message ${user ? "userMessage" : "otherMessage"}`}>
-      <p>{content}</p>
-      <p>{username}</p>
+    <div
+      className={`message ${
+        user ? "user-glitch-message" : "glitch-received-message"
+      }`}
+    >
+      <p className="message-content">{content}</p>
+      <p className="message-username">{username}</p>
     </div>
   );
 }

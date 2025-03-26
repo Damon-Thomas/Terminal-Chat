@@ -8,7 +8,7 @@ export default function MessageArea({ children }: MessageAreaProps) {
   return (
     <div className="messageArea">
       {children || (
-        <div className="messageArea">
+        <div className="messageAreaDefault">
           <h1>Use Sidebar to Select Contact to Message</h1>
         </div>
       )}
