@@ -3,6 +3,7 @@ import "./sidebarStyles.css";
 import SideItem from "./SideItem";
 import getContacts from "../../fetchers/getContacts";
 import SideTitle from "./SideTitle";
+import contactActions from "../../context/ContactActions";
 
 type Contact = { id: string; username: string; group: boolean };
 
@@ -19,13 +20,8 @@ type Convo = {
   lastMessageTime: string;
   unreadMessages: number;
 };
-type MessageSideBarProps = {
-  setSelectedContact: React.Dispatch<React.SetStateAction<Contact>>;
-};
 
-export default function MessageSideBar({
-  setSelectedContact,
-}: MessageSideBarProps) {
+export default function MessageSideBar() {
   const [trigger, setTrigger] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [groups, setGroups] = React.useState([]);
@@ -36,7 +32,7 @@ export default function MessageSideBar({
   const [convoPage, setConvoPage] = React.useState(1);
 
   const groupClickHandler = (group: Group) => {
-    setSelectedContact({
+    contactActions.storeContact({
       id: group.id,
       username: group.groupName,
       group: true,
@@ -44,7 +40,7 @@ export default function MessageSideBar({
   };
 
   const convoClickHandler = (convo: Convo) => {
-    setSelectedContact({
+    contactActions.storeContact({
       id: convo.id,
       username: convo.username,
       group: false,

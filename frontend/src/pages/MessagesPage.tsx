@@ -60,9 +60,7 @@ export default function MessagesPage() {
 
   return (
     <div className="messageMain">
-      <MessageSideBar
-        setSelectedContact={contactActions.storeContact}
-      ></MessageSideBar>
+      <MessageSideBar></MessageSideBar>
       <MessageArea>
         {selectedContact ? (
           <div>
