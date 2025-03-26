@@ -4,14 +4,14 @@ import messageController from "../controllers/messageController.js";
 
 const router = Router();
 
-router.get(
+router.post(
   "/getMessagesBetweenUsers",
   userController.verifyToken,
   userController.authUser,
   messageController.getMessagesBetweenUsers
 );
 
-router.get(
+router.post(
   "/getMessagesToGroup",
   userController.verifyToken,
   userController.authUser,

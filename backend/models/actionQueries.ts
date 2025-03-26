@@ -4,10 +4,12 @@ import userQueries from "./userQueries.js";
 const sendMessage = async (
   userId: string,
   message: string,
+  username: string,
   sentTo: string,
   destinationType: "user" | "group",
   pinned: boolean = false
 ) => {
+  console.log("sendMessage", userId, message, sentTo, destinationType, pinned);
   if (destinationType === "user" && sentTo === userId) {
     return { message: "Cannot send message to self", failure: true };
   }
@@ -27,6 +29,7 @@ const sendMessage = async (
   const newMessage = await prisma.message.create({
     data: {
       authorId: userId,
+      username: username,
       content: message,
       sentToId: destinationType === "user" ? sentTo : null,
       sentToGroupId: destinationType === "group" ? sentTo : null,
@@ -38,6 +41,7 @@ const sendMessage = async (
 
 const setPinnedMessage = async (
   userId: string,
+  username: string,
   groupId: string,
   content: string
 ) => {
@@ -56,6 +60,7 @@ const setPinnedMessage = async (
           create: {
             content: content,
             authorId: userId,
+            username: username,
             // You can optionally fill in other required fields (e.g. filename, filePath, etc.)
           },
           // update the pinned message if it already exists

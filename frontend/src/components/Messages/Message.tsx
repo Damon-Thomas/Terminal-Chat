@@ -1,16 +1,16 @@
 export default function Message({
   content,
-  authorId,
+  username,
   user,
 }: {
   content: string;
-  authorId: string;
+  username: string;
   user: boolean;
 }) {
   return (
     <div className={`message ${user ? "userMessage" : "otherMessage"}`}>
       <p>{content}</p>
-      <p>{authorId}</p>
+      <p>{username}</p>
     </div>
   );
 }

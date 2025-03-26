@@ -23,16 +23,19 @@ export default function MessageCreator({
   const [error, setError] = useState("");
 
   async function sendMessage() {
+    console.log("messageSentTo", messageSentTo);
     const response = await sendActions.createMessage(
       content,
       messageSentTo,
-      group ? "Group" : "User"
+      group ? "group" : "user",
+      false //pinned
     );
-    if (response.success) {
+    console.log("response", response);
+    if (response.failure === false) {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
-          id: response.data.id,
+          id: response.id,
           createdAt: new Date().toISOString(),
           content,
           authorId: user.id,

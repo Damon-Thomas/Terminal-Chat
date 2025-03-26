@@ -1,4 +1,4 @@
-type Contact = { id: string; username: string; group: boolean };
+export type Contact = { id: string; username: string; group: boolean };
 
 function storeContact(contact: Contact) {
   localStorage.setItem("selectedContact", JSON.stringify(contact));

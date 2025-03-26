@@ -3,6 +3,7 @@ import userQueries from "./userQueries.js";
 
 const sendMessage = async (
   userId: string,
+  username: string,
   message: string,
   sentTo: string,
   destinationType: "user" | "group"
@@ -15,6 +16,7 @@ const sendMessage = async (
   const newMessage = await prisma.message.create({
     data: {
       authorId: userId,
+      username: username,
       content: message,
       sentToId: destinationType === "user" ? sentTo : null,
       sentToGroupId: destinationType === "group" ? sentTo : null,

@@ -6,12 +6,17 @@ import { UserRequest } from "./profileController.js";
 import { User } from "@prisma/client";
 
 const sendMessage = async (req: UserRequest, res: Response) => {
+  console.log("sendMessage", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ failure: true, errors: errors.array() });
   }
   const { message, sentTo, destinationType, pinned } = req.body;
-
+  if (!sentTo) {
+    return res
+      .status(400)
+      .json({ failure: true, message: "No recipient specified" });
+  }
   try {
     const newMessage = await actionQueries.sendMessage(
       req.user.id,
@@ -37,6 +42,7 @@ const setPinnedMessage = async (req: UserRequest, res: Response) => {
   try {
     const pinnedMessage = await actionQueries.setPinnedMessage(
       req.user.id,
+      req.user.username,
       groupId,
       content
     );

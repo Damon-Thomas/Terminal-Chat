@@ -1,7 +1,8 @@
 const createMessage = async (
   message: string,
   sentTo: string,
-  destinationType: "Group" | "User"
+  destinationType: "group" | "user",
+  pinned: boolean
 ) => {
   const response = await fetch(
     `${import.meta.env.VITE_ApiHost}/action/createMessage`,
@@ -11,7 +12,7 @@ const createMessage = async (
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify({ message, sentTo, destinationType }),
+      body: JSON.stringify({ message, sentTo, destinationType, pinned }),
     }
   );
   return response.json();

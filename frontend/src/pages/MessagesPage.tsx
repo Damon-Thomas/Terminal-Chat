@@ -1,12 +1,12 @@
 import MessageArea from "../components/Messages/MessageArea";
 import MessageSideBar from "./sidebar/MessageSideBar";
 import "./pageStyles/messagePageStyles.css";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { use, useCallback, useContext, useEffect, useState } from "react";
 import getMessages from "../fetchers/getMessages";
 import MessageCreator from "../components/Messages/MessageCreator";
 import Message from "../components/Messages/Message";
 import useAuth from "../context/useAuth";
-import contactActions from "../context/ContactActions";
+import contactActions, { Contact } from "../context/ContactActions";
 
 export type Message = {
   id: string;
@@ -19,44 +19,33 @@ export type Message = {
 
 export default function MessagesPage() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const selectedContact = contactActions.getStoredContact();
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const group = selectedContact?.group;
   const { user } = useAuth();
 
-  const fetchMessages = useCallback(async () => {
-    if (group && selectedContact) {
-      const retrieved = await getMessages.getGroupMessages(selectedContact.id);
-      if (retrieved) {
-        setMessages(retrieved);
-      } else {
-        console.log("Error getting messages");
-        setMessages([]);
-      }
-    } else if (selectedContact) {
-      console.log(
-        "selectedContact",
-        selectedContact.id,
-        selectedContact.username
-      );
-
-      const retrieved = await getMessages.getUserToUserMessages(
-        selectedContact.id
-      );
-      if (retrieved) {
-        setMessages(retrieved);
-      } else {
-        console.log("Error getting messages");
-        setMessages([]);
-      }
+  const fetchMessages = useCallback(async (contactId: string) => {
+    const retrieved = await getMessages.getUserToUserMessages(contactId);
+    if (retrieved) {
+      console.log("retrieved", retrieved);
+      setMessages(retrieved.messages);
     } else {
-      console.log("No selected contact");
+      console.log("Error getting messages");
       setMessages([]);
     }
-  }, [group, selectedContact]);
+  }, []);
 
   useEffect(() => {
-    fetchMessages();
-  }, [fetchMessages]);
+    const storedContact = contactActions.getStoredContact();
+    setSelectedContact(storedContact);
+  }, []);
+
+  useEffect(() => {
+    if (selectedContact) {
+      fetchMessages(selectedContact.id);
+    } else {
+      setMessages([]);
+    }
+  }, [selectedContact, fetchMessages]);
 
   return (
     <div className="messageMain">
@@ -71,8 +60,9 @@ export default function MessagesPage() {
             )}
             {messages.map((message) => (
               <Message
+                key={message.id}
                 content={message.content}
-                authorId={message.authorId}
+                username={message.username}
                 user={user.id === message.authorId}
               ></Message>
             ))}

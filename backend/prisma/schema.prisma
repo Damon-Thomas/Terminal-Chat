@@ -31,12 +31,10 @@ model User {
 model Message {
   id            String         @id @unique @default(uuid())
   createdAt     DateTime       @default(now())
-  filename      String?        @db.VarChar(255)
   content       String?        @db.VarChar(255)
-  size          Int?
-  filePath      String?        @db.VarChar(255)
   authorId      String
   author        User           @relation("SentMessages", fields: [authorId], references: [id])
+  username      String
   sentToId      String?
   sentTo        User?          @relation("ReceivedMessages", fields: [sentToId], references: [id])
   sentToGroupId String?
