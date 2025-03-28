@@ -158,6 +158,11 @@ const makeGroup = async (req: UserRequest, res: Response) => {
         .status(400)
         .json({ newGroup, failure: true, message: "Group already Exists" });
     } else {
+      if (newGroup && newGroup.group) {
+        actionQueries.joinGroup(userId, newGroup.group.id);
+      } else {
+        console.log("created group not joined");
+      }
       res.status(200).json(newGroup);
     }
   } catch (e) {

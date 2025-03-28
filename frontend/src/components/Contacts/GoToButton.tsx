@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { CurrentConvoContext } from "../../context/CurrentConvoContext";
 import { useContext } from "react";
 import contactActions from "../../context/ContactActions";
+import Button from "../Buttons/Button";
 
 export default function GoToButton({
   children,
@@ -26,9 +27,9 @@ export default function GoToButton({
 
   return (
     <Link to={destination}>
-      <button onClick={handleClick} className="button">
+      <Button size="small" onClick={handleClick} className="button">
         {children}
-      </button>
+      </Button>
     </Link>
   );
 }

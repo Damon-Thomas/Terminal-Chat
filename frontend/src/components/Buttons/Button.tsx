@@ -5,7 +5,7 @@ export default function Button({
   className = "",
   onClick = () => {},
   type = "button",
-  size = "medium",
+  size = "small",
 }: {
   children: string;
   className?: string;

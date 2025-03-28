@@ -12,8 +12,12 @@ export default function Header() {
 
   return (
     <div className="header ">
-      <Button onClick={handleHomeClick}>Home</Button>
-      <Button onClick={logout}>Log Out</Button>
+      <Button size="medium" onClick={handleHomeClick}>
+        Home
+      </Button>
+      <Button size="medium" onClick={logout}>
+        Log Out
+      </Button>
     </div>
   );
 }

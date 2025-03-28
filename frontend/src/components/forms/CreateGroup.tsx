@@ -55,12 +55,16 @@ export default function CreateGroup() {
     }
   };
   return (
-    <div className="createGroup">
-      <h1>Create Group</h1>
-      <Form onSubmit={groupHandler}>
+    <div className="createGroup ">
+      <h1 className="createGroupTitle glitch-received-message">Create Group</h1>
+      <Form className="createGroupForm" onSubmit={groupHandler}>
         <InputWrapper>
-          <Label htmlFor="groupName" text={"Group Name:"}></Label>
-          <Input type="text" id="groupName" name="groupName" />
+          <Input
+            placeholder="Enter Group Name..."
+            type="text"
+            id="groupName"
+            name="groupName"
+          />
           <ErrorMessage>{error}</ErrorMessage>
         </InputWrapper>
         <Button type="submit">Create Group</Button>

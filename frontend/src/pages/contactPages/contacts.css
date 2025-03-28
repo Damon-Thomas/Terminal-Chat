@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+.userGroups {
+  @apply flex flex-col my-2 md:my-4;
+  border-top: 1px solid var(--text-color);
+}
+
+/* .createGroup {
+  @apply ;
+} */
+
+.createGroupForm {
+  @apply m-0 p-0;
+}
+
+.createGroupForm .inputWrapper {
+  @apply gap-0;
+}
+
+.createGroupForm button {
+  @apply m-0;
+}
+
+.groupSelectorWrapper {
+  @apply flex flex-col overflow-y-auto gap-2;
+  scrollbar-gutter: stable;
+}
+
+.createGroupTitle {
+  @apply text-2xl p-0 mb-2;
+}
+
+.groupMain {
+  @apply grid p-2 md:p-4  w-full h-full overflow-hidden;
+  grid-template-rows: (275px, 1fr, 1fr);
+}
+
+.formWrapper {
+  @apply gap-0;
+}
+
+.groupCard {
+  @apply flex flex-col min-w-52;
+}
+
+.groupList {
+  @apply flex justify-center w-full h-full pb-4 md:pb-8;
+}
+
+.cardWrapper {
+  @apply flex flex-wrap justify-center gap-2;
+}
+
+.groupCardButtonWrapper {
+  @apply flex gap-2;
+}
+
+.groupNavButtons {
+  @apply flex justify-center mt-4 gap-2;
+}

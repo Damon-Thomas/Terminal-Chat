@@ -1,5 +1,5 @@
 @import "tailwindcss";
 
 .header {
-  @apply flex justify-center;
+  @apply flex gap-2 justify-end px-2 pt-2 md:px-8;
 }

@@ -6,12 +6,14 @@ export default function Input({
   id,
   name,
   required = false,
+  placeholder = "",
 }: {
   type: string;
   className?: string;
   id: string;
   name: string;
   required?: boolean;
+  placeholder?: string;
 }) {
   return (
     <input
@@ -20,6 +22,7 @@ export default function Input({
       id={id}
       name={name}
       required={required}
+      placeholder={placeholder}
     />
   );
 }
