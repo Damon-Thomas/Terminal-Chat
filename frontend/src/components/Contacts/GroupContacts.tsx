@@ -4,12 +4,21 @@ import Button from "../Buttons/Button";
 import sendActions from "../../fetchers/sendActions";
 import GoToButton from "./GoToButton";
 import CreateGroup from "../forms/CreateGroup";
+import user from "../../fetchers/user";
 
 export default function GroupContacts() {
   interface Group {
     id: string;
     groupName: string;
     joined: boolean;
+  }
+
+  interface Group2 {
+    group: {
+      id: string;
+      groupName: string;
+      joined: boolean;
+    };
   }
 
   const [userGroups, setUserGroups] = useState<Group[]>([]);
@@ -34,12 +43,14 @@ export default function GroupContacts() {
         setNonUserGroupPage((p) => Math.max(1, p - 1));
         return;
       }
-      console.log("nonUserGroups", groups);
+
       const updatedGroups = groups.map((group: Group) => ({
         ...group,
         joined: false,
       }));
+      console.log("nonUserGroups", updatedGroups);
       if (groups) {
+        console.log(updatedGroups);
         setNonUserGroups(updatedGroups);
       } else {
         setNonUserGroups([]);
@@ -59,17 +70,20 @@ export default function GroupContacts() {
       } else {
         setUserGroupErrors("");
       }
+      console.log("response", response);
       const groups = response.groups;
       if (groups.length === 0) {
         setUserGroupPage((p) => Math.max(1, p - 1));
         return;
       }
-      console.log("userGroups", groups);
-      const updatedGroups = groups.map((group: Group) => ({
-        ...group,
+      console.log("userGroups1", groups);
+      const updatedGroups = groups.map((group: Group2) => ({
+        ...group.group,
         joined: true,
       }));
+      console.log("userGroups", updatedGroups);
       if (groups) {
+        console.log(updatedGroups);
         setUserGroups(updatedGroups);
       } else {
         setUserGroups([]);
@@ -155,9 +169,15 @@ export default function GroupContacts() {
       <div className="userGroups">
         <h1 className="text-lg md:text-2xl lg:text-4xl">Groups</h1>
         <div className="flex flex-wrap gap-4">
-          {userGroups.map((group) =>
-            group.joined ? (
-              <div key={group.id} className="flex flex-col gap-2">
+          {userGroups.map((group) => {
+            // Create a truly unique key by combining id and joined status
+
+            const uniqueKey = `${group.id}-${
+              group.joined ? "joined" : "not-joined"
+            }`;
+
+            return group.joined ? (
+              <div key={uniqueKey} className="flex flex-col gap-2">
                 <h2>{group.groupName}</h2>
                 <GoToButton
                   destination="/messages"
@@ -176,7 +196,7 @@ export default function GroupContacts() {
                 </Button>
               </div>
             ) : (
-              <div key={group.id} className="flex flex-col gap-2">
+              <div key={uniqueKey} className="flex flex-col gap-2">
                 <h2>{group.groupName}</h2>
                 <Button
                   onClick={() => {
@@ -186,8 +206,8 @@ export default function GroupContacts() {
                   Join Group
                 </Button>
               </div>
-            )
-          )}
+            );
+          })}
         </div>
         <div className="flex justify-center mt-4 gap-2">
           <Button onClick={() => incUserGroupPage(false, true)}>
@@ -200,8 +220,8 @@ export default function GroupContacts() {
       <div className="userGroups">
         <h1 className="text-lg md:text-2xl lg:text-4xl">User Groups</h1>
         <div className="flex flex-wrap gap-4">
-          {nonUserGroups.map((group) =>
-            group.joined ? (
+          {nonUserGroups.map((group) => {
+            return group.joined ? (
               <div key={group.id} className="flex flex-col gap-2">
                 <h2>{group.groupName}</h2>
                 <Button onClick={() => {}}>Message Group</Button>
@@ -224,8 +244,8 @@ export default function GroupContacts() {
                   Join Group
                 </Button>
               </div>
-            )
-          )}
+            );
+          })}
         </div>
         <div className="flex justify-center mt-4 gap-2">
           <Button onClick={() => incUserGroupPage(false, false)}>

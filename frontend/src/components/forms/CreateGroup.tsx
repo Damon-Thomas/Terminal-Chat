@@ -45,6 +45,7 @@ export default function CreateGroup() {
     }
     if (response && !response.failure) {
       setError("");
+      //join the group? do in backend
       contactActions.storeContact({
         id: group.id,
         group: true,
