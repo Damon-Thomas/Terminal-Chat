@@ -185,15 +185,18 @@ const leaveGroup = async (userId: string, groupId: string) => {
 };
 
 const createGroup = async (groupName: string, administratorId: string) => {
+  console.log("createGroup", groupName, administratorId);
   const groupExists = await prisma.group.findFirst({
     where: { groupName },
   });
   if (groupExists) {
     return { message: "Group already exists", failure: true };
   }
+  console.log("past groupExists");
   const group = await prisma.group.create({
     data: { groupName, administratorId },
   });
+  console.log("past group create", group);
   return { group, failure: false };
 };
 

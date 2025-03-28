@@ -2,13 +2,13 @@ import "./input.css";
 
 export default function Input({
   type,
-  className,
+  className = "",
   id,
   name,
   required = false,
 }: {
   type: string;
-  className: string;
+  className?: string;
   id: string;
   name: string;
   required?: boolean;

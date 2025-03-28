@@ -1,5 +1,5 @@
-import ContactSpace from "../components/Home/ContactSpace";
-import UserSpace from "../components/Home/UserSpace";
+import ContactSpace from "../../components/Home/ContactSpace";
+import UserSpace from "../../components/Home/UserSpace";
 
 export default function UserHomePage() {
   return (

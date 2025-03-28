@@ -34,15 +34,16 @@ const getActiveUserContacts = async () => {
   return users.json();
 };
 
-const getUserGroups = async () => {
+const getUserGroups = async (page: number) => {
   const groups = await fetch(
     `${import.meta.env.VITE_ApiHost}/contacts/getGroups`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
+      body: JSON.stringify({ page }),
     }
   );
   return groups.json();
@@ -78,15 +79,16 @@ const getNonContactUsers = async (page: number) => {
   return users.json();
 };
 
-const getNonJoinedGroups = async () => {
+const getNonJoinedGroups = async (page: number) => {
   const groups = await fetch(
     `${import.meta.env.VITE_ApiHost}/contacts/getNonJoinedGroups`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
+      body: JSON.stringify({ page }),
     }
   );
   return groups.json();

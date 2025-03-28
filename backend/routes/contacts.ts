@@ -11,7 +11,7 @@ router.get(
   contactControllers.getActiveUserContacts as any
 );
 
-router.get(
+router.post(
   "/getGroups",
   userController.verifyToken,
   userController.authUser,
@@ -39,7 +39,7 @@ router.post(
   contactControllers.getNonContactUsers as any
 );
 
-router.get(
+router.post(
   "/getNonJoinedGroups",
   userController.verifyToken,
   userController.authUser,

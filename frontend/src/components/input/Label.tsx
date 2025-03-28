@@ -5,11 +5,11 @@ import initTypewriter from "../../utils/typewriter.js";
 export default function Label({
   htmlFor,
   text,
-  className,
+  className = "",
 }: {
   htmlFor: string;
   text: string;
-  className: string;
+  className?: string;
 }) {
   useEffect(() => {
     initTypewriter();

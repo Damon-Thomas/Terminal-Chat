@@ -150,6 +150,7 @@ const makeGroup = async (req: UserRequest, res: Response) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupName } = req.body;
+  console.log("makeGroup", groupName, userId);
   try {
     const newGroup = await actionQueries.createGroup(groupName, userId);
     if (newGroup.failure) {

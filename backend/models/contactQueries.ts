@@ -112,7 +112,9 @@ const getNonContactUsers = async (userId: string, page: number) => {
 };
 
 const getNonJoinedGroups = async (userId: string, page: number) => {
+  console.log("getNonJoinedGroups", userId, page);
   const takeStart = (page - 1) * 10;
+  console.log("start", takeStart);
   return await prisma.group.findMany({
     where: {
       members: {

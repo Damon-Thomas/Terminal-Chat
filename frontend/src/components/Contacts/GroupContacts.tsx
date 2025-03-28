@@ -3,6 +3,7 @@ import getContacts from "../../fetchers/getContacts";
 import Button from "../Buttons/Button";
 import sendActions from "../../fetchers/sendActions";
 import GoToButton from "./GoToButton";
+import CreateGroup from "../forms/CreateGroup";
 
 export default function GroupContacts() {
   interface Group {
@@ -12,16 +13,28 @@ export default function GroupContacts() {
   }
 
   const [userGroups, setUserGroups] = useState<Group[]>([]);
-  const [groupsOnPage, setGroupsOnPage] = useState<Group[]>([]);
   const [userGroupPage, setUserGroupPage] = useState(1);
   const [nonUserGroups, setNonUserGroups] = useState<Group[]>([]);
-  const [nonGroupsOnPage, setNonGroupsOnPage] = useState<Group[]>([]);
-
+  const [nonGroupErrors, setNonGroupErrors] = useState("");
+  const [userGroupErrors, setUserGroupErrors] = useState("");
   const [nonUserGroupPage, setNonUserGroupPage] = useState(1);
 
   useEffect(() => {
     async function getNonUserGroups() {
-      const groups = await getContacts.getNonJoinedGroups();
+      const response = await getContacts.getNonJoinedGroups(nonUserGroupPage);
+      if (!response || response.failure) {
+        console.log("Error getting user groups");
+        setNonGroupErrors("Error getting user groups");
+        return;
+      } else {
+        setNonGroupErrors("");
+      }
+      const groups = response.groups;
+      if (groups.length === 0) {
+        setNonUserGroupPage((p) => Math.max(1, p - 1));
+        return;
+      }
+      console.log("nonUserGroups", groups);
       const updatedGroups = groups.map((group: Group) => ({
         ...group,
         joined: false,
@@ -33,8 +46,25 @@ export default function GroupContacts() {
         console.log("Error getting non user groups");
       }
     }
+    getNonUserGroups();
+  }, [nonUserGroupPage]);
+
+  useEffect(() => {
     async function getUserGroups() {
-      const groups = await getContacts.getUserGroups();
+      const response = await getContacts.getUserGroups(userGroupPage);
+      if (!response || response.failure) {
+        console.log("Error getting user groups");
+        setUserGroupErrors("Error getting user groups");
+        return;
+      } else {
+        setUserGroupErrors("");
+      }
+      const groups = response.groups;
+      if (groups.length === 0) {
+        setUserGroupPage((p) => Math.max(1, p - 1));
+        return;
+      }
+      console.log("userGroups", groups);
       const updatedGroups = groups.map((group: Group) => ({
         ...group,
         joined: true,
@@ -47,31 +77,49 @@ export default function GroupContacts() {
       }
     }
     getUserGroups();
-    getNonUserGroups();
-  }, []);
+  }, [userGroupPage]);
 
-  useEffect(() => {
-    const groups = userGroups.slice(
-      (userGroupPage - 1) * 10,
-      userGroupPage * 10
-    );
-    const nonGroups = nonUserGroups.slice(
-      (nonUserGroupPage - 1) * 10,
-      nonUserGroupPage * 10
-    );
-    if (groups) {
-      setGroupsOnPage(groups);
-    } else {
-      setGroupsOnPage([]);
-      console.log("Error getting user groups");
+  // useEffect(() => {
+  //   const groups = userGroups.slice(
+  //     (userGroupPage - 1) * 10,
+  //     userGroupPage * 10
+  //   );
+  //   const nonGroups = nonUserGroups.slice(
+  //     (nonUserGroupPage - 1) * 10,
+  //     nonUserGroupPage * 10
+  //   );
+  //   if (groups) {
+  //     setGroupsOnPage(groups);
+  //   } else {
+  //     setGroupsOnPage([]);
+  //     console.log("Error getting user groups");
+  //   }
+  //   if (nonGroups) {
+  //     setNonGroupsOnPage(nonGroups);
+  //   } else {
+  //     setNonGroupsOnPage([]);
+  //     console.log("Error getting non user groups");
+  //   }
+  // }, [userGroupPage, userGroups, nonUserGroupPage, nonUserGroups]);
+
+  function incUserGroupPage(bool: boolean, joined: boolean) {
+    if (!bool) {
+      if (joined) {
+        setUserGroupPage((p) => Math.max(1, p - 1));
+      } else {
+        setNonUserGroupPage((p) => Math.max(1, p - 1));
+      }
+      return;
     }
-    if (nonGroups) {
-      setNonGroupsOnPage(nonGroups);
-    } else {
-      setNonGroupsOnPage([]);
-      console.log("Error getting non user groups");
+    if (joined) {
+      if (userGroups.length < 10) {
+        return;
+      } else {
+        setUserGroupPage((p) => p + 1);
+        return;
+      }
     }
-  }, [userGroupPage, userGroups, nonUserGroupPage, nonUserGroups]);
+  }
 
   async function joinGroup(groupId: string) {
     const response = await sendActions.joinGroup(groupId);
@@ -103,10 +151,11 @@ export default function GroupContacts() {
 
   return (
     <div className="flex flex-col gap-4">
+      <CreateGroup />
       <div className="userGroups">
         <h1 className="text-lg md:text-2xl lg:text-4xl">Groups</h1>
         <div className="flex flex-wrap gap-4">
-          {groupsOnPage.map((group) =>
+          {userGroups.map((group) =>
             group.joined ? (
               <div key={group.id} className="flex flex-col gap-2">
                 <h2>{group.groupName}</h2>
@@ -141,17 +190,17 @@ export default function GroupContacts() {
           )}
         </div>
         <div className="flex justify-center mt-4 gap-2">
-          <Button onClick={() => setUserGroupPage((p) => Math.max(1, p - 1))}>
+          <Button onClick={() => incUserGroupPage(false, true)}>
             Previous
           </Button>
           <span>Page {userGroupPage}</span>
-          <Button onClick={() => setUserGroupPage((p) => p + 1)}>Next</Button>
+          <Button onClick={() => incUserGroupPage(true, true)}>Next</Button>
         </div>
       </div>
       <div className="userGroups">
         <h1 className="text-lg md:text-2xl lg:text-4xl">User Groups</h1>
         <div className="flex flex-wrap gap-4">
-          {nonGroupsOnPage.map((group) =>
+          {nonUserGroups.map((group) =>
             group.joined ? (
               <div key={group.id} className="flex flex-col gap-2">
                 <h2>{group.groupName}</h2>
@@ -179,15 +228,11 @@ export default function GroupContacts() {
           )}
         </div>
         <div className="flex justify-center mt-4 gap-2">
-          <Button
-            onClick={() => setNonUserGroupPage((p) => Math.max(1, p - 1))}
-          >
+          <Button onClick={() => incUserGroupPage(false, false)}>
             Previous
           </Button>
           <span>Page {nonUserGroupPage}</span>
-          <Button onClick={() => setNonUserGroupPage((p) => p + 1)}>
-            Next
-          </Button>
+          <Button onClick={() => incUserGroupPage(true, false)}>Next</Button>
         </div>
       </div>
     </div>
