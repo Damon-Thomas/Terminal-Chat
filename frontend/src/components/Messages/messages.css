@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .messageArea {
-  @apply ml-14 m-4 h-[calc(100%-32px)] overflow-hidden;
+  @apply m-4 h-[calc(100%-32px)] overflow-hidden;
   flex: 1 1 100%;
 }
 
@@ -11,17 +11,17 @@
 }
 
 .messageBox {
-  @apply p-2 bg-slate-800 rounded-lg h-full flex flex-col gap-2;
+  @apply p-2 bg-slate-800 rounded-lg h-full flex flex-col justify-between gap-2;
   text-overflow: wrap;
   overflow-wrap: break-word;
 }
 
 .messageCreator {
-  @apply h-50 border-2 border-amber-300 rounded-lg p-2 flex flex-col;
+  @apply h-50 rounded-lg p-2 flex flex-col;
 }
 
 .messageInputinput-box {
-  @apply grow border-2 border-amber-300 rounded-lg p-2;
+  @apply grow border-2  rounded-lg p-2;
   background-color: var(--background-color);
   color: var(--text-color);
 }
