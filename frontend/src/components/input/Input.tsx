@@ -16,7 +16,7 @@ export default function Input({
   return (
     <input
       type={type}
-      className={className + "input-box"}
+      className={className + " input-box"}
       id={id}
       name={name}
       required={required}

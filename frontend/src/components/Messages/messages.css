@@ -18,12 +18,18 @@
 
 .messageCreator {
   @apply h-50 rounded-lg p-2 flex flex-col;
+
+  z-index: 10;
+  position: relative;
 }
 
-.messageInputinput-box {
-  @apply grow border-2  rounded-lg p-2;
+.messageInput {
+  @apply grow border-2 rounded-lg p-2;
   background-color: var(--background-color);
   color: var(--text-color);
+  border: 2px solid green;
+  z-index: 20;
+  position: relative;
 }
 
 .formWrapper.messageCreator {

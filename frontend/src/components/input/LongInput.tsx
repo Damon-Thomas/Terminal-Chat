@@ -22,13 +22,18 @@ export default function LongInput({
   return (
     <textarea
       rows={rows}
-      className={className + "input-box"}
+      className={`${className} input-box`}
       id={id}
       name={name}
       required={required}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       placeholder={placeholder}
+      onTouchStart={(e) => e.stopPropagation()}
+      onTouchEnd={(e) => {
+        e.stopPropagation();
+        (e.target as HTMLTextAreaElement).focus();
+      }}
     />
   );
 }
