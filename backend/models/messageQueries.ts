@@ -146,9 +146,11 @@ const createGroup = async (groupName: string, administratorId: string) => {
 };
 
 const messagesToGroup = async (groupId: string) => {
+  console.log("modal", groupId);
   const messages = await prisma.message.findMany({
     where: { sentToGroupId: groupId },
   });
+  console.log("messages", messages);
   return messages;
 };
 

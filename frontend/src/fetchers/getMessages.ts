@@ -19,7 +19,7 @@ const getGroupMessages = async (groupId: string) => {
   const messages = await fetch(
     `${import.meta.env.VITE_ApiHost}/messages/getMessagesToGroup`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,

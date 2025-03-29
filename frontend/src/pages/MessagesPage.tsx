@@ -32,16 +32,28 @@ export default function MessagesPage() {
     userRef.current = user;
   }, [user]);
 
-  const fetchMessages = useCallback(async (contactId: string) => {
-    const retrieved = await getMessages.getUserToUserMessages(contactId);
-    if (retrieved) {
-      console.log("retrieved", retrieved);
-      setMessages(retrieved.messages);
-    } else {
-      console.log("Error getting messages");
-      setMessages([]);
-    }
-  }, []);
+  const fetchMessages = useCallback(
+    async (contactId: string, group: boolean) => {
+      if (!contactId) {
+        console.log("No contactId provided");
+        return;
+      }
+      let retrieved;
+      if (!group) {
+        retrieved = await getMessages.getUserToUserMessages(contactId);
+      } else {
+        retrieved = await getMessages.getGroupMessages(contactId);
+      }
+      if (retrieved) {
+        console.log("retrieved", retrieved);
+        setMessages(retrieved.messages);
+      } else {
+        console.log("Error getting messages");
+        setMessages([]);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     const storedContact = contactActions.getStoredContact();
@@ -50,7 +62,7 @@ export default function MessagesPage() {
 
   useEffect(() => {
     if (selectedContact) {
-      fetchMessages(selectedContact.id);
+      fetchMessages(selectedContact.id, selectedContact.group);
     } else {
       setMessages([]);
     }
