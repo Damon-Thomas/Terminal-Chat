@@ -31,6 +31,7 @@ export default function GroupContacts() {
 
   useEffect(() => {
     async function getNonUserGroups() {
+      console.log("nonUserGroupPage", nonUserGroupPage);
       const response = await getContacts.getNonJoinedGroups(nonUserGroupPage);
       if (!response || response.failure) {
         console.log("Error getting user groups");
@@ -61,6 +62,7 @@ export default function GroupContacts() {
 
   useEffect(() => {
     async function getUserGroups() {
+      console.log("userGroupPage", userGroupPage);
       const response = await getContacts.getUserGroups(userGroupPage);
       if (!response || response.failure) {
         setUserGroupErrors("Error getting user groups");
@@ -75,8 +77,8 @@ export default function GroupContacts() {
         setUserGroupPage((p) => Math.max(1, p - 1));
         return;
       }
-      const updatedGroups = groups.map((group: Group2) => ({
-        ...group.group,
+      const updatedGroups = groups.map((group: Group) => ({
+        ...group,
         joined: true,
       }));
       if (groups) {
@@ -89,31 +91,9 @@ export default function GroupContacts() {
     getUserGroups();
   }, [userGroupPage]);
 
-  // useEffect(() => {
-  //   const groups = userGroups.slice(
-  //     (userGroupPage - 1) * 10,
-  //     userGroupPage * 10
-  //   );
-  //   const nonGroups = nonUserGroups.slice(
-  //     (nonUserGroupPage - 1) * 10,
-  //     nonUserGroupPage * 10
-  //   );
-  //   if (groups) {
-  //     setGroupsOnPage(groups);
-  //   } else {
-  //     setGroupsOnPage([]);
-  //     console.log("Error getting user groups");
-  //   }
-  //   if (nonGroups) {
-  //     setNonGroupsOnPage(nonGroups);
-  //   } else {
-  //     setNonGroupsOnPage([]);
-  //     console.log("Error getting non user groups");
-  //   }
-  // }, [userGroupPage, userGroups, nonUserGroupPage, nonUserGroups]);
-
   function incUserGroupPage(bool: boolean, joined: boolean) {
     if (!bool) {
+      console.log("not bool");
       if (joined) {
         setUserGroupPage((p) => Math.max(1, p - 1));
       } else {
@@ -121,12 +101,23 @@ export default function GroupContacts() {
       }
       return;
     }
+
     if (joined) {
-      console.log("length", userGroups, userGroups.length);
+      console.log("u length", userGroups, userGroups.length);
       if (userGroups.length < 10) {
         return;
       } else {
+        console.log("add page");
         setUserGroupPage((p) => p + 1);
+        return;
+      }
+    } else {
+      console.log("nu length", nonUserGroups, nonUserGroups.length);
+      if (nonUserGroups.length < 10) {
+        return;
+      } else {
+        console.log("add page");
+        setNonUserGroupPage((p) => p + 1);
         return;
       }
     }

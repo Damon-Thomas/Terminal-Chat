@@ -29,8 +29,12 @@ const getUserGroups = async (req: UserRequest, res: Response) => {
   if (!req.user.id) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
+  const { page } = req.body || 1;
   try {
-    const groups = await contactQueries.getGroupsUserHasJoined(req.user.id);
+    const groups = await contactQueries.getGroupsUserHasJoined(
+      req.user.id,
+      page
+    );
     res.status(200).json({ groups, failure: false });
   } catch (error) {
     const errorMessage =
