@@ -155,7 +155,7 @@ export default function MessageSideBar({
                 size="small"
                 onClick={() => incrementPage("group", false)}
               >
-                Previous
+                Prev
               </Button>
               <span>Page {groupPage}</span>
               <Button size="small" onClick={() => incrementPage("group", true)}>
@@ -176,7 +176,7 @@ export default function MessageSideBar({
                 size="small"
                 onClick={() => incrementPage("convo", false)}
               >
-                Previous
+                Prev
               </Button>
               <span>Page {convoPage}</span>
               <Button size="small" onClick={() => incrementPage("convo", true)}>

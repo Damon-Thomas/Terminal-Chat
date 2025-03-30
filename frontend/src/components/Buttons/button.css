@@ -27,8 +27,30 @@
   @apply text-lg md:text-base px-8 py-4 m-0;
 }
 
-.button:hover {
+.button.default:hover {
   background-color: var(--background-color);
   color: var(--text-color);
   border: 1px solid var(--text-color);
+}
+.button.primary:hover {
+  background-color: var(--secondary-text-color);
+  color: var(--background-color);
+  border: 1px solid var(--secondary-text-color);
+}
+.button.secondary:hover {
+  background-color: var(--third-color);
+  color: var(--background-color);
+  border: 1px solid var(--third-color);
+}
+
+.button.default {
+  background-color: var(--text-color);
+}
+
+.button.primary {
+  background-color: var(--secondary-text-color);
+}
+
+.button.secondary {
+  background-color: var(--third-color);
 }

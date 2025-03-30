@@ -45,9 +45,8 @@ const getCurrentConversationUsers = async (userId: string, page: number) => {
       uniqueUsers.set(message.sentTo.id, message.sentTo);
     }
   });
-  const result = Array.from(uniqueUsers.values());
-  console.log("result i need RN", result);
-  return result;
+
+  return Array.from(uniqueUsers.values());
 };
 
 const getGroupsUserHasJoined = async (userId: string, page: number) => {

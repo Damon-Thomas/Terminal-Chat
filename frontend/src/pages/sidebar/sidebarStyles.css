@@ -19,8 +19,9 @@
   @apply h-full shadow-lg; /* Fixed width */
   @apply transform transition-all duration-300 ease-in-out;
   @apply w-64; /* Default width */
-  background-color: var(--text-color, #333);
-  color: var(--background-color, #fff);
+  background-color: var(--background-color, #333);
+  color: var(--text-color, green);
+  border: 1px solid var(--text-color, green);
   overflow-y: auto;
 }
 
@@ -75,13 +76,24 @@
 }
 
 .sideTitle {
-  @apply font-bold text-lg my-2;
+  @apply font-bold text-lg pt-2  my-2 md:my-4 text-center;
+  border-top: 1px solid var(--text-color, green);
 }
 
 .pageNav {
-  @apply flex justify-between my-2;
+  @apply flex justify-between items-center my-2 cursor-pointer;
 }
 
-.pageNav button:disabled {
-  @apply bg-gray-500 cursor-not-allowed;
+.sideItem {
+  @apply flex items-start my-2 px-2 py-1;
+  @apply transition-colors duration-300 ease-in-out;
+  background-color: var(--text-color, green);
+  color: var(--background-color, black);
+  border: 1px solid var(--text-color, green);
+  cursor: pointer;
+}
+
+.sideItem:hover {
+  background-color: var(--background-color, black);
+  color: var(--text-color, green);
 }

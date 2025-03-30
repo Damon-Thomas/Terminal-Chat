@@ -6,7 +6,6 @@ import { UserRequest } from "./profileController.js";
 import { User } from "@prisma/client";
 
 const sendMessage = async (req: UserRequest, res: Response) => {
-  console.log("sendMessage", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ failure: true, errors: errors.array() });
@@ -150,7 +149,6 @@ const makeGroup = async (req: UserRequest, res: Response) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupName } = req.body;
-  console.log("makeGroup", groupName, userId);
   try {
     const newGroup = await actionQueries.createGroup(groupName, userId);
     if (newGroup.failure) {
@@ -203,7 +201,6 @@ const leaveGroup = async (req: UserRequest, res: Response) => {
 
 const deleteGroup = async (req: UserRequest, res: Response) => {
   const { groupId } = req.body;
-  console.log("deleteGroup", groupId);
   try {
     const deleteGroup = await actionQueries.deleteGroup(groupId, req.user.id);
     if (
