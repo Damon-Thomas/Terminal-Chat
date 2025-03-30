@@ -28,7 +28,7 @@ export default function MessageSideBar({
   setSelectedContact: React.Dispatch<React.SetStateAction<Contact | null>>;
 }) {
   const [trigger, setTrigger] = React.useState(true);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [groups, setGroups] = React.useState([]);
   const [groupSelection, setGroupSelection] = React.useState<Group[]>([]);
   const [groupPage, setGroupPage] = React.useState(1);
@@ -53,6 +53,22 @@ export default function MessageSideBar({
     });
     setSelectedContact(contactActions.getStoredContact());
   };
+
+  const handleResize = () => {
+    if (window.innerWidth < 768) {
+      setTrigger(false);
+    } else {
+      setTrigger(true);
+    }
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const incrementPage = (type: "group" | "convo", inc: boolean) => {
     if (type === "group") {

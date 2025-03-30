@@ -2,23 +2,18 @@
 
 /* Container for the sidebar and trigger */
 .sidebarOverlay {
-  @apply fixed md:relative h-full z-30;
-  @apply flex;
-  /* Transition for the overlay itself */
-  @apply transition-all duration-300 ease-in-out;
+  @apply fixed flex md:relative h-full z-30;
 }
 
-/* When closed on mobile, adjust the overlay to not take space */
+/* When closed, adjust the overlay to not take space */
 .sidebarOverlay.closed {
-  @apply md:w-auto; /* Desktop unchanged */
-  width: 0; /* Mobile takes no space when closed */
+  @apply transform transition-all duration-300 ease-in-out;
 }
 
 /* The actual sidebar */
 .sidebar {
-  @apply h-full shadow-lg; /* Fixed width */
-  @apply transform transition-all duration-300 ease-in-out;
-  @apply w-64; /* Default width */
+  @apply h-full w-64; /* Default width */
+  @apply transform transition-all duration-300 ease-in-out; /*animate open */
   background-color: var(--background-color, #333);
   color: var(--text-color, green);
   border: 1px solid var(--text-color, green);
@@ -27,19 +22,20 @@
 
 /* For open state */
 .sidebar.openBar {
-  @apply translate-x-0;
+  @apply translate-x-0 transform transition-all duration-300 ease-in-out;
   width: 16rem; /* Use fixed width for consistent animation */
 }
 
 /* For closed state */
 .sidebar.closedBar {
-  @apply -translate-x-full; /* Translate off-screen for mobile */
-  @apply md:translate-x-0 md:w-0; /* On desktop, set width to 0 but keep in place */
+  @apply -translate-x-full transform transition-all duration-300 ease-in-out; /* Translate off-screen for mobile */
+  /* @apply md:translate-x-0 md:w-0; On desktop, set width to 0 but keep in place */
 }
 
 /* Trigger button container */
 .triggerIcon {
   @apply absolute z-40 transition-all duration-300 ease-in-out;
+  @apply md:hidden;
   top: 0.5rem;
 }
 
@@ -50,12 +46,14 @@
 
 /* Position when sidebar is open */
 .triggerIcon {
+  @apply absolute z-40 transition-all duration-300 ease-in-out;
   right: -2.5rem; /* Default position to the right of sidebar */
 }
 
 /* Position when sidebar is closed - for mobile */
 .triggerIcon.closed {
-  @apply md:left-2; /* On desktop, move to left edge when closed */
+  @apply absolute z-40 transition-all duration-300 ease-in-out;
+
   left: 0.5rem; /* Position at left edge on mobile */
 }
 
