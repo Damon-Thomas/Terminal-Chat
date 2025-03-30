@@ -4,6 +4,7 @@ import SideItem from "./SideItem";
 import getContacts from "../../fetchers/getContacts";
 import SideTitle from "./SideTitle";
 import contactActions from "../../context/ContactActions";
+import Button from "../../components/Buttons/Button";
 
 type Contact = { id: string; username: string; group: boolean };
 
@@ -53,45 +54,27 @@ export default function MessageSideBar({
     setSelectedContact(contactActions.getStoredContact());
   };
 
-  const incrementPage = (type: "group" | "convo") => {
+  const incrementPage = (type: "group" | "convo", inc: boolean) => {
     if (type === "group") {
-      return;
+      if (inc) {
+        if (groupSelection.length < 10) {
+          return;
+        }
+        setGroupPage((p) => p + 1);
+      } else {
+        setGroupPage((p) => Math.max(1, p - 1));
+      }
     } else {
-      return;
+      if (inc) {
+        if (convoSelection.length < 10) {
+          return;
+        }
+        setConvoPage((p) => p + 1);
+      } else {
+        setConvoPage((p) => Math.max(1, p - 1));
+      }
     }
   };
-
-  // function incrementPage(bool: boolean, joined: boolean) {
-  //   if (!bool) {
-  //     console.log("not bool");
-  //     if (joined) {
-  //       setUserGroupPage((p) => Math.max(1, p - 1));
-  //     } else {
-  //       setNonUserGroupPage((p) => Math.max(1, p - 1));
-  //     }
-  //     return;
-  //   }
-
-  //   if (joined) {
-  //     console.log("u length", userGroups, userGroups.length);
-  //     if (userGroups.length < 10) {
-  //       return;
-  //     } else {
-  //       console.log("add page");
-  //       setUserGroupPage((p) => p + 1);
-  //       return;
-  //     }
-  //   } else {
-  //     console.log("nu length", nonUserGroups, nonUserGroups.length);
-  //     if (nonUserGroups.length < 10) {
-  //       return;
-  //     } else {
-  //       console.log("add page");
-  //       setNonUserGroupPage((p) => p + 1);
-  //       return;
-  //     }
-  //   }
-  // }
 
   useEffect(() => {
     async function fetchGroups() {
@@ -159,18 +142,16 @@ export default function MessageSideBar({
               </SideItem>
             ))}
             <div className="pageNav">
-              <button
-                onClick={() => setGroupPage((prev) => prev - 1)}
-                disabled={groupPage === 0}
+              <Button
+                size="small"
+                onClick={() => incrementPage("group", false)}
               >
-                Prev
-              </button>
-              <button
-                onClick={() => setGroupPage((prev) => prev + 1)}
-                disabled={groupPage * 5 + 5 >= groups.length}
-              >
+                Previous
+              </Button>
+              <span>Page {groupPage}</span>
+              <Button size="small" onClick={() => incrementPage("group", true)}>
                 Next
-              </button>
+              </Button>
             </div>
             <SideTitle>Conversations</SideTitle>
             {convoSelection.map((convo, index) => (
@@ -182,18 +163,16 @@ export default function MessageSideBar({
               </SideItem>
             ))}
             <div className="pageNav">
-              <button
-                onClick={() => setConvoPage((prev) => prev - 1)}
-                disabled={convoPage === 0}
+              <Button
+                size="small"
+                onClick={() => incrementPage("convo", false)}
               >
-                Prev
-              </button>
-              <button
-                onClick={() => setConvoPage((prev) => prev + 1)}
-                disabled={convoPage * 5 + 5 >= convos.length}
-              >
+                Previous
+              </Button>
+              <span>Page {convoPage}</span>
+              <Button size="small" onClick={() => incrementPage("convo", true)}>
                 Next
-              </button>
+              </Button>
             </div>
           </div>
         </aside>
