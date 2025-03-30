@@ -91,7 +91,7 @@ export default function MessageSideBar({
     }
     fetchGroups();
     fetchConvos();
-  }, []);
+  }, [convoPage, groupPage]);
 
   useEffect(() => {
     async function updateGroupSelection() {
@@ -100,7 +100,7 @@ export default function MessageSideBar({
 
       console.log("response", response);
       const groups = response.groups;
-      if (groups.length === 0) {
+      if (groups.length === 0 && groupPage > 1) {
         console.log("length is 0");
         setGroupPage((p) => Math.max(1, p - 1));
         return;
@@ -115,17 +115,26 @@ export default function MessageSideBar({
     updateGroupSelection();
   }, [groupPage]);
 
-  // useEffect(() => {
-  //   function updateConvoSelection() {
-  //     if (selection.length === 0 && convoPage > 1) {
-  //       setConvoPage((prev) => prev - 1);
-  //       updateConvoSelection();
-  //     } else {
-  //       setConvoSelection(selection);
-  //     }
-  //   }
-  //   updateConvoSelection();
-  // }, [convoPage, convos]);
+  useEffect(() => {
+    async function updateConvoSelection() {
+      const response = await getContacts.getActiveUserContacts(convoPage);
+      console.log("response", response);
+      const convos = response.users;
+
+      if (convos.length === 0 && convoPage > 1) {
+        console.log("length is 0");
+        setConvoPage((p) => Math.max(1, p - 1));
+        return;
+      }
+      if (convos) {
+        setConvoSelection(convos);
+      } else {
+        setConvoSelection([]);
+        console.log("Error getting user groups");
+      }
+    }
+    updateConvoSelection();
+  }, [convoPage, convos]);
 
   return (
     <div className={`sidebarOverlay ${!trigger ? "closed" : ""}`}>

@@ -9,14 +9,11 @@ const sendMessage = async (
   destinationType: "user" | "group",
   pinned: boolean = false
 ) => {
-  console.log("sendMessage", userId, message, sentTo, destinationType, pinned);
   if (destinationType === "user" && sentTo === userId) {
     return { message: "Cannot send message to self", failure: true };
   }
   if (destinationType === "user") {
-    console.log("id of sent to", sentTo);
     const user = await userQueries.getUserById(sentTo);
-    console.log("user", user);
     if (!user) {
       return { message: "User not found", failure: true };
     }
@@ -185,18 +182,15 @@ const leaveGroup = async (userId: string, groupId: string) => {
 };
 
 const createGroup = async (groupName: string, administratorId: string) => {
-  console.log("createGroup", groupName, administratorId);
   const groupExists = await prisma.group.findFirst({
     where: { groupName },
   });
   if (groupExists) {
     return { message: "Group already exists", failure: true };
   }
-  console.log("past groupExists");
   const group = await prisma.group.create({
     data: { groupName, administratorId },
   });
-  console.log("past group create", group);
   return { group, failure: false };
 };
 

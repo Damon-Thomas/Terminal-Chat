@@ -91,10 +91,8 @@ const getNonContactUsers = async (req: UserRequest, res: Response) => {
 const getNonJoinedGroups = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
   const { page } = req.body || 1;
-  console.log("getNonJoinedGroups controller", userId, page);
   try {
     const groups = await contactQueries.getNonJoinedGroups(userId, page);
-    console.log("getNonJoinedGroups controller", groups);
     res.status(200).json({ groups, failure: false });
   } catch (error) {
     const errorMessage =

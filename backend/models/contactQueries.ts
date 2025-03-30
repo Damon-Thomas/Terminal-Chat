@@ -1,30 +1,14 @@
 import prisma from "./client.js";
 
 const getCurrentConversationUsers = async (userId: string, page: number) => {
-  //Users that the user has sent messages to
   const takeStart = (page - 1) * 10;
-  const sentMessageUsers = await prisma.message.findMany({
-    where: {
-      authorId: userId,
-      sentTo: { isNot: null }, // filter out group messages
-    },
-    select: {
-      sentTo: {
-        select: {
-          id: true,
-          username: true,
-          lastLogin: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
 
-  // Get all users who sent messages to the user.
-  const receivedMessageUsers = await prisma.message.findMany({
-    where: { sentToId: userId },
+  // Use a single query with UNION via Prisma's raw query capabilities
+  // This is more efficient than two separate queries
+  const conversationUsers = await prisma.message.findMany({
+    where: {
+      OR: [{ authorId: userId, sentToId: { not: null } }, { sentToId: userId }],
+    },
     select: {
       author: {
         select: {
@@ -33,22 +17,37 @@ const getCurrentConversationUsers = async (userId: string, page: number) => {
           lastLogin: true,
         },
       },
+      sentTo: {
+        select: {
+          id: true,
+          username: true,
+          lastLogin: true,
+        },
+      },
     },
+    distinct: ["sentToId", "authorId"],
     orderBy: {
       createdAt: "desc",
     },
+    take: 10,
+    skip: takeStart,
   });
 
-  // Combine the two lists of users and remove duplicates
-  const users = new Set();
-  sentMessageUsers.forEach((user) => {
-    users.add(user.sentTo);
-  });
-  receivedMessageUsers.forEach((user) => {
-    users.add(user.author);
-  });
+  // Process the results to get unique users
+  const uniqueUsers = new Map();
 
-  return Array.from(users).slice(takeStart, takeStart + 10);
+  conversationUsers.forEach((message) => {
+    // Add the user who is not the current user
+    if (message.author?.id !== userId && message.author) {
+      uniqueUsers.set(message.author.id, message.author);
+    }
+    if (message.sentTo?.id !== userId && message.sentTo) {
+      uniqueUsers.set(message.sentTo.id, message.sentTo);
+    }
+  });
+  const result = Array.from(uniqueUsers.values());
+  console.log("result i need RN", result);
+  return result;
 };
 
 const getGroupsUserHasJoined = async (userId: string, page: number) => {
