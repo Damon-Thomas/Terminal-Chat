@@ -15,8 +15,12 @@ const getActiveUserContacts = async (req: UserRequest, res: Response) => {
   if (!req.user.id) {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
+  const { page } = req.body || 1;
   try {
-    const users = await contactQueries.getCurrentConversationUsers(req.user.id);
+    const users = await contactQueries.getCurrentConversationUsers(
+      req.user.id,
+      page
+    );
     res.status(200).json({ users, failure: false });
   } catch (error) {
     const errorMessage =

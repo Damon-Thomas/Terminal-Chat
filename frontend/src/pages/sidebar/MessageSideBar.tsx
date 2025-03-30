@@ -21,7 +21,11 @@ type Convo = {
   unreadMessages: number;
 };
 
-export default function MessageSideBar() {
+export default function MessageSideBar({
+  setSelectedContact,
+}: {
+  setSelectedContact: React.Dispatch<React.SetStateAction<Contact | null>>;
+}) {
   const [trigger, setTrigger] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [groups, setGroups] = React.useState([]);
@@ -37,6 +41,7 @@ export default function MessageSideBar() {
       username: group.groupName,
       group: true,
     });
+    setSelectedContact(contactActions.getStoredContact());
   };
 
   const convoClickHandler = (convo: Convo) => {
@@ -45,17 +50,58 @@ export default function MessageSideBar() {
       username: convo.username,
       group: false,
     });
+    setSelectedContact(contactActions.getStoredContact());
   };
+
+  const incrementPage = (type: "group" | "convo") => {
+    if (type === "group") {
+      return;
+    } else {
+      return;
+    }
+  };
+
+  // function incrementPage(bool: boolean, joined: boolean) {
+  //   if (!bool) {
+  //     console.log("not bool");
+  //     if (joined) {
+  //       setUserGroupPage((p) => Math.max(1, p - 1));
+  //     } else {
+  //       setNonUserGroupPage((p) => Math.max(1, p - 1));
+  //     }
+  //     return;
+  //   }
+
+  //   if (joined) {
+  //     console.log("u length", userGroups, userGroups.length);
+  //     if (userGroups.length < 10) {
+  //       return;
+  //     } else {
+  //       console.log("add page");
+  //       setUserGroupPage((p) => p + 1);
+  //       return;
+  //     }
+  //   } else {
+  //     console.log("nu length", nonUserGroups, nonUserGroups.length);
+  //     if (nonUserGroups.length < 10) {
+  //       return;
+  //     } else {
+  //       console.log("add page");
+  //       setNonUserGroupPage((p) => p + 1);
+  //       return;
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     async function fetchGroups() {
-      const fetchedGroups = await getContacts.getUserGroups();
+      const fetchedGroups = await getContacts.getUserGroups(groupPage);
       if (fetchedGroups.success) {
         setGroups(fetchedGroups.groups);
       }
     }
     async function fetchConvos() {
-      const convos = await getContacts.getActiveUserContacts();
+      const convos = await getContacts.getActiveUserContacts(convoPage);
       if (convos.success) {
         setConvos(convos.contacts);
       }
@@ -65,29 +111,38 @@ export default function MessageSideBar() {
   }, []);
 
   useEffect(() => {
-    function updateGroupSelection() {
-      const selection = groups.slice(groupPage * 5 - 5, groupPage * 5);
-      console.log("Group selection", selection, selection.length, groupPage);
-      if (selection.length === 0 && groupPage > 1) {
-        console.log("Updating group page");
-        setGroupPage((prev) => prev - 1);
-        updateGroupSelection();
-      } else {
-        setGroupSelection(selection);
+    async function updateGroupSelection() {
+      console.log("userGroupPage", groupPage);
+      const response = await getContacts.getUserGroups(groupPage);
+
+      console.log("response", response);
+      const groups = response.groups;
+      if (groups.length === 0) {
+        console.log("length is 0");
+        setGroupPage((p) => Math.max(1, p - 1));
+        return;
       }
-    }
-    function updateConvoSelection() {
-      const selection = convos.slice(convoPage * 5 - 5, convoPage * 5);
-      if (selection.length === 0 && convoPage > 1) {
-        setConvoPage((prev) => prev - 1);
-        updateConvoSelection();
+      if (groups) {
+        setGroupSelection(groups);
       } else {
-        setConvoSelection(selection);
+        setGroupSelection([]);
+        console.log("Error getting user groups");
       }
     }
     updateGroupSelection();
-    updateConvoSelection();
-  }, [groupPage, convoPage, groups, convos]);
+  }, [groupPage]);
+
+  // useEffect(() => {
+  //   function updateConvoSelection() {
+  //     if (selection.length === 0 && convoPage > 1) {
+  //       setConvoPage((prev) => prev - 1);
+  //       updateConvoSelection();
+  //     } else {
+  //       setConvoSelection(selection);
+  //     }
+  //   }
+  //   updateConvoSelection();
+  // }, [convoPage, convos]);
 
   return (
     <div className={`sidebarOverlay ${!trigger ? "closed" : ""}`}>

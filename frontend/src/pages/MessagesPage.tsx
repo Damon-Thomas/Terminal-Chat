@@ -70,7 +70,7 @@ export default function MessagesPage() {
 
   return (
     <div className="relative flex w-full h-full overflow-hidden">
-      <MessageSideBar />
+      <MessageSideBar setSelectedContact={setSelectedContact} />
       <div className="flex-1 overflow-hidden">
         <MessageArea>
           {selectedContact ? (

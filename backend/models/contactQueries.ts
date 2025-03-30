@@ -1,7 +1,8 @@
 import prisma from "./client.js";
 
-const getCurrentConversationUsers = async (userId: string) => {
+const getCurrentConversationUsers = async (userId: string, page: number) => {
   //Users that the user has sent messages to
+  const takeStart = (page - 1) * 10;
   const sentMessageUsers = await prisma.message.findMany({
     where: {
       authorId: userId,
@@ -16,13 +17,25 @@ const getCurrentConversationUsers = async (userId: string) => {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   // Get all users who sent messages to the user.
   const receivedMessageUsers = await prisma.message.findMany({
     where: { sentToId: userId },
     select: {
-      author: true,
+      author: {
+        select: {
+          id: true,
+          username: true,
+          lastLogin: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
@@ -35,7 +48,7 @@ const getCurrentConversationUsers = async (userId: string) => {
     users.add(user.author);
   });
 
-  return Array.from(users);
+  return Array.from(users).slice(takeStart, takeStart + 10);
 };
 
 const getGroupsUserHasJoined = async (userId: string, page: number) => {

@@ -20,15 +20,16 @@ const getFriendsList = async () => {
   }
 };
 
-const getActiveUserContacts = async () => {
+const getActiveUserContacts = async (page: number) => {
   const users = await fetch(
     `${import.meta.env.VITE_ApiHost}/contacts/activeUserContacts`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
+      body: JSON.stringify({ page }),
     }
   );
   return users.json();

@@ -4,7 +4,7 @@ import contactControllers from "../controllers/contactControllers.js";
 
 const router = Router();
 
-router.get(
+router.post(
   "/activeUserContacts",
   userController.verifyToken,
   userController.authUser,
