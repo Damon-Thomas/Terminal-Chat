@@ -63,6 +63,14 @@ export default function NonContacts() {
               >
                 Add
               </Button>
+              <GoToButton
+                destination="/profile"
+                id={user.id}
+                username={user.username}
+                group={false}
+              >
+                Profile
+              </GoToButton>
             </div>
           ) : (
             <div key={user.id} className="flex flex-col gap-2">

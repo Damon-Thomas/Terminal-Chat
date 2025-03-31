@@ -33,50 +33,6 @@ const sendMessage = async (req: UserRequest, res: Response) => {
   }
 };
 
-const setPinnedMessage = async (req: UserRequest, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ failure: true, errors: errors.array() });
-  }
-  const { groupId, content } = req.body;
-  try {
-    const pinnedMessage = await actionQueries.setPinnedMessage(
-      req.user.id,
-      req.user.username,
-      groupId,
-      content
-    );
-    if (pinnedMessage.failure) {
-      return res.status(403).json(pinnedMessage);
-    }
-    res.status(200).json({ ...pinnedMessage, failure: false });
-  } catch (e) {
-    console.log("error setting pinned message", e);
-    res.status(400).json({ error: e, failure: true });
-  }
-};
-
-const deletePinnedMessage = async (req: UserRequest, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ failure: true, errors: errors.array() });
-  }
-  const { groupId } = req.body;
-  try {
-    const deletePinnedMessage = await actionQueries.deletePinnedMessage(
-      req.user.id,
-      groupId
-    );
-    if (deletePinnedMessage.failure) {
-      return res.status(403).json(deletePinnedMessage);
-    }
-    res.status(200).json({ ...deletePinnedMessage, failure: false });
-  } catch (e) {
-    console.log("error deleting pinned message", e);
-    res.status(400).json({ error: e, failure: true });
-  }
-};
-
 const likeMessage = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
 
@@ -150,7 +106,7 @@ const makeGroup = async (req: UserRequest, res: Response) => {
   }
   const { groupName } = req.body;
   try {
-    const newGroup = await actionQueries.createGroup(groupName, userId);
+    const newGroup = await actionQueries.createGroup(groupName);
     if (newGroup.failure) {
       return res
         .status(400)
@@ -231,6 +187,4 @@ export default {
   joinGroup,
   leaveGroup,
   deleteGroup,
-  setPinnedMessage,
-  deletePinnedMessage,
 };

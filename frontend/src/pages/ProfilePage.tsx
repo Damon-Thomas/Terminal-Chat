@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import ContactActions from "../context/ContactActions";
 import profile from "../fetchers/profile";
 import useAuth from "../context/useAuth";
+import ProfileForm from "./profile/ProfileForm";
+import OtherUserProfile from "./profile/OtherUserProfile";
 
 interface ProfileInfo {
   id: string;
@@ -26,14 +28,9 @@ export default function ProfilePage() {
           setUsername(user.username);
           setOwnProfile(true);
           const response = await profile.getProfile(user.id);
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          console.log("Profile data:", data);
-          setProfileInfo(data);
+          setProfileInfo(response);
         } catch (error) {
-          console.error("Error fetching profile info:", error);
+          console.error("Error fetching profile info user:", error);
         }
       } else {
         try {
@@ -41,14 +38,9 @@ export default function ProfilePage() {
           setUsername(storedContact.username);
           setOwnProfile(false);
           const response = await profile.getProfile(storedContact.id);
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          console.log("Profile data:", data);
-          setProfileInfo(data);
+          setProfileInfo(response);
         } catch (error) {
-          console.error("Error fetching profile info:", error);
+          console.error("Error fetching profile info other:", error);
         }
       }
     };
@@ -58,17 +50,16 @@ export default function ProfilePage() {
   return (
     <div>
       {ownProfile ? (
-        <p>form</p>
+        <ProfileForm
+          profile={profileInfo}
+          setProfile={setProfileInfo}
+          username={username}
+        ></ProfileForm>
       ) : (
-        <div className="profile-page">
-          <div>
-            <h1>Profile Page: {username}</h1>
-            <h6>Intro</h6>
-            <p>{profileInfo.intro}</p>
-            <h6>Bio</h6>
-            <p>{profileInfo.bio}</p>
-          </div>
-        </div>
+        <OtherUserProfile
+          profile={profileInfo}
+          username={username}
+        ></OtherUserProfile>
       )}
     </div>
   );

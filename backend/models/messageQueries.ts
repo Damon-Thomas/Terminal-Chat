@@ -139,7 +139,6 @@ const createGroup = async (groupName: string, administratorId: string) => {
   await prisma.group.create({
     data: {
       groupName: groupName,
-      administratorId: administratorId,
     },
   });
   return { message: "Group created", failure: false };

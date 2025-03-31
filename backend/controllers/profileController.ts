@@ -27,7 +27,6 @@ const getProfile = async (req: UserRequest, res: Response) => {
   }
 };
 
-//add profile pic handling
 const updateProfile = async (req: UserRequest, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

@@ -32,63 +32,9 @@ const sendMessage = async (
       content: message,
       sentToId: destinationType === "user" ? sentTo : null,
       sentToGroupId: destinationType === "group" ? sentTo : null,
-      PinnedMessage: pinned,
     },
   });
   return { ...newMessage, failure: false };
-};
-
-const setPinnedMessage = async (
-  userId: string,
-  username: string,
-  groupId: string,
-  content: string
-) => {
-  const pinnedMessageVerifier = await prisma.group.findUnique({
-    where: { id: groupId, administratorId: userId },
-  });
-  if (!pinnedMessageVerifier) {
-    return { message: "User is not the group administrator!", failure: true };
-  }
-  const updatedGroup = await prisma.group.update({
-    where: { id: groupId },
-    data: {
-      PinnedMessage: {
-        upsert: {
-          // create the pinned message if it doesn't exist
-          create: {
-            content: content,
-            authorId: userId,
-            username: username,
-            // You can optionally fill in other required fields (e.g. filename, filePath, etc.)
-          },
-          // update the pinned message if it already exists
-          update: {
-            content: content,
-          },
-        },
-      },
-    },
-    include: {
-      PinnedMessage: true,
-    },
-  });
-  return { pinnedMessage: updatedGroup.PinnedMessage, failure: false };
-};
-
-const deletePinnedMessage = async (userId: string, groupId: string) => {
-  const pinnedMessageVerifier = await prisma.group.findUnique({
-    where: { id: groupId, administratorId: userId },
-  });
-  if (!pinnedMessageVerifier) {
-    return { message: "User is not the group administrator!", failure: true };
-  }
-
-  const pinnedMessage = await prisma.group.update({
-    where: { id: groupId },
-    data: { PinnedMessage: { disconnect: true } },
-  });
-  return { pinnedMessage, failure: false };
 };
 
 const likeMessage = async (userId: string, messageId: string) => {
@@ -181,7 +127,7 @@ const leaveGroup = async (userId: string, groupId: string) => {
   return { group };
 };
 
-const createGroup = async (groupName: string, administratorId: string) => {
+const createGroup = async (groupName: string) => {
   const groupExists = await prisma.group.findFirst({
     where: { groupName },
   });
@@ -189,7 +135,7 @@ const createGroup = async (groupName: string, administratorId: string) => {
     return { message: "Group already exists", failure: true };
   }
   const group = await prisma.group.create({
-    data: { groupName, administratorId },
+    data: { groupName },
   });
   return { group, failure: false };
 };
@@ -199,27 +145,13 @@ const deleteGroup = async (groupId: string, userId: string) => {
     return { message: "Invalid input", failure: true };
   }
 
-  const administratorId = await prisma.group.findUnique({
-    where: { id: groupId },
-    select: { administratorId: true },
+  await prisma.userGroup.deleteMany({
+    where: { groupId },
   });
-  if (!administratorId || administratorId.administratorId !== userId) {
-    return { message: "User is not the group administrator!", failure: true };
-  }
-
-  if (!administratorId) {
-    return { message: "Group not found", failure: true };
-  }
-
-  if (administratorId.administratorId === userId) {
-    await prisma.userGroup.deleteMany({
-      where: { groupId },
-    });
-    await prisma.group.delete({
-      where: { id: groupId },
-    });
-    return { message: "Group deleted", failure: false };
-  }
+  await prisma.group.delete({
+    where: { id: groupId },
+  });
+  return { message: "Group deleted", failure: false };
 };
 
 export default {
@@ -232,6 +164,4 @@ export default {
   leaveGroup,
   createGroup,
   deleteGroup,
-  setPinnedMessage,
-  deletePinnedMessage,
 };

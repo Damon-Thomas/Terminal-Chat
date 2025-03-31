@@ -1,14 +1,14 @@
 import "./input.css";
 
 export default function Input({
-  type,
+  type = "text",
   className = "",
   id,
   name,
   required = false,
   placeholder = "",
 }: {
-  type: string;
+  type?: string;
   className?: string;
   id: string;
   name: string;

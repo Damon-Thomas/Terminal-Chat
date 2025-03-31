@@ -69,18 +69,4 @@ router.delete(
   actionController.deleteGroup as any
 );
 
-router.put(
-  "/setPinnedMessage",
-  userController.verifyToken,
-  userController.authUser,
-  actionController.setPinnedMessage as any
-);
-
-router.delete(
-  "/deletePinnedMessage",
-  userController.verifyToken,
-  userController.authUser,
-  actionController.deletePinnedMessage as any
-);
-
 export default router;

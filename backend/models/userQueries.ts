@@ -77,14 +77,6 @@ const deleteUser = async (username: string) => {
       });
       stepsCompleted++;
 
-      //deleteGroupsUserIsAdminOf
-      await prisma.group.deleteMany({
-        where: {
-          administratorId: user.id,
-        },
-      });
-      stepsCompleted++;
-
       //delete user from friends lists
       await prisma.userFriend.deleteMany({
         where: {
@@ -153,8 +145,6 @@ const updateProfile = async (
         userId: userId,
       },
       data: {
-        color: color,
-        profilePic: profilePic,
         bio: bio,
         intro: intro,
       },
