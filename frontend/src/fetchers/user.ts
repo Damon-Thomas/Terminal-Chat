@@ -57,6 +57,7 @@ const verifyToken = async () => {
 
 function logOut() {
   localStorage.removeItem("token");
+  localStorage.removeItem("selectedContact");
   location.href = "/";
 }
 

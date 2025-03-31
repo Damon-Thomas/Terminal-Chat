@@ -4,7 +4,7 @@ import profileController from "../controllers/profileController.js";
 
 const router = Router();
 
-router.get(
+router.post(
   "/getProfile",
   userController.verifyToken,
   userController.authUser,

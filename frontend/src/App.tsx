@@ -15,6 +15,7 @@ import FriendContactPage from "./pages/contactPages/FriendContactPage.tsx";
 import GroupContactPage from "./pages/contactPages/GroupContactPage.tsx";
 import NonContactPage from "./pages/contactPages/NonContactPage.tsx";
 import MessagesPage from "./pages/MessagesPage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="/messages" element={<MessagesPage />}></Route>
+        <Route path="/profile" element={<ProfilePage />}></Route>
         <Route path="/friends" element={<FriendContactPage />} />
         <Route path="/groups" element={<GroupContactPage />} />
         <Route path="/meet" element={<NonContactPage />} />

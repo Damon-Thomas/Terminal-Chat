@@ -9,4 +9,8 @@ function getStoredContact() {
   return storedContact ? JSON.parse(storedContact) : null;
 }
 
-export default { storeContact, getStoredContact };
+function clearStoredContact() {
+  localStorage.removeItem("selectedContact");
+}
+
+export default { storeContact, getStoredContact, clearStoredContact };

@@ -11,15 +11,15 @@ export interface UserRequest extends Request {
 }
 
 interface Profile {
-  color: string;
-  profilePic: string | null;
+  id: string;
   bio: string;
   intro: string;
 }
 
 const getProfile = async (req: UserRequest, res: Response) => {
   console.log(req.user.id);
-  const profile: Profile | null = await profileQueries.getProfile(req.user.id);
+  const { userId } = req.body;
+  const profile: Profile | null = await profileQueries.getProfile(userId);
   if (profile) {
     res.status(200).json({ ...profile, failure: false });
   } else {
@@ -36,8 +36,6 @@ const updateProfile = async (req: UserRequest, res: Response) => {
   }
 
   const profile = {
-    color: req.body.color,
-    profilePic: req.body.profilePic,
     bio: req.body.bio,
     intro: req.body.intro,
   };

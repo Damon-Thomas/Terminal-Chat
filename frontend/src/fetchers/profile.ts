@@ -1,12 +1,13 @@
-const getProfile = async () => {
+const getProfile = async (userId: string) => {
   const response = await fetch(
     `${import.meta.env.VITE_ApiHost}/profile/getProfile`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
+      body: JSON.stringify({ userId }),
     }
   );
   return await response.json();

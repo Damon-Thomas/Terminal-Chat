@@ -1,11 +1,14 @@
+import ContactActions from "../../context/ContactActions";
 import Button from "../Buttons/Button";
 
 export default function UserSpace() {
   function messageButtonHandler() {
+    ContactActions.clearStoredContact();
     location.href = "/messages";
   }
   function profileButtonHandler() {
-    console.log("Profile Button Clicked");
+    ContactActions.clearStoredContact();
+    location.href = "/profile";
   }
   return (
     <div className="home-space user-space">
