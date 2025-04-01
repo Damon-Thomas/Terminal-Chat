@@ -147,6 +147,9 @@ const createGroup = async (groupName: string, administratorId: string) => {
 const messagesToGroup = async (groupId: string) => {
   const messages = await prisma.message.findMany({
     where: { sentToGroupId: groupId },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   return messages;
 };
@@ -164,6 +167,9 @@ const getMessagesBetweenUsers = async (userId: string, sentToId: string) => {
           sentToId: userId,
         },
       ],
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
   return messages;

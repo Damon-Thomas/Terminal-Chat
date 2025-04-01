@@ -10,13 +10,13 @@ import type { Message } from "../../pages/MessagesPage";
 export default function MessageCreator({
   group = false,
   messageSentTo,
-  messages,
+  // messages,
   username,
   setMessages,
 }: {
   group: boolean;
   messageSentTo: string;
-  messages: Array<Message>;
+  // messages: Array<Message>;
   username: string;
   setMessages: React.Dispatch<React.SetStateAction<Array<Message>>>;
 }) {
@@ -38,22 +38,19 @@ export default function MessageCreator({
       content,
       messageSentTo,
       username,
-      group ? "group" : "user",
-      false //pinned
+      group ? "group" : "user"
     );
     console.log("response", response);
     if (response.failure === false) {
       setMessages((prevMessages) => [
-        ...prevMessages,
         {
           id: response.id,
           createdAt: new Date().toISOString(),
           username,
           content,
           authorId: userRef.current.id,
-          likes: [],
-          PinnedMessage: false,
         },
+        ...prevMessages,
       ]);
       setContent("");
     } else {

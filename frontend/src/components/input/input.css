@@ -2,7 +2,6 @@
 
 .input-box {
   width: 100%;
-  max-width: 800px;
   border: 2px solid var(--border-color);
   color: var(--secondary-text-color);
   background: #111;

@@ -9,7 +9,10 @@ export default function MessageArea({ children }: MessageAreaProps) {
     <div className="messageArea">
       {children || (
         <div className="messageAreaDefault">
-          <h1>Use Sidebar to Select Contact to Message</h1>
+          <h1>
+            Use Sidebar to Select Who to Message (On mobile use the icon at the
+            top left to open the sidebar)
+          </h1>
         </div>
       )}
     </div>
@@ -19,7 +22,10 @@ export default function MessageArea({ children }: MessageAreaProps) {
 MessageArea.defaultProps = {
   children: (
     <div className="messageArea">
-      <h1>Use Sidebar to Select Contact to Message</h1>
+      <h1>
+        Use Sidebar to Select Who to Message (On mobile use the icon at the top
+        left to open the sidebar)
+      </h1>
     </div>
   ),
 };

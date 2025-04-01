@@ -2,8 +2,7 @@ const createMessage = async (
   message: string,
   sentTo: string,
   username: string,
-  destinationType: "group" | "user",
-  pinned: boolean
+  destinationType: "group" | "user"
 ) => {
   const response = await fetch(
     `${import.meta.env.VITE_ApiHost}/action/createMessage`,
@@ -18,7 +17,6 @@ const createMessage = async (
         sentTo,
         username,
         destinationType,
-        pinned,
       }),
     }
   );

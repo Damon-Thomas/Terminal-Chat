@@ -16,8 +16,6 @@ export type Message = {
   content: string;
   authorId: string;
   username: string;
-  likes: string[];
-  PinnedMessage: boolean;
 };
 
 export default function MessagesPage() {
@@ -109,7 +107,6 @@ export default function MessagesPage() {
                 group={group || false}
                 username={user.username}
                 messageSentTo={selectedContact ? selectedContact.id : ""}
-                messages={messages}
                 setMessages={setMessages}
               ></MessageCreator>
             </div>
