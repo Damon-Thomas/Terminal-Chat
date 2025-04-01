@@ -5,7 +5,7 @@ import FormTitle from "../../components/forms/FormTitle";
 import InputWrapper from "../../components/input/InputWrapper";
 import Label from "../../components/input/Label";
 import LongInput from "../../components/input/LongInput";
-
+import blueAvatar from "../../assets/BlueFull.png";
 export default function ProfileForm({
   profile,
   setProfile,
@@ -55,6 +55,10 @@ export default function ProfileForm({
       }}
     >
       <FormTitle title={`Edit Profile of ${name}`}></FormTitle>
+      <div className="userAvatarContainer">
+        <div className="userAvatarOverlay"></div>
+        <img src={blueAvatar} alt="Avatar" className="avatar" />
+      </div>
       <InputWrapper>
         <Label htmlFor="intro" text="Intro" />
         <LongInput

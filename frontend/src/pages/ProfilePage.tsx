@@ -49,7 +49,7 @@ export default function ProfilePage() {
   }, [user]);
 
   return (
-    <div>
+    <div className="profile-page">
       {ownProfile ? (
         <ProfileForm
           profile={profileInfo}
