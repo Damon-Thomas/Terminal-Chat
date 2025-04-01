@@ -7,6 +7,7 @@ export default function Input({
   name,
   required = false,
   placeholder = "",
+  onChange = () => {},
 }: {
   type?: string;
   className?: string;
@@ -14,6 +15,7 @@ export default function Input({
   name: string;
   required?: boolean;
   placeholder?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <input
@@ -23,6 +25,7 @@ export default function Input({
       name={name}
       required={required}
       placeholder={placeholder}
+      onChange={onChange}
     />
   );
 }

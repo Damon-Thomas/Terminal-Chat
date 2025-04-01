@@ -71,6 +71,10 @@ export default function MessageCreator({
     await sendMessage();
   };
 
+  function clearErrors() {
+    setError("");
+  }
+
   return (
     <Form onSubmit={handleSubmit} className="messageCreator">
       <LongInput
@@ -81,6 +85,7 @@ export default function MessageCreator({
         setValue={setContent}
         placeholder="Type a message..."
         className="messageInput"
+        otherSetValue={clearErrors}
       />
       <ErrorMessage>{error}</ErrorMessage>
       <Button type="submit" className="messageButton" size="small">

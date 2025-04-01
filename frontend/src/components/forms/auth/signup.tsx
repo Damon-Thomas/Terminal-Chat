@@ -74,14 +74,35 @@ export default function SignUp({
       passwordLI.value,
       confirmpasswordSU.value
     );
+    console.log("Info from sign up", info);
     if (info && info.success) {
-      setCurrentUser(info);
+      if (info.id && info.username) {
+        setCurrentUser({ id: info.id, username: info.username, success: true });
+      }
     } else {
-      if (info && info.success === false && info.errors) {
-        setErrors(info.errors);
+      if (info && info.success === false && info.errorMessage) {
+        setErrors({
+          username: "",
+          password: "",
+          confirmPassword: info.errorMessage,
+        });
+        return;
       }
       console.log("Error logging in");
     }
+  }
+
+  function closeModal() {
+    setOpen(false);
+    errorClearer();
+  }
+
+  function errorClearer() {
+    setErrors({
+      username: "",
+      password: "",
+      confirmPassword: "",
+    });
   }
   return (
     <ModalContainer
@@ -90,18 +111,20 @@ export default function SignUp({
         setOpen(true);
       }}
     >
-      <Button
-        className="modalCloseButton"
-        onClick={() => setOpen(false)}
-        type="button"
-      >
+      <Button className="modalCloseButton" onClick={closeModal} type="button">
         X
       </Button>
       <FormTitle title="Sign Up" />
       <Form onSubmit={signUp}>
         <InputWrapper>
           <Label htmlFor="usernameSU" text="Username" className="" />
-          <Input className="" type="text" id="usernameSU" name="usernameSU" />
+          <Input
+            className=""
+            type="text"
+            id="usernameSU"
+            name="usernameSU"
+            onChange={errorClearer}
+          />
           <ErrorMessage>{errors.username}</ErrorMessage>
         </InputWrapper>
         <InputWrapper>
@@ -111,6 +134,7 @@ export default function SignUp({
             type="password"
             id="passwordSU"
             name="passwordSU"
+            onChange={errorClearer}
           />
           <ErrorMessage>{errors.password}</ErrorMessage>
         </InputWrapper>
@@ -125,6 +149,7 @@ export default function SignUp({
             type="password"
             id="confirmpasswordSU"
             name="confirmpasswordSU"
+            onChange={errorClearer}
           />
           <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
         </InputWrapper>

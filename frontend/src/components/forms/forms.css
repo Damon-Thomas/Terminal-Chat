@@ -15,5 +15,5 @@
 }
 
 .formWrapper {
-  @apply flex flex-col p-2 gap-4 lg:gap-6;
+  @apply flex flex-col p-2 gap-2 lg:gap-6;
 }

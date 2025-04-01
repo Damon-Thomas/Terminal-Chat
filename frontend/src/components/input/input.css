@@ -15,7 +15,11 @@
 }
 
 .inputWrapper {
-  @apply flex flex-col justify-start items-start gap-2;
+  @apply flex flex-col justify-start items-start gap-1 mb-2;
+}
+
+.error-message {
+  text-align: top;
 }
 
 /* Mobile-specific fixes */

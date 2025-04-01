@@ -9,6 +9,7 @@ export default function LongInput({
   setValue,
   required = false,
   placeholder = "",
+  otherSetValue = () => {},
 }: {
   rows?: number;
   className?: string;
@@ -18,7 +19,12 @@ export default function LongInput({
   setValue: (value: string) => void;
   required?: boolean;
   placeholder?: string;
+  otherSetValue?: () => void;
 }) {
+  function changeHandler(value: string) {
+    setValue(value);
+    otherSetValue();
+  }
   return (
     <textarea
       rows={rows}
@@ -27,7 +33,7 @@ export default function LongInput({
       name={name}
       required={required}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => changeHandler(e.target.value)}
       placeholder={placeholder}
       onTouchStart={(e) => e.stopPropagation()}
       onTouchEnd={(e) => {

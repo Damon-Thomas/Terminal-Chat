@@ -11,7 +11,7 @@ import contactActions from "../../context/ContactActions";
 
 export default function CreateGroup() {
   const [error, setError] = useState("");
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   const groupHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +54,11 @@ export default function CreateGroup() {
       location.href = `/messages`;
     }
   };
+
+  function clearErrors() {
+    setError("");
+  }
+
   return (
     <div className="createGroup ">
       <h1 className="createGroupTitle glitch-received-message">Create Group</h1>
@@ -64,6 +69,7 @@ export default function CreateGroup() {
             type="text"
             id="groupName"
             name="groupName"
+            onChange={clearErrors}
           />
           <ErrorMessage>{error}</ErrorMessage>
         </InputWrapper>

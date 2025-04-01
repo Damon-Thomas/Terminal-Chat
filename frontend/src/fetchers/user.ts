@@ -14,9 +14,19 @@ const signUp = async (
     }
   );
   const data = await response.json();
+  if (data.failure) {
+    return { success: false, errorMessage: data.message };
+  }
+  if (data.errorMessage) {
+    return { success: false, errorMessage: data.errorMessage };
+  }
+  if (data.error) {
+    return { success: false, errorMessage: data.error };
+  }
   if (await data.token) {
     saveToken(data.token);
   }
+  console.log("data", data);
   return { id: data.id, username: data.username, success: data.success };
 };
 
@@ -29,6 +39,12 @@ const logIn = async (username: string, password: string) => {
     body: JSON.stringify({ username, password }),
   });
   const data = await response.json();
+  if (data.failure) {
+    return { success: false, errorMessage: data.message };
+  }
+  if (data.error) {
+    return { success: false, errorMessage: data.error };
+  }
   if (await data.token) {
     saveToken(data.token);
   }

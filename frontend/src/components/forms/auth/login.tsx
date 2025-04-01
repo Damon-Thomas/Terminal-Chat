@@ -61,30 +61,56 @@ export default function LogIn({
       return;
     }
     const info = await user.logIn(usernameLI.value, passwordLI.value);
-    if (info && info.success) {
-      setCurrentUser(info);
+    if (info && info.success && info.id && info.username) {
+      setCurrentUser({
+        id: info.id,
+        username: info.username,
+        success: info.success,
+      });
     } else {
-      if (info && info.success === false && info.errors) {
-        setErrors(info.errors);
+      if (info && info.success === false && info.errorMessage) {
+        setErrors({
+          username: "",
+          password: info.errorMessage,
+        });
+      } else {
+        setErrors({
+          username: "",
+          password: "Unkown Error While Logging in",
+        });
       }
       console.log("Error logging in");
     }
   }
 
+  function modalCloser() {
+    setOpen(false);
+    errorClearer();
+  }
+
+  function errorClearer() {
+    setErrors({
+      username: "",
+      password: "",
+    });
+  }
+
   return (
     <ModalContainer isOpen={open} onClose={() => setOpen(true)}>
-      <Button
-        className="modalCloseButton"
-        onClick={() => setOpen(false)}
-        type="button"
-      >
+      <Button className="modalCloseButton" onClick={modalCloser} type="button">
         X
       </Button>
       <FormTitle title="Log In" />
       <Form onSubmit={logIn}>
         <InputWrapper>
           <Label htmlFor="usernameLI" text="Username" className="" />
-          <Input className="" type="text" id="usernameLI" name="usernameLI" />
+          <Input
+            className=""
+            type="text"
+            id="usernameLI"
+            name="usernameLI"
+            onChange={errorClearer}
+          />
           <ErrorMessage>{errors.username}</ErrorMessage>
         </InputWrapper>
         <InputWrapper>
@@ -94,6 +120,7 @@ export default function LogIn({
             type="password"
             id="passwordLI"
             name="passwordLI"
+            onChange={errorClearer}
           />
           <ErrorMessage>{errors.password}</ErrorMessage>
         </InputWrapper>

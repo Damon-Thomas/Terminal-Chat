@@ -35,7 +35,7 @@
   grid-template-rows: (275px, 1fr, 1fr);
 }
 
-.formWrapper {
+.formWrapper.createGroupForm {
   @apply gap-0;
 }
 
