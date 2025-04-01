@@ -25,7 +25,7 @@ router.get(
   contactControllers.getGroupMembers as any
 );
 
-router.get(
+router.post(
   "/getFriendsList",
   userController.verifyToken,
   userController.authUser,

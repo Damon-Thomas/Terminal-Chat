@@ -13,7 +13,7 @@ export default function FriendContacts() {
   }
 
   //   const [friendContacts, setfriendContacts] = useState<User[]>([]);
-  const [editedFriendContacts, setEditedFriendContacts] = useState<User[]>([]);
+
   const [friendPage, setFriendPage] = useState<User[]>([]);
   const [page, setPage] = useState(1);
   // const context = useContext(CurrentConvoContext);
@@ -24,44 +24,27 @@ export default function FriendContacts() {
 
   useEffect(() => {
     async function getFriendContacts() {
-      const users = await getContacts.getFriendsList();
-      const updatedUsers = users.map((user: User) => ({
-        ...user,
-        friend: true,
-      }));
-      if (updatedUsers) {
-        setEditedFriendContacts(updatedUsers);
+      const users = await getContacts.getFriendsList(1);
+      console.log("No more users?", users);
+      if (users.length > 0) {
+        setFriendPage(users.map((user: User) => ({ ...user, friend: true })));
       } else {
-        setEditedFriendContacts([]);
-        console.log("Error getting friend contacts");
+        setFriendPage([]);
       }
     }
     getFriendContacts();
   }, []);
 
-  useEffect(() => {
-    async function getFriendPage() {
-      const users = editedFriendContacts.slice((page - 1) * 10, page * 10);
-      if (users) {
-        setFriendPage(users);
-      } else {
-        setFriendPage([]);
-        console.log("Error getting friend contacts");
-      }
-    }
-    getFriendPage();
-  }, [page, editedFriendContacts]);
-
   async function removeFriend(friendId: string) {
     const response = await sendActions.removeFriend(friendId);
     if (response) {
       console.log("Friend removed");
-      const user = editedFriendContacts.find((user) => user.id === friendId);
+      const user = friendPage.find((user) => user.id === friendId);
       if (user) {
-        const index = editedFriendContacts.indexOf(user);
-        editedFriendContacts.splice(index, 1);
+        const index = friendPage.indexOf(user);
+        friendPage.splice(index, 1);
       }
-      setEditedFriendContacts([...editedFriendContacts]);
+      setFriendPage([...friendPage]);
     } else {
       console.log("Error removing friend");
     }
@@ -71,11 +54,11 @@ export default function FriendContacts() {
     const response = await sendActions.addFriend(friendId);
     if (response) {
       console.log("Friend added");
-      const user = editedFriendContacts.find((user) => user.id === friendId);
+      const user = friendPage.find((user) => user.id === friendId);
       if (user) {
         user.friend = true;
       }
-      setEditedFriendContacts([...editedFriendContacts]);
+      setFriendPage([...friendPage]);
     } else {
       console.log("Error adding friend");
     }
@@ -88,6 +71,26 @@ export default function FriendContacts() {
       group: false,
     });
     location.href = "/messages";
+  }
+
+  async function handlePageChange(newPage: number) {
+    console.log("Page changed", newPage);
+    if (newPage < 1) {
+      return;
+    }
+
+    const users = await getContacts.getFriendsList(newPage);
+    console.log("No more users?", users);
+    if (users.length > 0) {
+      setPage(newPage);
+
+      setFriendPage(
+        users.map((user: User) => ({
+          ...user,
+          friend: true,
+        }))
+      );
+    }
   }
 
   return (
@@ -118,11 +121,9 @@ export default function FriendContacts() {
       </div>
 
       <div className="flex justify-center mt-4 gap-2">
-        <Button onClick={() => setPage((p) => Math.max(1, p - 1))}>
-          Previous
-        </Button>
+        <Button onClick={() => handlePageChange(page - 1)}>Prev</Button>
         <span>Page {page}</span>
-        <Button onClick={() => setPage((p) => p + 1)}>Next</Button>
+        <Button onClick={() => handlePageChange(page + 1)}>Next</Button>
       </div>
     </div>
   );

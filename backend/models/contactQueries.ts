@@ -80,13 +80,15 @@ const getGroupMembers = async (groupId: string) => {
   });
 };
 
-const getFriendsList = async (userId: string) => {
-  const friends = await prisma.user.findMany({
-    where: {
-      id: userId,
-    },
+const getFriendsList = async (userId: string, page: number) => {
+  const takeStart = (page - 1) * 10;
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
     select: {
       friends: {
+        skip: takeStart,
+        take: 10,
         select: {
           friend: {
             select: {
@@ -99,8 +101,8 @@ const getFriendsList = async (userId: string) => {
       },
     },
   });
-
-  return friends[0].friends.map((friend) => friend.friend);
+  console.log("user", user);
+  return user?.friends.map((f) => f.friend) || [];
 };
 
 const getNonContactUsers = async (userId: string, page: number) => {

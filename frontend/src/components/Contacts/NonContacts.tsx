@@ -17,14 +17,11 @@ export default function NonContacts() {
   useEffect(() => {
     async function getNonContacts() {
       const users = await getContacts.getNonContactUsers(page);
-
-      const updatedUsers = users.users.map((user: User) => ({
-        ...user,
-        friend: false,
-      }));
-      console.log("Updated users", updatedUsers);
-      if (updatedUsers && updatedUsers.length > 0) {
-        setNonContacts(updatedUsers);
+      console.log("No more users?", users);
+      if (users.users.length > 0) {
+        setNonContacts(
+          users.users.map((user: User) => ({ ...user, friend: false }))
+        );
       } else {
         setNonContacts([]);
       }
@@ -43,6 +40,23 @@ export default function NonContacts() {
       setNonContacts([...nonContacts]);
     } else {
       console.log("Error adding friend");
+    }
+  }
+
+  async function handlePageChange(newPage: number, inc: boolean) {
+    if (!inc && newPage > 0) {
+      setPage(newPage);
+      return;
+    }
+
+    if (inc) {
+      const users = await getContacts.getNonContactUsers(newPage);
+      if (users.users.length > 0) {
+        setPage(newPage);
+        setNonContacts(
+          users.users.map((user: User) => ({ ...user, friend: false }))
+        );
+      }
     }
   }
 
@@ -90,11 +104,9 @@ export default function NonContacts() {
       </div>
 
       <div className="flex justify-center mt-4 gap-2">
-        <Button onClick={() => setPage((p) => Math.max(1, p - 1))}>
-          Previous
-        </Button>
+        <Button onClick={() => handlePageChange(page - 1, false)}>Prev</Button>
         <span>Page {page}</span>
-        <Button onClick={() => setPage((p) => p + 1)}>Next</Button>
+        <Button onClick={() => handlePageChange(page + 1, true)}>Next</Button>
       </div>
     </div>
   );

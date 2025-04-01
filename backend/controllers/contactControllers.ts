@@ -66,8 +66,9 @@ const getGroupMembers = async (req: GroupRequest, res: Response) => {
 
 const getFriendsList = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
+  const { page } = req.body || 1;
   try {
-    const friends = await contactQueries.getFriendsList(userId);
+    const friends = await contactQueries.getFriendsList(userId, page);
     res.status(200).json({ friends, failure: false });
   } catch (error) {
     const errorMessage =

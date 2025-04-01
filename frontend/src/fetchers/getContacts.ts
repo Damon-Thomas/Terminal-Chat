@@ -1,12 +1,13 @@
-const getFriendsList = async () => {
+const getFriendsList = async (page: number) => {
   const friends = await fetch(
     `${import.meta.env.VITE_ApiHost}/contacts/getFriendsList`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
+      body: JSON.stringify({ page }),
     }
   );
   if (friends.ok) {
