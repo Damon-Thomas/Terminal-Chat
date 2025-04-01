@@ -8,6 +8,7 @@ import Message from "../components/Messages/Message";
 import useAuth from "../context/useAuth";
 import contactActions, { Contact } from "../context/ContactActions";
 import MessageContainer from "../components/Messages/MessageContainer";
+import ContactActions from "../context/ContactActions";
 
 export type Message = {
   id: string;
@@ -68,6 +69,12 @@ export default function MessagesPage() {
     }
   }, [selectedContact, fetchMessages]);
 
+  function goToProfileHandler() {
+    if (group === false) {
+      window.location.href = "/profile";
+    }
+  }
+
   return (
     <div className="relative flex w-full h-full overflow-hidden">
       <MessageSideBar setSelectedContact={setSelectedContact} />
@@ -79,14 +86,22 @@ export default function MessagesPage() {
                 {group && selectedContact.username ? (
                   <p>{selectedContact.username}</p>
                 ) : (
-                  <p>Messages with {selectedContact.username}</p>
+                  <p>
+                    Messages with{" "}
+                    <span onClick={goToProfileHandler}>
+                      {" "}
+                      {selectedContact.username}{" "}
+                    </span>
+                  </p>
                 )}
                 {messages.map((message) => (
                   <Message
                     key={message.id}
                     content={message.content}
                     username={message.username}
+                    id={message.authorId}
                     user={user.id === message.authorId}
+                    createdAt={new Date(message.createdAt).toLocaleString()}
                   ></Message>
                 ))}
               </MessageContainer>

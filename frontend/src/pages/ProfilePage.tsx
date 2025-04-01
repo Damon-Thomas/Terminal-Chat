@@ -23,7 +23,8 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfileInfo = async () => {
-      if (ContactActions.getStoredContact() === null) {
+      const selectedUser = ContactActions.getStoredContact();
+      if (selectedUser === null || selectedUser.id === user.id) {
         try {
           setUsername(user.username);
           setOwnProfile(true);

@@ -93,6 +93,15 @@ export default function FriendContacts() {
     }
   }
 
+  function goToProfileHandler(id: string, username: string) {
+    contactActions.storeContact({
+      id: id,
+      username: username,
+      group: false,
+    });
+    window.location.href = "/profile";
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-lg md:text-2xl lg:text-4xl">Friends</h1>
@@ -111,6 +120,11 @@ export default function FriendContacts() {
               <h2>{user.username}</h2>
               <Button onClick={() => messageFriend(user.id, user.username)}>
                 Message
+              </Button>
+              <Button
+                onClick={() => goToProfileHandler(user.id, user.username)}
+              >
+                Profile
               </Button>
               <Button onClick={() => removeFriend(user.id)}>
                 Delete Friend
