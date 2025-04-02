@@ -4,12 +4,95 @@
   @apply h-full w-full justify-center items-center flex flex-col;
 }
 
+.profileForm {
+  @apply w-full h-full max-w-xl overflow-hidden p-6;
+}
+
+.formContent {
+  @apply w-full h-full  flex flex-col items-center justify-center overflow-auto;
+}
+
+.formContent {
+  @apply w-full h-full flex flex-col items-center justify-center;
+}
+
+.profileMain {
+  @apply w-full max-w-4xl h-full flex flex-col items-center justify-center;
+}
+
+.profileLabel {
+  @apply text-lg md:text-2xl font-bold;
+}
+
+.profileInput.intro {
+  @apply w-full min-h-24;
+}
+
+.profileInput.bio {
+  @apply w-full min-h-36;
+}
+
+.buttonWrapper {
+  @apply flex flex-col gap-4 md:gap-8 justify-center items-center;
+}
+
+.otherProfileButton.button {
+  @apply w-full min-w-36 md:min-w-44 min-h-8 md:min-h-12 text-lg md:text-2xl;
+}
+
+.profileButton.button {
+  @apply w-full text-xl md:text-2xl;
+}
+
+.profileInputWrapper {
+  @apply w-full  flex flex-col;
+}
+
+.avatarNameWrapper {
+  @apply flex flex-col items-center justify-center;
+}
+
+.profileUsername {
+  @apply text-lg md:text-2xl font-bold;
+}
+
+.topSection {
+  @apply flex w-full items-center justify-center gap-8 md:gap-16;
+}
+
+.bottomSection {
+  @apply flex flex-col w-full items-start justify-start;
+}
+
+.topSection,
+.bottomSection {
+  @apply w-full px-8 py-2 md:py-4 md:px-16;
+}
+
+.otherProfileHeading {
+  @apply text-xl md:text-4xl w-full;
+  background-color: #33ff3322;
+}
+
+.otherProfileContent {
+  @apply w-full p-2 text-base md:text-lg font-medium min-h-40;
+  background-color: #1d293d;
+}
+
+.otherProfileContent.intro {
+  @apply min-h-24;
+}
+
 .avatarOverlay {
   @apply absolute top-0 left-0 w-full h-full;
   background-color: var(--text-color);
   opacity: 0.5;
   animation: none;
   z-index: 2; /* Ensure overlay is above avatar but below noise effect */
+}
+
+.avatarUsernameWrapper {
+  @apply flex flex-col items-center justify-center;
 }
 
 .userAvatarOverlay {
@@ -29,18 +112,18 @@
 
 .avatar:hover {
   /* Even more intense on hover */
-  animation: glitch 0.2s infinite;
+  animation: glitch 0.8s infinite;
 }
 
 .avatarContainer {
-  @apply w-32 h-32 mb-4 relative;
+  @apply w-24 h-24 md:w-32 md:h-32 mb-4 relative;
   border: 4px solid var(--text-color);
   overflow: hidden;
   position: relative;
 }
 
 .userAvatarContainer {
-  @apply w-32 h-32 mb-4 relative;
+  @apply w-24 h-24 md:w-32 md:h-32 mb-4 relative;
   border: 4px solid var(--secondary-text-color);
   overflow: hidden;
   position: relative;

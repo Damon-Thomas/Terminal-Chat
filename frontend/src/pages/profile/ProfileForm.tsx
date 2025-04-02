@@ -6,6 +6,8 @@ import InputWrapper from "../../components/input/InputWrapper";
 import Label from "../../components/input/Label";
 import LongInput from "../../components/input/LongInput";
 import blueAvatar from "../../assets/BlueFull.png";
+import ErrorMessage from "../../components/input/errorMessage";
+import profileAPI from "../../fetchers/profile";
 export default function ProfileForm({
   profile,
   setProfile,
@@ -25,6 +27,12 @@ export default function ProfileForm({
   >;
   username: string;
 }) {
+  const [errors, setErrors] = useState({
+    bio: "",
+    intro: "",
+  });
+  const [notices, setNotices] = useState("");
+
   interface HandleFormChangeEvent {
     target: { value: string };
   }
@@ -41,36 +49,125 @@ export default function ProfileForm({
       setProfile({ ...profile, intro: e.target.value });
     }
   }
-  console.log("username", username);
+
+  async function submitForm(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    console.log("submitting form", profile);
+    const bio = (e.target as HTMLFormElement).bio.value;
+    const intro = (e.target as HTMLFormElement).intro.value;
+    console.log("bio", bio, intro);
+    setNotices("");
+    const newErrors = {
+      bio: "",
+      intro: "",
+    };
+    if (bio.length > 250) {
+      newErrors.bio = `(${bio.length}) Bio must be less than 250 characters`;
+    }
+    if (intro.length > 100) {
+      newErrors.intro = `(${intro.length}) Intro must be less than 100 characters`;
+    }
+    if (bio.length === 0) {
+      newErrors.bio = "Bio cannot be empty";
+    }
+    if (intro.length === 0) {
+      newErrors.intro = "Intro cannot be empty";
+    }
+    setErrors(newErrors);
+    if (newErrors.bio || newErrors.intro) {
+      return;
+    }
+    try {
+      const response = await profileAPI.editProfile({
+        bio: bio,
+        intro: intro,
+      });
+      console.log("response", response);
+      if (response.failure) {
+        setErrors({
+          bio: "",
+          intro: response.message || "Error updating profile",
+        });
+      } else if (!response.failure) {
+        setNotices("Profile updated successfully");
+        setErrors({
+          bio: "",
+          intro: "",
+        });
+        setProfile({
+          ...profile,
+          bio: bio,
+          intro: intro,
+        });
+        setNotices("Profile updated successfully");
+      }
+    } catch (e) {
+      console.log("Error updating profile", e);
+    }
+  }
+
+  function resetNotices() {
+    setNotices("");
+    setErrors({
+      bio: "",
+      intro: "",
+    });
+  }
+
   return (
     <Form
       onSubmit={(e) => {
-        console.log(e);
-        e.preventDefault();
+        submitForm(e);
+        e.stopPropagation();
       }}
+      className="profileForm"
     >
-      <FormTitle title={`Edit Profile of ${username}`}></FormTitle>
-      <div className="userAvatarContainer">
-        <div className="userAvatarOverlay"></div>
-        <img src={blueAvatar} alt="Avatar" className="avatar" />
+      <div className="formContent">
+        <FormTitle title={`Edit Your Profile`}></FormTitle>
+        <div className="avatarUsernameWrapper">
+          <div className="userAvatarContainer">
+            <div className="userAvatarOverlay"></div>
+            <img src={blueAvatar} alt="Avatar" className="avatar" />
+          </div>
+          <FormTitle title={username}></FormTitle>
+        </div>
+        <InputWrapper className="profileInputWrapper">
+          <Label
+            className="otherProfileHeading glitch-received-message"
+            htmlFor="intro"
+            text="Intro"
+          />
+          <LongInput
+            className="profileInput intro"
+            value={profile.intro}
+            setValue={(value) =>
+              handleFormChange({ target: { value } }, "intro")
+            }
+            name="intro"
+            id="intro"
+            otherSetValue={resetNotices}
+          ></LongInput>
+          <ErrorMessage>{errors.intro}</ErrorMessage>
+          <Label
+            className=" otherProfileHeading glitch-received-message"
+            htmlFor="bio"
+            text="Bio"
+          />
+          <LongInput
+            className="profileInput bio"
+            value={profile.bio}
+            setValue={(value) => handleFormChange({ target: { value } }, "bio")}
+            name="bio"
+            id="bio"
+            otherSetValue={resetNotices}
+          ></LongInput>
+          <ErrorMessage>{notices === "" ? errors.bio : notices}</ErrorMessage>
+
+          <Button className="profileButton" size="large" type="submit">
+            Save
+          </Button>
+        </InputWrapper>
       </div>
-      <InputWrapper>
-        <Label htmlFor="intro" text="Intro" />
-        <LongInput
-          value={profile.intro}
-          setValue={(value) => handleFormChange({ target: { value } }, "intro")}
-          name="intro"
-          id="intro"
-        ></LongInput>
-        <Label htmlFor="bio" text="Bio" />
-        <LongInput
-          value={profile.bio}
-          setValue={(value) => handleFormChange({ target: { value } }, "bio")}
-          name="bio"
-          id="bio"
-        ></LongInput>
-        <Button type="submit">Save</Button>
-      </InputWrapper>
     </Form>
   );
 }

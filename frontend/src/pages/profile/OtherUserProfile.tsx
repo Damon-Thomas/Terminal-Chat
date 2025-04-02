@@ -77,14 +77,14 @@ export default function OtherUserProfile({
   }
 
   return (
-    <div className="profile-page">
-      <div>
+    <div className="profileMain">
+      <div className="topSection">
         <div className="avatarNameWrapper">
           <div className="avatarContainer">
             <div className="avatarOverlay"></div>
             <img src={greenAvatar} alt="Avatar" className="avatar" />
           </div>
-          <h1>{username}:</h1>
+          <h1 className="profileUsername">{username}</h1>
         </div>
         <div className="buttonWrapper">
           <GoToButton
@@ -92,23 +92,32 @@ export default function OtherUserProfile({
             id={pageUser.id}
             username={pageUser.username}
             group={pageUser.group}
+            className="otherProfileButton"
           >
             Message
           </GoToButton>
           {friends ? (
-            <Button className="addContactButton" onClick={handleRemoveFriend}>
+            <Button
+              className="addContactButton otherProfileButton"
+              onClick={handleRemoveFriend}
+            >
               Remove Friend
             </Button>
           ) : (
-            <Button className="addContactButton" onClick={handleAddFriend}>
+            <Button
+              className="addContactButton otherProfileButton"
+              onClick={handleAddFriend}
+            >
               Add Friend
             </Button>
           )}
         </div>
-        <h6>Intro</h6>
-        <p>{profile.intro}</p>
-        <h6>Bio</h6>
-        <p>{profile.bio}</p>
+      </div>
+      <div className="bottomSection">
+        <h6 className="otherProfileHeading glitch-received-message ">Intro</h6>
+        <p className="otherProfileContent intro">{profile.intro}</p>
+        <h6 className="otherProfileHeading glitch-received-message ">Bio</h6>
+        <p className="otherProfileContent bio">{profile.bio}</p>
       </div>
     </div>
   );

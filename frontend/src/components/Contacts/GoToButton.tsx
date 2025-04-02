@@ -11,6 +11,7 @@ export default function GoToButton({
   username,
   group,
   message = true,
+  className = "",
 }: {
   children: string;
   destination: string;
@@ -18,18 +19,22 @@ export default function GoToButton({
   username: string;
   group: boolean;
   message?: boolean;
+  className?: string;
 }) {
   const handleClick = () => {
     if (message) {
       contactActions.storeContact({ id, username, group: group });
     }
+    location.href = destination;
   };
 
   return (
-    <Link to={destination}>
-      <Button size="small" onClick={handleClick} className="button">
-        {children}
-      </Button>
-    </Link>
+    <Button
+      size="small"
+      onClick={handleClick}
+      className={`button ${className}`}
+    >
+      {children}
+    </Button>
   );
 }

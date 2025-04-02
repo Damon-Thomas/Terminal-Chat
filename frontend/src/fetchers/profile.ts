@@ -14,12 +14,7 @@ const getProfile = async (userId: string) => {
   return await response.json();
 };
 
-const editProfile = async (profile: {
-  color: string;
-  profilePic: string;
-  bio: string;
-  intro: string;
-}) => {
+const editProfile = async (profile: { bio: string; intro: string }) => {
   const response = await fetch(
     `${import.meta.env.VITE_ApiHost}/profile/updateProfile`,
     {
