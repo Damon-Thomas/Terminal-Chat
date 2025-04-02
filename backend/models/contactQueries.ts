@@ -165,6 +165,18 @@ const getUserContacts = async (userId: string) => {
   });
 };
 
+const areFriends = async (userId: string, friendId: string) => {
+  const friend = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      friends: {
+        where: { friendId: friendId },
+      },
+    },
+  });
+  return (friend?.friends?.length ?? 0) > 0;
+};
+
 export default {
   getUserContacts,
   getGroupsUserHasJoined,
@@ -173,4 +185,5 @@ export default {
   getGroupMembers,
   getNonContactUsers,
   getNonJoinedGroups,
+  areFriends,
 };

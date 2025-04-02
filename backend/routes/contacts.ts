@@ -46,4 +46,11 @@ router.post(
   contactControllers.getNonJoinedGroups as any
 );
 
+router.post(
+  "/areFriends",
+  userController.verifyToken,
+  userController.authUser,
+  contactControllers.areFriends as any
+);
+
 export default router;

@@ -96,6 +96,28 @@ const getNonJoinedGroups = async (page: number) => {
   return groups.json();
 };
 
+const isFriend = async (userId: string, friendId: string) => {
+  console.log("Checking if user is friend");
+  const response = await fetch(
+    `${import.meta.env.VITE_ApiHost}/contacts/areFriends`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ userId, friendId }),
+    }
+  );
+  if (response.ok) {
+    const data = await response.json();
+    return data.friends;
+  } else {
+    console.log("Error checking friendship status");
+    return false;
+  }
+};
+
 export default {
   getFriendsList,
   getActiveUserContacts,
@@ -103,4 +125,5 @@ export default {
   getGroupMembers,
   getNonContactUsers,
   getNonJoinedGroups,
+  isFriend,
 };

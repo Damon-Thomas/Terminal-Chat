@@ -102,6 +102,23 @@ const getNonJoinedGroups = async (req: UserRequest, res: Response) => {
   }
 };
 
+const areFriends = async (req: UserRequest, res: Response) => {
+  const { friendId } = req.body;
+  if (!req.user.id) {
+    return res
+      .status(400)
+      .json({ failure: true, message: "User not verified" });
+  }
+  try {
+    const friends = await contactQueries.areFriends(req.user.id, friendId);
+    res.status(200).json({ friends, failure: false });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown Error";
+    res.status(400).json({ message: errorMessage, error, failure: true });
+  }
+};
+
 export default {
   getActiveUserContacts,
   getFriendsList,
@@ -109,4 +126,5 @@ export default {
   getGroupMembers,
   getNonContactUsers,
   getNonJoinedGroups,
+  areFriends,
 };
