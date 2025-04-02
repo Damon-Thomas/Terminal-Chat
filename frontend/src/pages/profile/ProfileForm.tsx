@@ -25,14 +25,9 @@ export default function ProfileForm({
   >;
   username: string;
 }) {
-  const [name, setName] = useState("");
   interface HandleFormChangeEvent {
     target: { value: string };
   }
-
-  useEffect(() => {
-    setName(username);
-  }, [username]);
 
   type HandleFormChangeType = "bio" | "intro";
 
@@ -46,7 +41,7 @@ export default function ProfileForm({
       setProfile({ ...profile, intro: e.target.value });
     }
   }
-
+  console.log("username", username);
   return (
     <Form
       onSubmit={(e) => {
@@ -54,7 +49,7 @@ export default function ProfileForm({
         e.preventDefault();
       }}
     >
-      <FormTitle title={`Edit Profile of ${name}`}></FormTitle>
+      <FormTitle title={`Edit Profile of ${username}`}></FormTitle>
       <div className="userAvatarContainer">
         <div className="userAvatarOverlay"></div>
         <img src={blueAvatar} alt="Avatar" className="avatar" />

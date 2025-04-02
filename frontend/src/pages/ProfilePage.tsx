@@ -23,11 +23,22 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfileInfo = async () => {
-      const selectedUser = ContactActions.getStoredContact();
-      if (selectedUser === null || selectedUser.id === user.id) {
+      if (!user || !user.id) {
+        return;
+      }
+      const selectedUser = ContactActions.getStoredContact() || user;
+      if (!selectedUser) {
+        console.error("No user found");
+        return;
+      }
+      console.log("Selected user:", selectedUser);
+      if (selectedUser.id === user.id) {
         try {
-          setUsername(user.username);
+          setUsername(selectedUser.username);
           setOwnProfile(true);
+          if (!user.id) {
+            return;
+          }
           const response = await profile.getProfile(user.id);
           setProfileInfo(response);
         } catch (error) {
@@ -51,16 +62,17 @@ export default function ProfilePage() {
   return (
     <div className="profile-page">
       {ownProfile ? (
-        <ProfileForm
-          profile={profileInfo}
-          setProfile={setProfileInfo}
-          username={username}
-        ></ProfileForm>
+        username ? (
+          <ProfileForm
+            profile={profileInfo}
+            setProfile={setProfileInfo}
+            username={username}
+          />
+        ) : (
+          <div>Loading profile...</div>
+        )
       ) : (
-        <OtherUserProfile
-          profile={profileInfo}
-          username={username}
-        ></OtherUserProfile>
+        <OtherUserProfile profile={profileInfo} username={username} />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import "./profile.css";
 import greenAvatar from "../../assets/BlueFull.png";
 import GoToButton from "../../components/Contacts/GoToButton";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ContactActions from "../../context/ContactActions";
 import useAuth from "../../context/useAuth";
 import getContacts from "../../fetchers/getContacts";

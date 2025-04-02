@@ -17,6 +17,7 @@ interface Profile {
 }
 
 const getProfile = async (req: UserRequest, res: Response) => {
+  console.log("getProfile", req.body);
   const { userId } = req.body;
   const profile: Profile | null = await profileQueries.getProfile(userId);
   if (profile) {

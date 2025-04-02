@@ -10,6 +10,7 @@ const getProfile = async (userId: string) => {
       body: JSON.stringify({ userId }),
     }
   );
+  console.log("response", response);
   return await response.json();
 };
 
