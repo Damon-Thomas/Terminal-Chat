@@ -80,11 +80,14 @@ export default function OtherUserProfile({
     <div className="profileMain">
       <div className="topSection">
         <div className="avatarNameWrapper">
+          <h1 className="profileUsername otherProfileHeading glitch-received-message ">
+            {username}
+          </h1>
+
           <div className="avatarContainer">
             <div className="avatarOverlay"></div>
             <img src={greenAvatar} alt="Avatar" className="avatar" />
           </div>
-          <h1 className="profileUsername">{username}</h1>
         </div>
         <div className="buttonWrapper">
           <GoToButton
@@ -114,10 +117,16 @@ export default function OtherUserProfile({
         </div>
       </div>
       <div className="bottomSection">
-        <h6 className="otherProfileHeading glitch-received-message ">Intro</h6>
-        <p className="otherProfileContent intro">{profile.intro}</p>
-        <h6 className="otherProfileHeading glitch-received-message ">Bio</h6>
-        <p className="otherProfileContent bio">{profile.bio}</p>
+        <div className="subSection">
+          <h6 className="otherProfileHeading glitch-received-message ">
+            Intro
+          </h6>
+          <p className="otherProfileContent intro">{profile.intro}</p>
+        </div>
+        <div className="subSection">
+          <h6 className="otherProfileHeading glitch-received-message ">Bio</h6>
+          <p className="otherProfileContent bio">{profile.bio}</p>
+        </div>{" "}
       </div>
     </div>
   );

@@ -123,50 +123,59 @@ export default function ProfileForm({
       className="profileForm"
     >
       <div className="formContent">
-        <FormTitle title={`Edit Your Profile`}></FormTitle>
-        <div className="avatarUsernameWrapper">
-          <div className="userAvatarContainer">
-            <div className="userAvatarOverlay"></div>
-            <img src={blueAvatar} alt="Avatar" className="avatar" />
+        <div className="blockOne">
+          <FormTitle className="profileTitle" title={username}></FormTitle>
+          <div className="avatarUsernameWrapper">
+            <div className="userAvatarContainer">
+              <div className="userAvatarOverlay"></div>
+              <img src={blueAvatar} alt="Avatar" className="avatar" />
+            </div>
           </div>
-          <FormTitle title={username}></FormTitle>
         </div>
-        <InputWrapper className="profileInputWrapper">
-          <Label
-            className="otherProfileHeading glitch-received-message"
-            htmlFor="intro"
-            text="Intro"
-          />
-          <LongInput
-            className="profileInput intro"
-            value={profile.intro}
-            setValue={(value) =>
-              handleFormChange({ target: { value } }, "intro")
-            }
-            name="intro"
-            id="intro"
-            otherSetValue={resetNotices}
-          ></LongInput>
-          <ErrorMessage>{errors.intro}</ErrorMessage>
-          <Label
-            className=" otherProfileHeading glitch-received-message"
-            htmlFor="bio"
-            text="Bio"
-          />
-          <LongInput
-            className="profileInput bio"
-            value={profile.bio}
-            setValue={(value) => handleFormChange({ target: { value } }, "bio")}
-            name="bio"
-            id="bio"
-            otherSetValue={resetNotices}
-          ></LongInput>
-          <ErrorMessage>{notices === "" ? errors.bio : notices}</ErrorMessage>
+        <div className="blockTwo">
+          <InputWrapper className="profileInputWrapper one">
+            <Label
+              className="otherProfileHeading glitch-received-message"
+              htmlFor="intro"
+              text="Intro"
+            />
+            <LongInput
+              className="profileInput intro"
+              value={profile.intro}
+              setValue={(value) =>
+                handleFormChange({ target: { value } }, "intro")
+              }
+              name="intro"
+              id="intro"
+              otherSetValue={resetNotices}
+            ></LongInput>
 
+            <ErrorMessage className="profileError">{errors.intro}</ErrorMessage>
+          </InputWrapper>
+          <InputWrapper className="profileInputWrapper two">
+            <Label
+              className=" otherProfileHeading glitch-received-message"
+              htmlFor="bio"
+              text="Bio"
+            />
+            <LongInput
+              className="profileInput bio"
+              value={profile.bio}
+              setValue={(value) =>
+                handleFormChange({ target: { value } }, "bio")
+              }
+              name="bio"
+              id="bio"
+              otherSetValue={resetNotices}
+            ></LongInput>
+            <ErrorMessage className="profileError">
+              {notices === "" ? errors.bio : notices}
+            </ErrorMessage>
+          </InputWrapper>
           <Button className="profileButton" size="large" type="submit">
             Save
           </Button>
-        </InputWrapper>
+        </div>
       </div>
     </Form>
   );

@@ -14,14 +14,8 @@ const signUp = async (
     }
   );
   const data = await response.json();
-  if (data.failure) {
-    return { success: false, errorMessage: data.message };
-  }
-  if (data.errorMessage) {
-    return { success: false, errorMessage: data.errorMessage };
-  }
-  if (data.error) {
-    return { success: false, errorMessage: data.error };
+  if (data.errors) {
+    return { success: false, errorMessage: data.errors[0].msg };
   }
   if (await data.token) {
     saveToken(data.token);

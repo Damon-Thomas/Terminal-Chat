@@ -81,14 +81,15 @@ export default function SignUp({
       }
     } else {
       if (info && info.success === false && info.errorMessage) {
+        console.log("Error signing up", info.errorMessage);
         setErrors({
-          username: "",
+          username: info.errorMessage,
           password: "",
-          confirmPassword: info.errorMessage,
+          confirmPassword: "",
         });
         return;
       }
-      console.log("Error logging in");
+      console.log("Error logging in", info);
     }
   }
 
