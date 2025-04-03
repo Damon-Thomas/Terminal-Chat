@@ -71,7 +71,7 @@ export default function CreateGroup() {
             name="groupName"
             onChange={clearErrors}
           />
-          <ErrorMessage>{error}</ErrorMessage>
+          <ErrorMessage className="groupError">{error}</ErrorMessage>
         </InputWrapper>
         <Button type="submit">Create Group</Button>
       </Form>

@@ -46,7 +46,7 @@ export default function GroupCard({
 
   return group.joined ? (
     <div className="groupCard ">
-      <h2>{group.groupName}</h2>
+      <h2 className="groupCardTitle ">{group.groupName}</h2>
       <div className="groupCardButtonWrapper">
         <GoToButton
           destination="/messages"
@@ -54,28 +54,30 @@ export default function GroupCard({
           id={group.id}
           username={group.groupName}
         >
-          Message Group
+          Message
         </GoToButton>
         <Button
           onClick={() => {
             leaveGroup(group.id);
           }}
         >
-          Leave Group
+          Leave
         </Button>
       </div>
     </div>
   ) : (
     <div className="groupCard ">
-      <h2>{group.groupName}</h2>
-      <Button
-        size="small"
-        onClick={() => {
-          joinGroup(group.id);
-        }}
-      >
-        Join Group
-      </Button>
+      <h2 className="groupCardTitle ">{group.groupName}</h2>
+      <div className="groupCardButtonWrapper">
+        <Button
+          size="small"
+          onClick={() => {
+            joinGroup(group.id);
+          }}
+        >
+          Join Group
+        </Button>
+      </div>
     </div>
   );
 }

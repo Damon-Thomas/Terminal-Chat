@@ -1,16 +1,40 @@
 @import "tailwindcss";
 
+.group-contact-page {
+  @apply flex flex-col w-full grow;
+}
+
 .userGroups {
   @apply flex flex-col my-2 md:my-4;
+  height: calc(50% - 20px); /* 50% of parent minus gap and margins */
+  min-height: 0; /* Important for flex child to respect max height */
   border-top: 1px solid var(--text-color);
 }
 
-/* .createGroup {
-  @apply ;
-} */
+.userGroupTitle {
+  @apply text-2xl md:text-4xl pl-2 mb-2;
+  background: rgba(51, 255, 51, 0.1);
+}
+
+.createGroup {
+  @apply p-2 mr-4;
+  border: 1px solid var(--text-color);
+}
 
 .createGroupForm {
   @apply m-0 p-0;
+}
+
+.groupError.errorWrapper > p {
+  @apply leading-none;
+}
+
+.createGroupForm > .inputWrapper {
+  @apply mb-0 md:mb-2;
+}
+
+.groupError.errorWrapper {
+  @apply flex items-center h-4 pl-2 md:h-2 md:mt-1;
 }
 
 .createGroupForm .inputWrapper {
@@ -22,16 +46,20 @@
 }
 
 .groupSelectorWrapper {
-  @apply flex flex-col overflow-y-auto gap-2;
+  @apply flex flex-col grow overflow-y-auto gap-2;
+  height: calc(
+    100% - 120px
+  ); /* Adjust 120px based on the height of your CreateGroup component */
   scrollbar-gutter: stable;
 }
 
 .createGroupTitle {
-  @apply text-2xl p-0 mb-2;
+  @apply text-2xl md:text-4xl px-2 mb-2;
+  background: rgba(51, 255, 51, 0.1);
 }
 
 .groupMain {
-  @apply grid p-2 md:p-4  w-full h-full overflow-hidden;
+  @apply flex flex-col p-2 md:p-4  w-full h-full overflow-hidden;
   grid-template-rows: (275px, 1fr, 1fr);
 }
 
@@ -40,19 +68,31 @@
 }
 
 .groupCard {
-  @apply flex flex-col min-w-52;
+  @apply flex flex-col h-fit p-2 overflow-y-scroll mb-0   w-[calc(50%-0.5rem)] md:w-fit md:min-w-56 lg:min-w-60 xl:min-w-72 2xl:min-w-80;
+  /* width: calc(50% - 0.5rem); */
+}
+
+.groupCardTitle {
+  @apply text-lg font-bold overflow-hidden leading-tight whitespace-nowrap text-ellipsis;
+  text-overflow: ellipsis;
 }
 
 .groupList {
-  @apply flex justify-center w-full h-full pb-4 md:pb-8;
+  @apply flex grow w-full;
+  overflow-y: auto;
+  min-height: 0; /* Important for nested flex containers */
 }
 
 .cardWrapper {
-  @apply flex flex-wrap justify-center gap-2;
+  @apply flex flex-wrap w-full h-fit justify-start items-start  gap-x-2 gap-y-0;
 }
 
 .groupCardButtonWrapper {
-  @apply flex gap-2;
+  @apply flex grow gap-2;
+}
+
+.groupCardButtonWrapper > .button.default {
+  @apply grow;
 }
 
 .groupNavButtons {

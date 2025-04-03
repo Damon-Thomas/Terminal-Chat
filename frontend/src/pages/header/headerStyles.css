@@ -3,3 +3,7 @@
 .header {
   @apply flex gap-2 justify-end px-2 pt-2 md:p-6 md:px-8;
 }
+
+.header > .button.default {
+  @apply min-w-24 text-sm md:text-lg md:min-w-32;
+}

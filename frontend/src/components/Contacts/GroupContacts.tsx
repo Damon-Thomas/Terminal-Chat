@@ -128,7 +128,9 @@ export default function GroupContacts() {
       <CreateGroup />
       <div className="groupSelectorWrapper">
         <div className="userGroups">
-          <h1 className="userGroupTitle">Groups</h1>
+          <h1 className="userGroupTitle glitch-received-message">
+            User Groups
+          </h1>
           <div className="groupList">
             <div className="cardWrapper">
               {userGroups.map((group) => {
@@ -154,7 +156,9 @@ export default function GroupContacts() {
           </div>
         </div>
         <div className="userGroups">
-          <h1 className="userGroupTitle">User Groups</h1>
+          <h1 className="userGroupTitle glitch-received-message">
+            Other Groups
+          </h1>
           <div className="groupList ">
             <div className="cardWrapper">
               {nonUserGroups.map((group) => {
