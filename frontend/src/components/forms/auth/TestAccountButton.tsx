@@ -16,6 +16,7 @@ export default function TestAccountButton() {
     //info = {id: data.id, username: data.username, success: data.success}
     if (info.success) {
       setCurrentUser(info);
+      location.href = "/";
       // add redirect?
       // Here we can handle success logging into test account
     } else {

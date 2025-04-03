@@ -12,8 +12,8 @@ export default function UserSpace() {
   }
   return (
     <div className="home-space user-space">
-      <h1>Your Space</h1>
-      <div>
+      <h1 className="contactHeading">Your Space</h1>
+      <div className="space-buttons">
         <Button type="button" className="" onClick={messageButtonHandler}>
           Messages
         </Button>

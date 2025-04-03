@@ -16,18 +16,21 @@ import GroupContactPage from "./pages/contactPages/GroupContactPage.tsx";
 import NonContactPage from "./pages/contactPages/NonContactPage.tsx";
 import MessagesPage from "./pages/MessagesPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
+import NonUserHome from "./pages/subPages/NonUserHome.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
     <Route errorElement={<ErrorPage />}>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+
         <Route path="/messages" element={<MessagesPage />}></Route>
         <Route path="/profile" element={<ProfilePage />}></Route>
         <Route path="/friends" element={<FriendContactPage />} />
         <Route path="/groups" element={<GroupContactPage />} />
         <Route path="/meet" element={<NonContactPage />} />
       </Route>
+      <Route path="/auth" element={<NonUserHome />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )

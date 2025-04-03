@@ -67,6 +67,7 @@ export default function LogIn({
         username: info.username,
         success: info.success,
       });
+      location.href = "/";
     } else {
       if (info && info.success === false && info.errorMessage) {
         setErrors({

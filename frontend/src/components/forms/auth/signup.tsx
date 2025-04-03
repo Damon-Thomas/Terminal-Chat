@@ -79,6 +79,7 @@ export default function SignUp({
       if (info.id && info.username) {
         setCurrentUser({ id: info.id, username: info.username, success: true });
       }
+      location.href = "/";
     } else {
       if (info && info.success === false && info.errorMessage) {
         console.log("Error signing up", info.errorMessage);
