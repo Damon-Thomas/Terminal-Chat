@@ -9,6 +9,13 @@ interface AuthenticatedRequest extends Request {
   token?: string;
 }
 
+interface DeleteRequest extends Request {
+  user?: any;
+  token?: string;
+  body: {
+    password?: string;
+  };
+}
 const authUser = asyncHandler(async (req: AuthenticatedRequest, res, next) => {
   interface DecodedToken {
     user: {
@@ -176,9 +183,14 @@ const logoutUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
   }
 });
 
-const deleteUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
+const deleteUser = asyncHandler(async (req: DeleteRequest, res, next) => {
   const user = req.user;
   const username = user.username;
+  const { password } = req.body;
+  if (password !== process.env.ADMIN_PASSWORD) {
+    res.status(400).json({ failure: true, message: "Invalid password" });
+    return;
+  }
   const userDeleter = await userQueries.deleteUser(username);
   if (userDeleter && !userDeleter.failure) {
     res.status(200).json({ message: "User deleted", failure: false });

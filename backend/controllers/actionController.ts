@@ -33,40 +33,6 @@ const sendMessage = async (req: UserRequest, res: Response) => {
   }
 };
 
-const likeMessage = async (req: UserRequest, res: Response) => {
-  const userId = req.user.id;
-
-  if (!userId) {
-    return res.status(400).json({ failure: true, message: "User not found" });
-  }
-
-  const { messageId } = req.body;
-  try {
-    const newLike = await actionQueries.likeMessage(userId, messageId);
-    res.status(200).json({ newLike, failure: false });
-  } catch (e) {
-    console.log("error liking message", e);
-    res.status(400).json({ error: e, failure: true });
-  }
-};
-
-const unLikeMessage = async (req: UserRequest, res: Response) => {
-  const userId = req.user.id;
-
-  if (!userId) {
-    return res.status(400).json({ failure: true, message: "User not found" });
-  }
-  const { messageId } = req.body;
-
-  try {
-    const unLike = await actionQueries.unLikeMessage(userId, messageId);
-    res.status(200).json(unLike);
-  } catch (e) {
-    console.log("error unliking message", e);
-    res.status(400).json(e);
-  }
-};
-
 const addFriend = async (req: UserRequest, res: Response) => {
   const userId = req.user.id;
   if (!userId) {
@@ -90,6 +56,7 @@ const deleteFriend = async (req: UserRequest, res: Response) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { friendId } = req.body;
+
   try {
     const deleteFriend = await actionQueries.deleteFriend(userId, friendId);
     res.status(200).json({ deleteFriend, failure: false });
@@ -146,6 +113,7 @@ const leaveGroup = async (req: UserRequest, res: Response) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupId } = req.body;
+
   try {
     const leaveGroup = await actionQueries.leaveGroup(userId, groupId);
     res.status(200).json({ leaveGroup, failure: false });
@@ -156,7 +124,10 @@ const leaveGroup = async (req: UserRequest, res: Response) => {
 };
 
 const deleteGroup = async (req: UserRequest, res: Response) => {
-  const { groupId } = req.body;
+  const { groupId, password } = req.body;
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return res.status(400).json({ failure: true, message: "Invalid password" });
+  }
   try {
     const deleteGroup = await actionQueries.deleteGroup(groupId, req.user.id);
     if (
@@ -179,8 +150,6 @@ const deleteGroup = async (req: UserRequest, res: Response) => {
 
 export default {
   sendMessage,
-  likeMessage,
-  unLikeMessage,
   addFriend,
   deleteFriend,
   makeGroup,

@@ -27,8 +27,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "allowSyntheticDefaultImports": true
+    "rootDir": ".",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "declaration": true
   },
   "include": ["./**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "./dist/**/*"]
 }

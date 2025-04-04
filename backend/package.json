@@ -7,11 +7,12 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && tsc",
     "start": "node dist/app.js",
     "dev": "NODE_ENV=development node --loader ts-node/esm app.ts",
-    "test": "NODE_ENV=test && jest --detectOpenHandles",
-    "testHandles": "NODE_ENV=test && jest --detectOpenHandles"
+    "test": "npm run build && NODE_ENV=test jest --detectOpenHandles",
+    "testHandles": "npm run build && NODE_ENV=test jest --detectOpenHandles"
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",
@@ -29,6 +30,7 @@
     "jest": "^29.7.0",
     "prisma": "^6.4.1",
     "supertest": "^7.0.0",
+    "ts-jest": "^29.3.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   },

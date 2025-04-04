@@ -343,3 +343,8 @@ body {
 .contactHeading {
   @apply text-2xl;
 }
+
+.welcomeMessage {
+  @apply text-2xl md:text-4xl lg:text-4xl w-3/4 text-wrap;
+  color: var(--system-message-color);
+}

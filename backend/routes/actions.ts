@@ -14,20 +14,6 @@ router.post(
 );
 
 router.post(
-  "/likeMessage",
-  userController.verifyToken,
-  userController.authUser,
-  actionController.likeMessage as any
-);
-
-router.delete(
-  "/unLikeMessage",
-  userController.verifyToken,
-  userController.authUser,
-  actionController.unLikeMessage as any
-);
-
-router.post(
   "/addFriend",
   userController.verifyToken,
   userController.authUser,
