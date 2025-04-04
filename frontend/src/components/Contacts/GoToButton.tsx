@@ -29,11 +29,7 @@ export default function GoToButton({
   };
 
   return (
-    <Button
-      size="small"
-      onClick={handleClick}
-      className={`button ${className}`}
-    >
+    <Button size="small" onClick={handleClick} className={`${className}`}>
       {children}
     </Button>
   );

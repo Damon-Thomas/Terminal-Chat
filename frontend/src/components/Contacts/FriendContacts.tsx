@@ -140,7 +140,7 @@ export default function FriendContacts() {
         )}
       </div>
 
-      <div className="navButs">
+      <div className="contactPageNav">
         <Button onClick={() => handlePageChange(page - 1)}>Prev</Button>
         <span>Page {page}</span>
         <Button onClick={() => handlePageChange(page + 1)}>Next</Button>

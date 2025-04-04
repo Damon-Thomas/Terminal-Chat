@@ -136,5 +136,21 @@
 }
 
 .butWrap > .button.default {
-  @apply grow md:grow-0 min-w-8 md:min-w-36;
+  @apply md:min-w-36 w-[calc(50%-0.5rem)] md:w-fit;
+}
+
+.noticeWrapper {
+  @apply md:min-w-36 w-[calc(50%-0.5rem)] md:w-fit flex justify-center items-center  text-center;
+}
+
+.butClickedNotice {
+  @apply leading-0 text-lg w-fit;
+}
+
+.contactPageNav {
+  @apply flex w-full justify-center items-center mt-4 gap-4 text-xl;
+}
+
+.contactPageNav > .button.default {
+  @apply min-w-36;
 }

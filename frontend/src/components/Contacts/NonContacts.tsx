@@ -61,49 +61,60 @@ export default function NonContacts() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-lg md:text-2xl lg:text-4xl">New People</h1>
-      <div className="flex flex-wrap gap-4">
+    <div className="friend-main">
+      <h1 className="userGroupTitle friendsTitle">New People</h1>
+      <div className="friendList">
         {nonContacts.map((user) =>
           !user.friend ? (
-            <div key={user.id} className="flex flex-col gap-2">
-              <h2>{user.username}</h2>
-              <Button
-                type="button"
-                className=""
-                onClick={() => {
-                  addFriend(user.id);
-                }}
-              >
-                Add
-              </Button>
-              <GoToButton
-                destination="/profile"
-                id={user.id}
-                username={user.username}
-                group={false}
-              >
-                Profile
-              </GoToButton>
+            <div key={user.id} className="friendCard">
+              <h2 className="friendCardTitle glitch-received-message">
+                {user.username}
+              </h2>
+              <div className="butWrap">
+                <Button
+                  type="button"
+                  className=""
+                  onClick={() => {
+                    addFriend(user.id);
+                  }}
+                >
+                  Add
+                </Button>
+                <GoToButton
+                  destination="/profile"
+                  id={user.id}
+                  username={user.username}
+                  group={false}
+                >
+                  Profile
+                </GoToButton>
+              </div>
             </div>
           ) : (
-            <div key={user.id} className="flex flex-col gap-2">
-              <h2>{user.username}</h2>
-              <p>Friend</p>
-              <GoToButton
-                destination="/messages"
-                id={user.id}
-                username={user.username}
-                group={false}
-              >
-                Message
-              </GoToButton>
+            <div key={user.id} className="friendCard">
+              <h2 className="friendCardTitle glitch-received-message">
+                {user.username}
+              </h2>
+
+              <div className="butWrap">
+                <div className="noticeWrapper">
+                  <p className="butClickedNotice">Friend</p>
+                </div>
+                <GoToButton
+                  destination="/messages"
+                  id={user.id}
+                  username={user.username}
+                  group={false}
+                >
+                  Message
+                </GoToButton>
+              </div>
             </div>
           )
         )}
       </div>
 
-      <div className="flex justify-center mt-4 gap-2">
+      <div className="contactPageNav">
         <Button onClick={() => handlePageChange(page - 1, false)}>Prev</Button>
         <span>Page {page}</span>
         <Button onClick={() => handlePageChange(page + 1, true)}>Next</Button>
