@@ -152,5 +152,5 @@
 }
 
 .contactPageNav > .button.default {
-  @apply min-w-36;
+  @apply grow text-lg max-w-52;
 }
