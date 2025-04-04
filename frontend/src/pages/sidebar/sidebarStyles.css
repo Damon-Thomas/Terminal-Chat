@@ -2,13 +2,18 @@
 
 /* Container for the sidebar and trigger */
 .sidebarOverlay {
-  @apply fixed flex md:relative h-full z-30;
+  @apply fixed flex md:relative h-[calc(100%-52px)] md:h-[calc(100%-8px)] z-30 mt-2;
 }
 
 /* When closed, adjust the overlay to not take space */
 .sidebarOverlay.closed {
   @apply transform transition-all duration-300 ease-in-out;
-  width: 0; /* Set width to 0 when closed */
+  width: 0;
+}
+
+.sidebarOverlay.open {
+  @apply transform transition-all duration-300 ease-in-out;
+  width: 16rem; /* Use fixed width for consistent animation */
 }
 
 .messageAreaDefault {
@@ -23,6 +28,7 @@
 .sidebar {
   @apply h-full w-64; /* Default width */
   @apply transform transition-all duration-300 ease-in-out; /*animate open */
+  @apply flex flex-col; /* Flexbox for layout */
   background-color: var(--background-color, #333);
   color: var(--text-color, green);
   border: 1px solid var(--text-color, green);
@@ -53,22 +59,20 @@
   @apply w-8 h-8;
 }
 
-/* Position when sidebar is open */
-.triggerIcon {
-  @apply absolute z-40 transition-all duration-300 ease-in-out;
-  right: -2.5rem; /* Default position to the right of sidebar */
-}
-
 /* Position when sidebar is closed - for mobile */
 .triggerIcon.closed {
   @apply absolute z-40 transition-all duration-300 ease-in-out;
+  left: 0.5rem;
+}
 
-  left: 0.5rem; /* Position at left edge on mobile */
+.triggerIcon.open {
+  @apply absolute z-40 transition-all duration-300 ease-in-out;
+  right: -2.5rem;
 }
 
 /* Content styles with transitions */
 .barContent {
-  @apply p-4 transition-opacity duration-300 ease-in-out;
+  @apply p-2 py-0.5 grow h-full overflow-hidden transition-opacity duration-300 ease-in-out;
   opacity: 1;
 }
 
@@ -83,8 +87,7 @@
 }
 
 .sideTitle {
-  @apply font-bold text-lg pt-2  my-2 md:my-4 text-center;
-  border-top: 1px solid var(--text-color, green);
+  @apply font-bold text-lg pt-0  my-1  text-center;
 }
 
 .pageNav {
@@ -103,4 +106,18 @@
 .sideItem:hover {
   background-color: var(--background-color, black);
   color: var(--text-color, green);
+}
+
+.sidebarSection {
+  @apply flex flex-col h-[calc((100%-4px)/2)] overflow-hidden;
+  border-bottom: 1px solid var(--text-color, green);
+}
+
+.itemContainer {
+  @apply flex flex-col grow overflow-y-scroll gap-1;
+  scrollbar-width: thin;
+}
+
+.sideItem {
+  @apply text-sm md:text-lg m-0 py-1 grow leading-none;
 }

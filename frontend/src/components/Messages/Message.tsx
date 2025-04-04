@@ -6,12 +6,14 @@ export default function Message({
   user,
   id,
   createdAt,
+  group = false,
 }: {
   content: string;
   username: string;
   user: boolean;
   id: string;
   createdAt: string;
+  group?: boolean;
 }) {
   function goToProfileHandler() {
     ContactActions.storeContact({
@@ -31,8 +33,14 @@ export default function Message({
     >
       <p className="message-content">{content}</p>
 
-      <p className="message-username" onClick={goToProfileHandler}>
-        {username} sent at {createdAt}
+      <p className="message-username">
+        <span
+          className={user || !group ? "" : "link"}
+          onClick={user || !group ? () => {} : goToProfileHandler}
+        >
+          {username}
+        </span>{" "}
+        sent at {createdAt}
       </p>
     </div>
   );

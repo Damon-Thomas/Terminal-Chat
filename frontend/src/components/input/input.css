@@ -12,6 +12,7 @@
   font-weight: 700;
   outline: none;
   animation: flicker 1.5s infinite alternate;
+  white-space: pre-wrap;
 }
 
 .inputWrapper {

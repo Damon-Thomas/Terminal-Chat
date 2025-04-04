@@ -10,6 +10,7 @@ export default function LongInput({
   required = false,
   placeholder = "",
   otherSetValue = () => {},
+  onKeyDown = () => {},
 }: {
   rows?: number;
   className?: string;
@@ -20,6 +21,7 @@ export default function LongInput({
   required?: boolean;
   placeholder?: string;
   otherSetValue?: () => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 }) {
   function changeHandler(value: string) {
     setValue(value);
@@ -40,6 +42,8 @@ export default function LongInput({
         e.stopPropagation();
         (e.target as HTMLTextAreaElement).focus();
       }}
+      onKeyDown={onKeyDown}
+      style={{ whiteSpace: "pre-wrap" }}
     />
   );
 }

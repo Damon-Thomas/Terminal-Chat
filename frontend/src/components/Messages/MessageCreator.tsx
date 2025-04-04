@@ -49,6 +49,7 @@ export default function MessageCreator({
           username,
           content,
           authorId: userRef.current.id,
+          group, // Include the group property
         },
         ...prevMessages,
       ]);
@@ -86,6 +87,15 @@ export default function MessageCreator({
         placeholder="Type a message..."
         className="messageInput"
         otherSetValue={clearErrors}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            const submitButton = document.querySelector(
+              ".messageButton"
+            ) as HTMLButtonElement;
+            submitButton?.click();
+          }
+        }}
       />
       <ErrorMessage>{error}</ErrorMessage>
       <Button type="submit" className="messageButton" size="small">

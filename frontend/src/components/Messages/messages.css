@@ -82,9 +82,16 @@
 
 .message-content {
   @apply text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .user-glitch-message .message-content,
 .user-glitch-message .message-username {
   text-align: right;
+}
+
+.link {
+  color: var(--third-color);
+  cursor: pointer;
 }

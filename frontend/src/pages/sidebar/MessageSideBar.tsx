@@ -153,19 +153,21 @@ export default function MessageSideBar({
   }, [convoPage, convos]);
 
   return (
-    <div className={`sidebarOverlay ${!trigger ? "closed" : ""}`}>
+    <div className={`sidebarOverlay ${!trigger ? "closed" : "open"}`}>
       <div className={`sidebar ${trigger ? "openBar" : "closedBar"}`}>
         <aside className="barContent">
-          <div className="barContent">
+          <div className="sidebarSection">
             <SideTitle>Groups</SideTitle>
-            {groupSelection.map((group, index) => (
-              <SideItem
-                clickHandler={() => groupClickHandler(group)}
-                key={index}
-              >
-                {group.groupName}
-              </SideItem>
-            ))}
+            <div className="itemContainer">
+              {groupSelection.map((group, index) => (
+                <SideItem
+                  clickHandler={() => groupClickHandler(group)}
+                  key={index}
+                >
+                  {group.groupName}
+                </SideItem>
+              ))}
+            </div>
             <div className="pageNav">
               <Button
                 size="small"
@@ -178,15 +180,19 @@ export default function MessageSideBar({
                 Next
               </Button>
             </div>
-            <SideTitle>Conversations</SideTitle>
-            {convoSelection.map((convo, index) => (
-              <SideItem
-                clickHandler={() => convoClickHandler(convo)}
-                key={index}
-              >
-                {convo.username}
-              </SideItem>
-            ))}
+          </div>
+          <div className="sidebarSection">
+            <div className="itemContainer">
+              <SideTitle>Conversations</SideTitle>
+              {convoSelection.map((convo, index) => (
+                <SideItem
+                  clickHandler={() => convoClickHandler(convo)}
+                  key={index}
+                >
+                  {convo.username}
+                </SideItem>
+              ))}
+            </div>
             <div className="pageNav">
               <Button
                 size="small"
@@ -203,7 +209,7 @@ export default function MessageSideBar({
         </aside>
       </div>
 
-      <div className={`triggerIcon ${!trigger ? "closed" : ""}`}>
+      <div className={`triggerIcon ${!trigger ? "closed" : "open"}`}>
         <button
           onClick={() => {
             setTrigger(!trigger);

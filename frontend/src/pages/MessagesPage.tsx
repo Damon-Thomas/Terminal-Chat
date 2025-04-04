@@ -16,6 +16,7 @@ export type Message = {
   content: string;
   authorId: string;
   username: string;
+  group: boolean;
 };
 
 export default function MessagesPage() {
@@ -86,7 +87,7 @@ export default function MessagesPage() {
                 ) : (
                   <p>
                     Messages with{" "}
-                    <span onClick={goToProfileHandler}>
+                    <span onClick={goToProfileHandler} className="link">
                       {" "}
                       {selectedContact.username}{" "}
                     </span>
@@ -100,6 +101,7 @@ export default function MessagesPage() {
                     id={message.authorId}
                     user={user.id === message.authorId}
                     createdAt={new Date(message.createdAt).toLocaleString()}
+                    group={group}
                   ></Message>
                 ))}
               </MessageContainer>
