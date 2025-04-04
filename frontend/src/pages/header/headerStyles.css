@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .header {
-  @apply flex gap-2 justify-end px-2 pt-2 md:p-6 md:px-8;
+  @apply flex gap-2 justify-end px-2 pt-2 md:px-8;
 }
 
 .header > .button.default {

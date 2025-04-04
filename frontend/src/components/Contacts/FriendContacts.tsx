@@ -103,38 +103,44 @@ export default function FriendContacts() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="text-lg md:text-2xl lg:text-4xl">Friends</h1>
-      <div className="flex flex-wrap gap-4">
+    <div className="friend-main">
+      <h1 className="userGroupTitle friendsTitle">Friends</h1>
+      <div className="friendList">
         {friendPage.map((user) =>
           !user.friend ? (
-            <div key={user.id} className="flex flex-col gap-2">
-              <h2>{user.username}</h2>
-              <Button onClick={() => messageFriend(user.id, user.username)}>
-                Message
-              </Button>
-              <Button onClick={() => addFriend(user.id)}>Add Friend</Button>
+            <div key={user.id} className="friendCard">
+              <h2 className="friendCardTitle glitch-received-message">
+                {user.username}
+              </h2>
+              <div className="butWrap">
+                <Button onClick={() => messageFriend(user.id, user.username)}>
+                  Message
+                </Button>
+                <Button onClick={() => addFriend(user.id)}>Add Friend</Button>
+              </div>
             </div>
           ) : (
-            <div key={user.id} className="flex flex-col gap-2">
-              <h2>{user.username}</h2>
-              <Button onClick={() => messageFriend(user.id, user.username)}>
-                Message
-              </Button>
-              <Button
-                onClick={() => goToProfileHandler(user.id, user.username)}
-              >
-                Profile
-              </Button>
-              <Button onClick={() => removeFriend(user.id)}>
-                Delete Friend
-              </Button>
+            <div key={user.id} className="friendCard">
+              <h2 className="friendCardTitle glitch-received-message">
+                {user.username}
+              </h2>
+              <div className="butWrap">
+                <Button onClick={() => messageFriend(user.id, user.username)}>
+                  Message
+                </Button>
+                <Button
+                  onClick={() => goToProfileHandler(user.id, user.username)}
+                >
+                  Profile
+                </Button>
+                <Button onClick={() => removeFriend(user.id)}>UnFriend</Button>
+              </div>
             </div>
           )
         )}
       </div>
 
-      <div className="flex justify-center mt-4 gap-2">
+      <div className="navButs">
         <Button onClick={() => handlePageChange(page - 1)}>Prev</Button>
         <span>Page {page}</span>
         <Button onClick={() => handlePageChange(page + 1)}>Next</Button>
