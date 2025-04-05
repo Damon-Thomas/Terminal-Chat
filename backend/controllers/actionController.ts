@@ -10,7 +10,7 @@ const sendMessage = async (req: UserRequest, res: Response) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ failure: true, errors: errors.array() });
   }
-  const { message, sentTo, username, destinationType, pinned } = req.body;
+  const { message, sentTo, username, destinationType } = req.body;
   if (!sentTo) {
     return res
       .status(400)
@@ -22,8 +22,7 @@ const sendMessage = async (req: UserRequest, res: Response) => {
       message,
       username,
       sentTo,
-      destinationType,
-      pinned
+      destinationType
     );
 
     res.status(200).json(newMessage);
@@ -130,11 +129,7 @@ const deleteGroup = async (req: UserRequest, res: Response) => {
   }
   try {
     const deleteGroup = await actionQueries.deleteGroup(groupId, req.user.id);
-    if (
-      deleteGroup &&
-      deleteGroup.failure &&
-      deleteGroup.message === "User is not the group administrator!"
-    ) {
+    if (deleteGroup && deleteGroup.failure) {
       return res.status(403).json({ ...deleteGroup });
     }
     if (deleteGroup && !deleteGroup.failure) {

@@ -18,7 +18,7 @@ router.post(
   contactControllers.getUserGroups as any
 );
 
-router.get(
+router.post(
   "/getGroupMembers",
   userController.verifyToken,
   userController.authUser,

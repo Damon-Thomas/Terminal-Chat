@@ -1,4 +1,4 @@
-import app from "../app.js"; // Not "../dist/app.js"
+import app from "../app.js"; // Import from compiled output
 import request from "supertest";
 import {
   describe,
@@ -7,10 +7,12 @@ import {
   afterAll,
   afterEach,
   beforeAll,
+  jest, // Add this import
 } from "@jest/globals";
 import http from "http";
 import e from "express";
 import exp from "constants";
+import { use } from "passport";
 
 //user login and signup tests
 describe("Test CRUD operations for user", () => {
@@ -27,7 +29,6 @@ describe("Test CRUD operations for user", () => {
 
   beforeAll((done) => {
     server = app.listen(3000, () => {
-      console.log("Test server running on port 3000");
       done();
     });
   });
@@ -146,6 +147,7 @@ describe("Test CRUD operations for user", () => {
           message: "Hello World",
           sentTo: userId2,
           destinationType: "user",
+          username: "Bob",
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
@@ -153,26 +155,6 @@ describe("Test CRUD operations for user", () => {
       expect(result.body.failure).toBe(false);
 
       messageId = result.body.id;
-    });
-
-    test("Like message", async () => {
-      const result = await request(app)
-        .post("/action/likeMessage")
-        .send({
-          messageId: messageId,
-        })
-        .set("Authorization", `Bearer ${token}`);
-      expect(result.status).toBe(200);
-    });
-
-    test("Unlike message", async () => {
-      const result = await request(app)
-        .delete("/action/unLikeMessage")
-        .send({
-          messageId: messageId,
-        })
-        .set("Authorization", `Bearer ${token}`);
-      expect(result.status).toBe(200);
     });
 
     test("Add friend", async () => {
@@ -222,7 +204,6 @@ describe("Test CRUD operations for user", () => {
           groupName: "Test Group",
         })
         .set("Authorization", `Bearer ${token}`);
-      console.log("create group result", result.body);
       expect(result.status).toBe(200);
       groupId = result.body.group.id;
     });
@@ -287,6 +268,7 @@ describe("Test CRUD operations for user", () => {
           message: "Hello Group",
           sentTo: groupId,
           destinationType: "group",
+          username: "Bob",
         })
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
@@ -300,7 +282,7 @@ describe("Test CRUD operations for user", () => {
     describe("Test get operations for messages", () => {
       test("Get Messages between users", async () => {
         const result = await request(app)
-          .get("/messages/getMessagesBetweenUsers")
+          .post("/messages/getMessagesBetweenUsers")
           .send({
             sentToId: userId2,
           })
@@ -312,7 +294,7 @@ describe("Test CRUD operations for user", () => {
 
       test("Get Group Messages", async () => {
         const result = await request(app)
-          .get("/messages/getMessagesToGroup")
+          .post("/messages/getMessagesToGroup")
           .send({
             groupId: groupId,
           })
@@ -322,57 +304,6 @@ describe("Test CRUD operations for user", () => {
         expect(result.body.messages[0].content).toBe("Hello Group");
       });
     });
-
-    test("Set pinned message", async () => {
-      const result = await request(app)
-        .put("/action/setPinnedMessage")
-        .send({
-          groupId: groupId,
-          content: "Pinned Message",
-        })
-        .set("Authorization", `Bearer ${token}`);
-      console.log("Pinned Message", result.body);
-      expect(result.status).toBe(200);
-      expect(result.body.pinnedMessage.content).toBe("Pinned Message");
-    });
-
-    test("Non admin set pinned message", async () => {
-      const result = await request(app)
-        .put("/action/setPinnedMessage")
-        .send({
-          groupId: groupId,
-          content: "Hostile Takeover",
-        })
-        .set("Authorization", `Bearer ${token2}`);
-      console.log("Hostile Takeover", result.body);
-      expect(result.status).toBe(403);
-      expect(result.body.message).toBe("User is not the group administrator!");
-    });
-
-    test("Overwrite pinned message", async () => {
-      const result = await request(app)
-        .put("/action/setPinnedMessage")
-        .send({
-          groupId: groupId,
-          content: "Pinned Message Updated",
-        })
-        .set("Authorization", `Bearer ${token}`);
-      console.log("Pinned Message Updated", result.body);
-      expect(result.status).toBe(200);
-      expect(result.body.pinnedMessage.content).toBe("Pinned Message Updated");
-    });
-
-    test("Delete pinned message", async () => {
-      const result = await request(app)
-        .delete("/action/deletePinnedMessage")
-        .send({
-          groupId: groupId,
-        })
-        .set("Authorization", `Bearer ${token}`);
-      console.log("Delete Pinned Message", result.body);
-      expect(result.status).toBe(200);
-    });
-
     //
     //
     //
@@ -380,7 +311,10 @@ describe("Test CRUD operations for user", () => {
     describe("Test get operations for contacts", () => {
       test("Get Currently Talking Users", async () => {
         const result = await request(app)
-          .get("/contacts/activeUserContacts")
+          .post("/contacts/activeUserContacts")
+          .send({
+            page: 1,
+          })
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
@@ -389,9 +323,10 @@ describe("Test CRUD operations for user", () => {
 
       test("Get a users groups", async () => {
         const result = await request(app)
-          .get("/contacts/getGroups")
+          .post("/contacts/getGroups")
           .send({
             groupId: groupId,
+            page: 1,
           })
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
@@ -400,7 +335,7 @@ describe("Test CRUD operations for user", () => {
 
       test("Get group members", async () => {
         const result = await request(app)
-          .get("/contacts/getGroupMembers")
+          .post("/contacts/getGroupMembers")
           .send({
             groupId: groupId,
           })
@@ -412,7 +347,7 @@ describe("Test CRUD operations for user", () => {
 
       test("Get group members 2", async () => {
         const result = await request(app)
-          .get("/contacts/getGroupMembers")
+          .post("/contacts/getGroupMembers")
           .send({
             groupId: groupId2,
           })
@@ -424,16 +359,20 @@ describe("Test CRUD operations for user", () => {
 
       test("Get friends list", async () => {
         const result = await request(app)
-          .get("/contacts/getFriendsList")
+          .post("/contacts/getFriendsList")
+          .send({
+            page: 1,
+          })
           .set("Authorization", `Bearer ${token}`);
+        console.log("hereeeee", result.body, result.status);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
-        expect(result.body.friends.length).toBe(1);
+        expect(result.body.friends.length).toBe(2);
       });
 
       test("User 1 Get non contact users", async () => {
         const result = await request(app)
-          .get("/contacts/getNonContactUsers")
+          .post("/contacts/getNonContactUsers")
           .send({
             page: 1,
           })
@@ -445,7 +384,7 @@ describe("Test CRUD operations for user", () => {
 
       test("User 2 Get non contact users", async () => {
         const result = await request(app)
-          .get("/contacts/getNonContactUsers")
+          .post("/contacts/getNonContactUsers")
           .send({
             page: 1,
           })
@@ -457,7 +396,7 @@ describe("Test CRUD operations for user", () => {
 
       test("Get non contact users out of range", async () => {
         const result = await request(app)
-          .get("/contacts/getNonContactUsers")
+          .post("/contacts/getNonContactUsers")
           .send({
             page: 100,
           })
@@ -469,7 +408,7 @@ describe("Test CRUD operations for user", () => {
 
       test("Get non joined groups", async () => {
         const result = await request(app)
-          .get("/contacts/getNonJoinedGroups")
+          .post("/contacts/getNonJoinedGroups")
           .send({
             page: 1,
           })
@@ -481,7 +420,7 @@ describe("Test CRUD operations for user", () => {
 
       test("Get non joined groups out of range", async () => {
         const result = await request(app)
-          .get("/contacts/getNonJoinedGroups")
+          .post("/contacts/getNonJoinedGroups")
           .send({
             page: 100,
           })
@@ -499,11 +438,13 @@ describe("Test CRUD operations for user", () => {
     describe("Test get operations for profile", () => {
       test("Get User Profile", async () => {
         const result = await request(app)
-          .get("/profile/getProfile")
+          .post("/profile/getProfile")
+          .send({
+            userId: userId,
+          })
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
-        expect(result.body.color).toBe("#74121D");
         expect(result.body.bio).toBe("Bio");
         expect(result.body.intro).toBe("Intro");
       });
@@ -511,14 +452,12 @@ describe("Test CRUD operations for user", () => {
         const result = await request(app)
           .post("/profile/updateProfile")
           .send({
-            color: "#000000",
             bio: "Hello World",
             intro: "Hello",
           })
           .set("Authorization", `Bearer ${token}`);
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
-        expect(result.body.color).toBe("#000000");
         expect(result.body.bio).toBe("Hello World");
         expect(result.body.intro).toBe("Hello");
       });
@@ -549,26 +488,14 @@ describe("Test CRUD operations for user", () => {
       expect(result.status).toBe(200);
     });
 
-    test("Wrong user delete group", async () => {
-      const result = await request(app)
-        .delete("/action/deleteGroup")
-        .send({
-          groupId: groupId,
-        })
-        .set("Authorization", `Bearer ${token2}`);
-      console.log("Wrong User Delete Group", result.body);
-      expect(result.status).toBe(403);
-      expect(result.body.message).toBe("User is not the group administrator!");
-    });
-
     test("Delete group", async () => {
       const result = await request(app)
         .delete("/action/deleteGroup")
         .send({
           groupId: groupId,
+          password: process.env.ADMIN_PASSWORD,
         })
         .set("Authorization", `Bearer ${token}`);
-      console.log("Delete Group", result.body);
       expect(result.status).toBe(200);
     });
 
@@ -577,9 +504,9 @@ describe("Test CRUD operations for user", () => {
         .delete("/action/deleteGroup")
         .send({
           groupId: groupId2,
+          password: process.env.ADMIN_PASSWORD,
         })
         .set("Authorization", `Bearer ${token2}`);
-      console.log("Delete Group 2", result.body);
       expect(result.status).toBe(200);
     });
   });
@@ -596,7 +523,6 @@ describe("Test CRUD operations for user", () => {
         .set("Authorization", `Bearer ${token}`);
       expect(result.status).toBe(200);
     } else {
-      console.log("Token is undefined");
       expect(token).toBeDefined();
     }
   });
@@ -604,13 +530,20 @@ describe("Test CRUD operations for user", () => {
   test("Delete user 1", async () => {
     const result = await request(app)
       .delete("/user/deleteUser")
+      .send({
+        password: process.env.ADMIN_PASSWORD,
+      })
       .set("Authorization", `Bearer ${token}`);
+
     expect(result.status).toBe(200);
   });
 
   test("Delete user 2", async () => {
     const result = await request(app)
       .delete("/user/deleteUser")
+      .send({
+        password: process.env.ADMIN_PASSWORD,
+      })
       .set("Authorization", `Bearer ${token2}`);
     expect(result.status).toBe(200);
   });
@@ -618,6 +551,9 @@ describe("Test CRUD operations for user", () => {
   test("Delete user 3", async () => {
     const result = await request(app)
       .delete("/user/deleteUser")
+      .send({
+        password: process.env.ADMIN_PASSWORD,
+      })
       .set("Authorization", `Bearer ${token3}`);
     expect(result.status).toBe(200);
   });

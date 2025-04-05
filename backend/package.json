@@ -11,8 +11,8 @@
     "build": "npm run clean && tsc",
     "start": "node dist/app.js",
     "dev": "NODE_ENV=development node --loader ts-node/esm app.ts",
-    "test": "npm run build && NODE_ENV=test jest --detectOpenHandles",
-    "testHandles": "npm run build && NODE_ENV=test jest --detectOpenHandles"
+    "test": "npm run build && node node-runner.cjs",
+    "test:dev": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",

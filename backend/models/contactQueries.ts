@@ -101,7 +101,6 @@ const getFriendsList = async (userId: string, page: number) => {
       },
     },
   });
-  console.log("user", user);
   return user?.friends.map((f) => f.friend) || [];
 };
 
