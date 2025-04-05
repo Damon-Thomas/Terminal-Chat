@@ -24,7 +24,7 @@ model User {
   Profile          Profile[]
   lastLogin        DateTime       @default(now())
   UserFriend       UserFriend[]
-  MessageLikes     MessageLikes[]
+  
 }
 
 model Message {
@@ -38,7 +38,6 @@ model Message {
   sentTo        User?          @relation("ReceivedMessages", fields: [sentToId], references: [id])
   sentToGroupId String?
   sentToGroup   Group?         @relation("GroupMessages", fields: [sentToGroupId], references: [id])
-  MessageLikes  MessageLikes[]
 }
 
 model Group {
@@ -66,15 +65,6 @@ model UserFriend {
   friend   User   @relation(fields: [friendId], references: [id])
 
   @@id([userId, friendId])
-}
-
-model MessageLikes {
-  userId    String
-  messageId String
-  user      User    @relation(fields: [userId], references: [id])
-  message   Message @relation(fields: [messageId], references: [id])
-
-  @@id([userId, messageId])
 }
 
 model Profile {
