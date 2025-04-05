@@ -103,32 +103,39 @@ export default function LogIn({
       </Button>
       <FormTitle title="Log In" />
       <Form onSubmit={logIn}>
-        <InputWrapper>
-          <Label htmlFor="usernameLI" text="Username" className="" />
-          <Input
-            className=""
-            type="text"
-            id="usernameLI"
-            name="usernameLI"
-            onChange={errorClearer}
-          />
-          <ErrorMessage>{errors.username}</ErrorMessage>
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="passwordLI" text="Password" className="" />
-          <Input
-            className=""
-            type="password"
-            id="passwordLI"
-            name="passwordLI"
-            onChange={errorClearer}
-          />
-          <ErrorMessage>{errors.password}</ErrorMessage>
-        </InputWrapper>
-        <Button type="submit" className="" onClick={() => {}}>
+        <div className="inputContent">
+          <InputWrapper>
+            <Label htmlFor="usernameLI" text="Username" className="" />
+            <Input
+              className=""
+              type="text"
+              id="usernameLI"
+              name="usernameLI"
+              onChange={errorClearer}
+            />
+            <ErrorMessage>{errors.username}</ErrorMessage>
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="passwordLI" text="Password" className="" />
+            <Input
+              className=""
+              type="password"
+              id="passwordLI"
+              name="passwordLI"
+              onChange={errorClearer}
+            />
+            <ErrorMessage>{errors.password}</ErrorMessage>
+          </InputWrapper>
+        </div>
+        <Button
+          type="submit"
+          size="medium"
+          className="authButton"
+          onClick={() => {}}
+        >
           Submit
         </Button>
-        <TestAccountButton />
+        <TestAccountButton size="medium" />
       </Form>
     </ModalContainer>
   );

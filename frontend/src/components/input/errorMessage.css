@@ -5,5 +5,5 @@
 }
 
 .error-message {
-  @apply text-xs sm:text-xs md:text-sm lg:text-base;
+  @apply text-xs sm:text-xs md:text-sm lg:text-base leading-none;
 }

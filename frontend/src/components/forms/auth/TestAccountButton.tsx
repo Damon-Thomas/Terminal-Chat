@@ -6,7 +6,11 @@ import {
   CurrentUserContextType,
 } from "../../../context/CurrentUserContext";
 
-export default function TestAccountButton() {
+export default function TestAccountButton({
+  size = "small",
+}: {
+  size?: "small" | "medium" | "large";
+}) {
   const { setCurrentUser } = useContext(
     CurrentUserContext
   ) as CurrentUserContextType;
@@ -15,15 +19,27 @@ export default function TestAccountButton() {
     const info = await user.logIn("TestAccount", "password");
     //info = {id: data.id, username: data.username, success: data.success}
     if (info.success) {
-      setCurrentUser(info);
+      setCurrentUser({
+        id: info.id,
+        username: info.username,
+        success: info.success,
+      });
       location.href = "/";
       // add redirect?
       // Here we can handle success logging into test account
     } else {
       console.log("Error logging into test account");
-      const createInfo = await user.signUp("TestAccount", "password");
+      const createInfo = await user.signUp(
+        "TestAccount",
+        "password",
+        "password"
+      );
       if (createInfo && createInfo.success) {
-        setCurrentUser(createInfo);
+        setCurrentUser({
+          id: createInfo.id,
+          username: createInfo.username,
+          success: createInfo.success,
+        });
       } else {
         console.log("Error creating test account");
         //Here we can handle errors logging into test account
@@ -32,7 +48,12 @@ export default function TestAccountButton() {
   }
 
   return (
-    <Button type="button" className="test-button" onClick={testAccount}>
+    <Button
+      type="button"
+      size={size}
+      className="test-button authButton"
+      onClick={testAccount}
+    >
       Use Test Account
     </Button>
   );

@@ -18,24 +18,26 @@ export default function NonUserHome() {
   }
   return (
     <div className="h-screen w-screen flex flex-col gap-4 md:gap-8 lg:gap-16 justify-center items-center">
+      <SignupForm open={signupModal} setOpen={setSignupModal} />
+      <LoginForm open={loginModal} setOpen={setLoginModal} />
       <div className="mainHome">
-        <h1 className="text-2xl md:text-4xl lg:text-4xl">Not Logged in</h1>
-        <div className="loggedOutButtonContainer">
-          <Button className="" onClick={openSignup} type="button">
-            Sign Up
-          </Button>
-          <SignupForm open={signupModal} setOpen={setSignupModal} />
-          <Button className="" onClick={openLogin} type="button">
-            Login
-          </Button>
-          <LoginForm open={loginModal} setOpen={setLoginModal} />
-          <TestAccountButton />
+        <div className="mainBody">
+          <h1 className="text-2xl md:text-4xl lg:text-4xl">Not Logged in</h1>
+          <div className="loggedOutButtonContainer">
+            <Button className="" onClick={openSignup} type="button">
+              Sign Up
+            </Button>
+            <Button className="" onClick={openLogin} type="button">
+              Login
+            </Button>
+            <TestAccountButton />
+          </div>
         </div>
+        <h1 className="welcomeMessage">
+          Welcome to my Message app. Feel free to use the test account to try
+          out it's features without signing up. Thank's for stopping by.
+        </h1>
       </div>
-      <h1 className="welcomeMessage">
-        Welcome to my Message app. Feel free to use the global test account to
-        try out it's features without signing up. Thank's for stopping by.
-      </h1>
     </div>
   );
 }

@@ -95,7 +95,7 @@
 }
 
 .sideItem {
-  @apply flex items-center my-2 px-2 py-1;
+  @apply flex items-center my-2 px-2 py-1 max-h-20;
   @apply transition-colors duration-300 ease-in-out;
   background-color: var(--text-color, green);
   color: var(--background-color, black);

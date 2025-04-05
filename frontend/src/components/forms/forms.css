@@ -5,9 +5,9 @@
 }
 
 /* Full viewport overlay */
-.modalOverlay {
-  @apply fixed inset-0 flex items-center justify-center bg-black/50;
-}
+/* .modalOverlay {
+  @apply fixed flex grow w-screen h-screen inset-0 z-20 items-center justify-center bg-pink-200/50;
+} */
 
 /* Actual modal container */
 .modalContainer {
@@ -15,5 +15,13 @@
 }
 
 .formWrapper {
-  @apply flex flex-col p-2 gap-2 lg:gap-6;
+  @apply flex flex-col p-2 gap-4 lg:gap-6;
+}
+
+/* .authButton.button.default{
+  @apply
+} */
+
+.inputContent {
+  @apply flex flex-col;
 }

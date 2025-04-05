@@ -118,48 +118,55 @@ export default function SignUp({
       </Button>
       <FormTitle title="Sign Up" />
       <Form onSubmit={signUp}>
-        <InputWrapper>
-          <Label htmlFor="usernameSU" text="Username" className="" />
-          <Input
-            className=""
-            type="text"
-            id="usernameSU"
-            name="usernameSU"
-            onChange={errorClearer}
-          />
-          <ErrorMessage>{errors.username}</ErrorMessage>
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="passwordSU" text="Password" className="" />
-          <Input
-            className=""
-            type="password"
-            id="passwordSU"
-            name="passwordSU"
-            onChange={errorClearer}
-          />
-          <ErrorMessage>{errors.password}</ErrorMessage>
-        </InputWrapper>
-        <InputWrapper>
-          <Label
-            htmlFor="confirmpasswordSU"
-            text="Confirm Password"
-            className=""
-          />
-          <Input
-            className=""
-            type="password"
-            id="confirmpasswordSU"
-            name="confirmpasswordSU"
-            onChange={errorClearer}
-          />
-          <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
-        </InputWrapper>
+        <div className="inputContent">
+          <InputWrapper>
+            <Label htmlFor="usernameSU" text="Username" className="" />
+            <Input
+              className=""
+              type="text"
+              id="usernameSU"
+              name="usernameSU"
+              onChange={errorClearer}
+            />
+            <ErrorMessage>{errors.username}</ErrorMessage>
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="passwordSU" text="Password" className="" />
+            <Input
+              className=""
+              type="password"
+              id="passwordSU"
+              name="passwordSU"
+              onChange={errorClearer}
+            />
+            <ErrorMessage>{errors.password}</ErrorMessage>
+          </InputWrapper>
+          <InputWrapper>
+            <Label
+              htmlFor="confirmpasswordSU"
+              text="Confirm Password"
+              className=""
+            />
+            <Input
+              className=""
+              type="password"
+              id="confirmpasswordSU"
+              name="confirmpasswordSU"
+              onChange={errorClearer}
+            />
+            <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
+          </InputWrapper>
+        </div>
 
-        <Button type="submit" className="" onClick={() => {}}>
+        <Button
+          type="submit"
+          size="medium"
+          className="authButton"
+          onClick={() => {}}
+        >
           Submit
         </Button>
-        <TestAccountButton />
+        <TestAccountButton size="medium" />
       </Form>
     </ModalContainer>
   );

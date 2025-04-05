@@ -21,7 +21,7 @@ const signUp = async (
     saveToken(data.token);
   }
   console.log("data", data);
-  return { id: data.id, username: data.username, success: data.success };
+  return { id: data.id, username: data.username, success: true };
 };
 
 const logIn = async (username: string, password: string) => {
