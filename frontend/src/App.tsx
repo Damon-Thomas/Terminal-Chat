@@ -1,22 +1,22 @@
 import "./App.css";
 import "./components/genCSS/typewriter.css";
-import UserContext from "./context/UserContext.tsx";
-import NotFound from "./pages/404.tsx";
-import ErrorPage from "./pages/ErrorPage.tsx";
+import UserContext from "./context/UserContext";
+import NotFound from "./pages/404";
+import ErrorPage from "./pages/ErrorPage";
 import {
   createBrowserRouter,
   RouterProvider,
   Route,
   createRoutesFromChildren,
 } from "react-router-dom";
-import Home from "./pages/Home.tsx";
-import Layout from "./pages/Layout.tsx";
-import FriendContactPage from "./pages/contactPages/FriendContactPage.tsx";
-import GroupContactPage from "./pages/contactPages/GroupContactPage.tsx";
-import NonContactPage from "./pages/contactPages/NonContactPage.tsx";
-import MessagesPage from "./pages/MessagesPage.tsx";
-import ProfilePage from "./pages/ProfilePage.tsx";
-import NonUserHome from "./pages/subPages/NonUserHome.tsx";
+import Home from "./pages/Home";
+import Layout from "./pages/Layout";
+import FriendContactPage from "./pages/contactPages/FriendContactPage";
+import GroupContactPage from "./pages/contactPages/GroupContactPage";
+import NonContactPage from "./pages/contactPages/NonContactPage";
+import MessagesPage from "./pages/MessagesPage";
+import ProfilePage from "./pages/ProfilePage";
+import NonUserHome from "./pages/subPages/NonUserHome";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(

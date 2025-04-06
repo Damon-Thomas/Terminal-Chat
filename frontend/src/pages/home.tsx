@@ -1,11 +1,11 @@
 import {
   CurrentUserContext,
   CurrentUserContextType,
-} from "../context/CurrentUserContext.ts";
-import user from "../fetchers/user.ts";
+} from "../context/CurrentUserContext";
+import user from "../fetchers/user";
 import { useContext, useEffect } from "react";
-import NonUserHome from "./subPages/NonUserHome.tsx";
-import UserHomePage from "./subPages/UserHomePage.tsx";
+import NonUserHome from "./subPages/NonUserHome";
+import UserHomePage from "./subPages/UserHomePage";
 
 export default function Home() {
   const { currentUser, setCurrentUser } = useContext(
