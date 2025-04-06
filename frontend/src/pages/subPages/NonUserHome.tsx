@@ -35,7 +35,7 @@ export default function NonUserHome() {
         </div>
         <h1 className="welcomeMessage">
           Welcome to my Message app. Feel free to use the test account to try
-          out it's features without signing up. Thank's for stopping by.
+          out its features without signing up. Thanks for stopping by.
         </h1>
       </div>
     </div>
