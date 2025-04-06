@@ -25,64 +25,6 @@ const sendMessage = async (
   return { newMessage, failure: false };
 };
 
-const likeMessage = async (userId: string, messageId: string) => {
-  const message = await prisma.message.findUnique({
-    where: {
-      id: messageId,
-    },
-  });
-  if (!message) {
-    return { message: "Message not found", failure: true };
-  }
-  const likeChecker = await prisma.messageLikes.findFirst({
-    where: {
-      userId: userId,
-      messageId: messageId,
-    },
-  });
-  if (likeChecker) {
-    return { message: "Message already liked", failure: true };
-  }
-  const newLike = await prisma.messageLikes.create({
-    data: {
-      userId: userId,
-      messageId: messageId,
-    },
-  });
-
-  return { newLike, failure: false };
-};
-
-const unLikeMessage = async (userId: string, messageId: string) => {
-  const message = await prisma.message.findUnique({
-    where: {
-      id: messageId,
-    },
-  });
-  if (!message) {
-    return { message: "Message not found", failure: true };
-  }
-  const likeChecker = await prisma.messageLikes.findFirst({
-    where: {
-      userId: userId,
-      messageId: messageId,
-    },
-  });
-  if (!likeChecker) {
-    return { message: "Message not liked", failure: true };
-  }
-  const likeDeleter = await prisma.messageLikes.delete({
-    where: {
-      userId_messageId: {
-        userId: userId,
-        messageId: messageId,
-      },
-    },
-  });
-
-  return { likeDeleter, failure: false };
-};
-
 const addFriend = async (userId: string, friendId: string) => {
   const friend = await userQueries.getUserById(friendId);
   if (!friend) {
@@ -177,13 +119,11 @@ const getMessagesBetweenUsers = async (userId: string, sentToId: string) => {
 
 export default {
   sendMessage,
-  likeMessage,
   addFriend,
   deleteFriend,
   joinGroup,
   leaveGroup,
   createGroup,
-  unLikeMessage,
   messagesToGroup,
   getMessagesBetweenUsers,
 };
