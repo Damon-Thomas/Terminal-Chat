@@ -1,4 +1,4 @@
-import ContactActions from "../../context/ContactActions";
+import ContactActions from "../../context/contactActions";
 import Button from "../Buttons/Button";
 
 export default function UserSpace() {

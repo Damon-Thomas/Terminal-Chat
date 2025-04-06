@@ -13,7 +13,7 @@ import {
   CurrentUserContextType,
 } from "../../../context/CurrentUserContext.ts";
 import user from "../../../fetchers/user.ts";
-import ErrorMessage from "../../input/errorMessage.tsx";
+import ErrorMessage from "../../input/ErrorMessage.tsx";
 import "./auth.css";
 
 export default function SignUp({

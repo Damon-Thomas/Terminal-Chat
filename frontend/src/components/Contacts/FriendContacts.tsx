@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import getContacts from "../../fetchers/getContacts";
 import Button from "../Buttons/Button";
 import sendActions from "../../fetchers/sendActions";
-import { CurrentConvoContext } from "../../context/CurrentConvoContext";
-import contactActions from "../../context/ContactActions";
+import contactActions from "../../context/contactActions";
 
 export default function FriendContacts() {
   interface User {
@@ -12,15 +11,8 @@ export default function FriendContacts() {
     friend: boolean;
   }
 
-  //   const [friendContacts, setfriendContacts] = useState<User[]>([]);
-
   const [friendPage, setFriendPage] = useState<User[]>([]);
   const [page, setPage] = useState(1);
-  // const context = useContext(CurrentConvoContext);
-  // if (!context) {
-  //   throw new Error("CurrentConvoContext is null. Ensure the provider is set.");
-  // }
-  // const { selectedContact, setSelectedContact } = context;
 
   useEffect(() => {
     async function getFriendContacts() {

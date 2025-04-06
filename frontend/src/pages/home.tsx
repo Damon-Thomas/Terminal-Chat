@@ -5,7 +5,7 @@ import {
 import user from "../fetchers/user.ts";
 import { useContext, useEffect } from "react";
 import NonUserHome from "./subPages/NonUserHome.tsx";
-import UserHomePage from "./SubPages/UserHomePage.tsx";
+import UserHomePage from "./subPages/UserHomePage.tsx";
 
 export default function Home() {
   const { currentUser, setCurrentUser } = useContext(

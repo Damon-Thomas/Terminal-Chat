@@ -1,7 +1,4 @@
-import { Link } from "react-router";
-import { CurrentConvoContext } from "../../context/CurrentConvoContext";
-import { useContext } from "react";
-import contactActions from "../../context/ContactActions";
+import contactActions from "../../context/contactActions";
 import Button from "../Buttons/Button";
 
 export default function GoToButton({

@@ -2,7 +2,7 @@ import "./profile.css";
 import greenAvatar from "../../assets/BlueFull.png";
 import GoToButton from "../../components/Contacts/GoToButton";
 import { useEffect, useState } from "react";
-import ContactActions from "../../context/ContactActions";
+import ContactActions from "../../context/contactActions";
 import useAuth from "../../context/useAuth";
 import getContacts from "../../fetchers/getContacts";
 import Button from "../../components/Buttons/Button";

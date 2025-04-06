@@ -15,7 +15,7 @@ import TestAccountButton from "./TestAccountButton.tsx";
 import user from "../../../fetchers/user.ts";
 import "./auth.css";
 import { useState } from "react";
-import ErrorMessage from "../../input/errorMessage.tsx";
+import ErrorMessage from "../../input/ErrorMessage.tsx";
 
 export default function LogIn({
   open,

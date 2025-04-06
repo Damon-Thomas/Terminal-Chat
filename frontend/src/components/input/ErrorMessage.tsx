@@ -1,4 +1,4 @@
-import initTypewriter from "../../utils/typewriter.js";
+import initTypewriter from "../../utils/typewriter.ts";
 import { useEffect } from "react";
 import "./errorMessage.css";
 

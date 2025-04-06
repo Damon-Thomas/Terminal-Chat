@@ -3,7 +3,7 @@ import "./sidebarStyles.css";
 import SideItem from "./SideItem";
 import getContacts from "../../fetchers/getContacts";
 import SideTitle from "./SideTitle";
-import contactActions from "../../context/ContactActions";
+import contactActions from "../../context/contactActions";
 import Button from "../../components/Buttons/Button";
 
 type Contact = { id: string; username: string; group: boolean };
@@ -29,10 +29,8 @@ export default function MessageSideBar({
 }) {
   const [trigger, setTrigger] = React.useState(true);
   const [open, setOpen] = React.useState(true);
-  const [groups, setGroups] = React.useState([]);
   const [groupSelection, setGroupSelection] = React.useState<Group[]>([]);
   const [groupPage, setGroupPage] = React.useState(1);
-  const [convos, setConvos] = React.useState([]);
   const [convoSelection, setConvoSelection] = React.useState<Convo[]>([]);
   const [convoPage, setConvoPage] = React.useState(1);
 
@@ -93,23 +91,6 @@ export default function MessageSideBar({
   };
 
   useEffect(() => {
-    async function fetchGroups() {
-      const fetchedGroups = await getContacts.getUserGroups(groupPage);
-      if (fetchedGroups.success) {
-        setGroups(fetchedGroups.groups);
-      }
-    }
-    async function fetchConvos() {
-      const convos = await getContacts.getActiveUserContacts(convoPage);
-      if (convos.success) {
-        setConvos(convos.contacts);
-      }
-    }
-    fetchGroups();
-    fetchConvos();
-  }, [convoPage, groupPage]);
-
-  useEffect(() => {
     async function updateGroupSelection() {
       console.log("userGroupPage", groupPage);
       const response = await getContacts.getUserGroups(groupPage);
@@ -150,7 +131,7 @@ export default function MessageSideBar({
       }
     }
     updateConvoSelection();
-  }, [convoPage, convos]);
+  }, [convoPage]);
 
   return (
     <div className={`sidebarOverlay ${!trigger ? "closed" : "open"}`}>

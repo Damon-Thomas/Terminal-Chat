@@ -1,18 +1,14 @@
 import { useState } from "react";
-import useAuth from "../../context/useAuth";
-import ErrorMessage from "../input/errorMessage";
+import ErrorMessage from "../input/ErrorMessage";
 import Input from "../input/Input";
-import Label from "../input/Label";
 import InputWrapper from "../input/InputWrapper";
 import Form from "./Form";
 import Button from "../Buttons/Button";
 import sendActions from "../../fetchers/sendActions";
-import contactActions from "../../context/ContactActions";
+import contactActions from "../../context/contactActions";
 
 export default function CreateGroup() {
   const [error, setError] = useState("");
-  // const { user } = useAuth();
-
   const groupHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
@@ -45,7 +41,6 @@ export default function CreateGroup() {
     }
     if (response && !response.failure) {
       setError("");
-      //join the group? do in backend
       contactActions.storeContact({
         id: group.id,
         group: true,

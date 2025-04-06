@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./input.css";
-import initTypewriter from "../../utils/typewriter.js";
+import initTypewriter from "../../utils/typewriter.ts";
 
 export default function Label({
   htmlFor,

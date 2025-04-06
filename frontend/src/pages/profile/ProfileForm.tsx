@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../../components/Buttons/Button";
 import Form from "../../components/forms/Form";
 import FormTitle from "../../components/forms/FormTitle";
@@ -6,7 +6,7 @@ import InputWrapper from "../../components/input/InputWrapper";
 import Label from "../../components/input/Label";
 import LongInput from "../../components/input/LongInput";
 import blueAvatar from "../../assets/BlueFull.png";
-import ErrorMessage from "../../components/input/errorMessage";
+import ErrorMessage from "../../components/input/ErrorMessage";
 import profileAPI from "../../fetchers/profile";
 export default function ProfileForm({
   profile,

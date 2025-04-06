@@ -6,9 +6,8 @@ import getMessages from "../fetchers/getMessages";
 import MessageCreator from "../components/Messages/MessageCreator";
 import Message from "../components/Messages/Message";
 import useAuth from "../context/useAuth";
-import contactActions, { Contact } from "../context/ContactActions";
+import contactActions, { Contact } from "../context/contactActions";
 import MessageContainer from "../components/Messages/MessageContainer";
-import ContactActions from "../context/ContactActions";
 
 export type Message = {
   id: string;
@@ -23,11 +22,9 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const group = selectedContact?.group;
-  // Get user data once and store in a ref
   const { user } = useAuth();
   const userRef = useRef(user);
 
-  // Update ref if user changes
   useEffect(() => {
     userRef.current = user;
   }, [user]);

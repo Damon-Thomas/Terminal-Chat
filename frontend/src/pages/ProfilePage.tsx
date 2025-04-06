@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ContactActions from "../context/ContactActions";
+import ContactActions from "../context/contactActions";
 import profile from "../fetchers/profile";
 import useAuth from "../context/useAuth";
 import ProfileForm from "./profile/ProfileForm";

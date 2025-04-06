@@ -1,4 +1,4 @@
-import ContactActions from "../../context/ContactActions";
+import ContactActions from "../../context/contactActions";
 
 export default function Message({
   content,

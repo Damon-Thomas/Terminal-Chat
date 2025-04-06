@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import getContacts from "../../fetchers/getContacts";
 import Button from "../Buttons/Button";
-import sendActions from "../../fetchers/sendActions";
-import GoToButton from "./GoToButton";
 import CreateGroup from "../forms/CreateGroup";
-import user from "../../fetchers/user";
 import GroupCard from "./GroupCard";
 
 export interface Group {
@@ -13,20 +10,10 @@ export interface Group {
   joined: boolean;
 }
 
-interface Group2 {
-  group: {
-    id: string;
-    groupName: string;
-    joined: boolean;
-  };
-}
-
 export default function GroupContacts() {
   const [userGroups, setUserGroups] = useState<Group[]>([]);
   const [userGroupPage, setUserGroupPage] = useState(1);
   const [nonUserGroups, setNonUserGroups] = useState<Group[]>([]);
-  const [nonGroupErrors, setNonGroupErrors] = useState("");
-  const [userGroupErrors, setUserGroupErrors] = useState("");
   const [nonUserGroupPage, setNonUserGroupPage] = useState(1);
 
   useEffect(() => {
@@ -35,10 +22,7 @@ export default function GroupContacts() {
       const response = await getContacts.getNonJoinedGroups(nonUserGroupPage);
       if (!response || response.failure) {
         console.log("Error getting user groups");
-        setNonGroupErrors("Error getting user groups");
         return;
-      } else {
-        setNonGroupErrors("");
       }
       const groups = response.groups;
       if (groups.length === 0) {
@@ -65,10 +49,8 @@ export default function GroupContacts() {
       console.log("userGroupPage", userGroupPage);
       const response = await getContacts.getUserGroups(userGroupPage);
       if (!response || response.failure) {
-        setUserGroupErrors("Error getting user groups");
+        console.log("Error getting user groups");
         return;
-      } else {
-        setUserGroupErrors("");
       }
       console.log("response", response);
       const groups = response.groups;

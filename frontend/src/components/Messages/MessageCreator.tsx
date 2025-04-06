@@ -1,8 +1,8 @@
-import { useContext, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import useAuth from "../../context/useAuth";
 import LongInput from "../input/LongInput";
 import Button from "../Buttons/Button";
-import ErrorMessage from "../input/errorMessage";
+import ErrorMessage from "../input/ErrorMessage";
 import Form from "../forms/Form";
 import sendActions from "../../fetchers/sendActions";
 import type { Message } from "../../pages/MessagesPage";
@@ -10,24 +10,20 @@ import type { Message } from "../../pages/MessagesPage";
 export default function MessageCreator({
   group = false,
   messageSentTo,
-  // messages,
   username,
   setMessages,
 }: {
   group: boolean;
   messageSentTo: string;
-  // messages: Array<Message>;
   username: string;
   setMessages: React.Dispatch<React.SetStateAction<Array<Message>>>;
 }) {
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
 
-  // Get user data once and store in a ref
   const { user } = useAuth();
   const userRef = useRef(user);
 
-  // Update ref if user changes
   useEffect(() => {
     userRef.current = user;
   }, [user]);
@@ -49,7 +45,7 @@ export default function MessageCreator({
           username,
           content,
           authorId: userRef.current.id,
-          group, // Include the group property
+          group,
         },
         ...prevMessages,
       ]);

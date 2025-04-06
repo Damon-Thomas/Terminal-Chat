@@ -1,6 +1,6 @@
 import "./forms.css";
 import "../genCSS/typewriter.css";
-import initTypewriter from "../../utils/typewriter.js";
+import initTypewriter from "../../utils/typewriter.ts";
 import { useEffect } from "react";
 
 //Typewriter effect for the title of the form
