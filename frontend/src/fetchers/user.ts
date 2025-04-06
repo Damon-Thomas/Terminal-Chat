@@ -4,7 +4,7 @@ const signUp = async (
   confirmPassword: string
 ) => {
   const response = await fetch(
-    `${import.meta.env.VITE_ApiHost}/user/createUser`,
+    `${import.meta.env.VITE_ApiHost}user/createUser`,
     {
       method: "POST",
       headers: {
@@ -25,7 +25,7 @@ const signUp = async (
 };
 
 const logIn = async (username: string, password: string) => {
-  const response = await fetch(`${import.meta.env.VITE_ApiHost}/user/login`, {
+  const response = await fetch(`${import.meta.env.VITE_ApiHost}user/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const verifyToken = async () => {
   if (!token) {
     return false;
   }
-  const response = await fetch(`${import.meta.env.VITE_ApiHost}/user/verify`, {
+  const response = await fetch(`${import.meta.env.VITE_ApiHost}user/verify`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
