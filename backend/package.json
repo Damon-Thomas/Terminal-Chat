@@ -9,6 +9,7 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "npm run clean && tsc",
+    "prestart": "npm run build",
     "start": "node dist/app.js",
     "dev": "NODE_ENV=development node --loader ts-node/esm app.ts",
     "test": "npm run build && node node-runner.cjs",
