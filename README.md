@@ -1,4 +1,4 @@
-# Messenger App **Live Project** → [Messenger App](https://messaging-app-beta-six.vercel.app)
+# [Messenger App](https://messaging-app-beta-six.vercel.app)
 
 You can try it out without signing up by using the test account.  
 Built as part of [The Odin Project’s messaging app assignment](https://www.theodinproject.com/lessons/nodejs-messaging-app)
