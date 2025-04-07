@@ -3,6 +3,7 @@ import SignupForm from "../../components/forms/auth/signup";
 import LoginForm from "../../components/forms/auth/login";
 import TestAccountButton from "../../components/forms/auth/TestAccountButton";
 import { useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function NonUserHome() {
   const [loginModal, setLoginModal] = useState(false);
@@ -38,6 +39,7 @@ export default function NonUserHome() {
           out its features without signing up. Thanks for stopping by.
         </h1>
       </div>
+      <Analytics />
     </div>
   );
 }
