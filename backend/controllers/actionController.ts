@@ -4,6 +4,7 @@ import actionQueries from "../models/actionQueries.js";
 import { Request, Response } from "express";
 import { UserRequest } from "./profileController.js";
 import { User } from "@prisma/client";
+import leoProfanity from "leo-profanity";
 
 const sendMessage = async (req: UserRequest, res: Response) => {
   const errors = validationResult(req);
@@ -11,6 +12,15 @@ const sendMessage = async (req: UserRequest, res: Response) => {
     return res.status(400).json({ failure: true, errors: errors.array() });
   }
   const { message, sentTo, username, destinationType } = req.body;
+
+  const isProfane = leoProfanity.check(message);
+
+  if (isProfane) {
+    return res
+      .status(400)
+      .json({ failure: true, message: "Inappropriate language detected." });
+  }
+
   if (!sentTo) {
     return res
       .status(400)

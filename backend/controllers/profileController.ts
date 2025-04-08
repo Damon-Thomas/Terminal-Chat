@@ -2,6 +2,7 @@ import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import profileQueries from "../models/profileQueries.js";
 import { Request, Response } from "express";
+import leoProfanity from "leo-profanity";
 
 export interface UserRequest extends Request {
   user: {
@@ -37,6 +38,15 @@ const updateProfile = async (req: UserRequest, res: Response) => {
     bio: req.body.bio,
     intro: req.body.intro,
   };
+
+  const isProfaneBio = leoProfanity.check(profile.bio);
+  const isProfaneIntro = leoProfanity.check(profile.intro);
+
+  if (isProfaneBio || isProfaneIntro) {
+    return res
+      .status(400)
+      .json({ failure: true, message: "Inappropriate language detected." });
+  }
 
   const updatedProfile = await profileQueries.updateProfile(
     req.user.id,

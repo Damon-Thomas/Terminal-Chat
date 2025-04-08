@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userQueries from "../models/userQueries.js";
 import { Request } from "express";
+import leoProfanity from "leo-profanity";
+
 interface AuthenticatedRequest extends Request {
   user?: any;
   token?: string;
@@ -139,6 +141,14 @@ const createUser = asyncHandler(
       return;
     }
     const { username, password } = req.body;
+    const isProfane = leoProfanity.check(username);
+
+    if (isProfane) {
+      res
+        .status(400)
+        .json({ failure: true, message: "Inappropriate language detected." });
+      return;
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     try {
