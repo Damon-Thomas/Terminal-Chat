@@ -14,13 +14,17 @@ const signUp = async (
     }
   );
   const data = await response.json();
+  console.log("data", data);
   if (data.errors) {
     return { success: false, errorMessage: data.errors[0].msg };
+  }
+  if (data.failure) {
+    return { success: false, errorMessage: data.message };
   }
   if (await data.token) {
     saveToken(data.token);
   }
-  console.log("data", data);
+
   return { id: data.id, username: data.username, success: true };
 };
 
