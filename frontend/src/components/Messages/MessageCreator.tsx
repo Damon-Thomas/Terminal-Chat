@@ -51,7 +51,7 @@ export default function MessageCreator({
       ]);
       setContent("");
     } else {
-      setError(response.error || "Failed to send message");
+      setError(response.message || "Failed to send message");
     }
   }
 

@@ -81,6 +81,15 @@ const makeGroup = async (req: UserRequest, res: Response) => {
     return res.status(400).json({ failure: true, message: "User not found" });
   }
   const { groupName } = req.body;
+
+  const isProfane = leoProfanity.check(groupName);
+
+  if (isProfane) {
+    return res
+      .status(400)
+      .json({ failure: true, message: "Inappropriate language detected." });
+  }
+
   try {
     const newGroup = await actionQueries.createGroup(groupName);
     if (newGroup.failure) {
