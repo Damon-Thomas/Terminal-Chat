@@ -5,6 +5,11 @@ Built as part of [The Odin Project’s messaging app assignment](https://www.the
 
 ---
 
+![Chat Screen](./images/messaging-app-beta-six.vercel.app_messages.png)
+![Profile Screen](./images/messaging-app-beta-six.vercel.app_profile.png)
+
+---
+
 ## Project Overview
 
 The app has three main parts:
@@ -74,3 +79,5 @@ The app has three main parts:
   - Image and file sharing
 
 ---
+
+
