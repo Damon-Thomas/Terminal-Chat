@@ -1,4 +1,5 @@
-import app from "../app.ts";
+// import app from "../app.ts"; //for running typescript supported tests
+import app from "../app.js";
 import request from "supertest";
 import {
   describe,

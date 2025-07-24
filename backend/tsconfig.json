@@ -29,9 +29,9 @@
     "rootDir": ".",
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
-    "declaration": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+    "declaration": true
+    // "allowImportingTsExtensions": true
+    // "noEmit": true // needed for running tests
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules", "dist", "./dist/**/*"]
