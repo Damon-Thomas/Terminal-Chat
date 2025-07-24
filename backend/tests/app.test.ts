@@ -1,4 +1,4 @@
-import app from "../app.js"; // Import from compiled output
+import app from "../app.ts";
 import request from "supertest";
 import {
   describe,
@@ -28,9 +28,14 @@ describe("Test CRUD operations for user", () => {
   let groupId2: string;
 
   beforeAll((done) => {
-    server = app.listen(3000, () => {
+    try {
+      server = app.listen(8080, () => {
+        done();
+      });
+    } catch (err) {
+      console.error("Server failed to start:", err);
       done();
-    });
+    }
   });
 
   afterAll((done) => {
@@ -204,6 +209,7 @@ describe("Test CRUD operations for user", () => {
           groupName: "Test Group",
         })
         .set("Authorization", `Bearer ${token}`);
+      result.status != 200 ? console.log("result", result.body) : null;
       expect(result.status).toBe(200);
       groupId = result.body.group.id;
     });
@@ -238,6 +244,7 @@ describe("Test CRUD operations for user", () => {
           groupId: groupId,
         })
         .set("Authorization", `Bearer ${token}`);
+      result.status != 200 ? console.log("result", result.body) : null;
       expect(result.status).toBe(200);
     });
 
@@ -271,6 +278,7 @@ describe("Test CRUD operations for user", () => {
           username: "Bob",
         })
         .set("Authorization", `Bearer ${token}`);
+      console.log("result", result.body);
       expect(result.status).toBe(200);
       expect(result.body.content).toBe("Hello Group");
     });
@@ -340,6 +348,8 @@ describe("Test CRUD operations for user", () => {
             groupId: groupId,
           })
           .set("Authorization", `Bearer ${token}`);
+        result.status != 200 ? console.log("result", result.body) : null;
+
         expect(result.status).toBe(200);
         expect(result.body.failure).toBe(false);
         expect(result.body.members.length).toBe(1);
@@ -496,6 +506,7 @@ describe("Test CRUD operations for user", () => {
           password: process.env.ADMIN_PASSWORD,
         })
         .set("Authorization", `Bearer ${token}`);
+      result.status != 200 ? console.log("result", result.body) : null;
       expect(result.status).toBe(200);
     });
 

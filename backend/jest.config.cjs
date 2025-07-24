@@ -9,6 +9,6 @@ module.exports = {
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
-  testMatch: ["**/dist/tests/**/*.test.js"], // Run compiled tests
+  testMatch: ["**/tests/**/*.test.ts"], // Run TypeScript source tests
   transformIgnorePatterns: ["node_modules/(?!(.pnpm/)?(uuid|@jest)/)"],
 };
